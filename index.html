@@ -1,272 +1,1707 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Adega Pai D'égua</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    .glass {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #22c55e;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.3s ease;
-      z-index: 50;
-    }
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDV Adega</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        header {
+            background-color: #000;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 8px 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .tab-btn.active {
+            background-color: white;
+            color: #000;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: flex;
+            gap: 20px;
+        }
+        .produtos-section {
+            flex: 2;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+        .venda-section {
+            flex: 1;
+            background-color: #000;
+            color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #333;
+        }
+        h1, h2, h3 {
+            margin-top: 0;
+            color: #000;
+        }
+        .venda-section h2, .historico-section h2 {
+            color: white;
+        }
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .produto-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: white;
+        }
+        .produto-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #000;
+        }
+        .produto-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+        .produto-info {
+            margin-top: 10px;
+        }
+        .produto-nome {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .produto-preco {
+            color: #000;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .produto-codigo {
+            font-size: 11px;
+            color: #777;
+            margin-top: 3px;
+        }
+        .itens-venda {
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .itens-venda::-webkit-scrollbar {
+            width: 6px;
+        }
+        .itens-venda::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+        .itens-venda::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+        .item-venda {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .total-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255,255,255,0.2);
+        }
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background-color: white;
+            color: #000;
+            border: 1px solid #000;
+        }
+        .btn-primary:hover {
+            background-color: #000;
+            color: white;
+            border-color: #000;
+        }
+        .btn-danger {
+            background-color: transparent;
+            color: white;
+            border: 1px solid #555;
+        }
+        .btn-danger:hover {
+            background-color: #333;
+            border-color: #333;
+        }
+        .btn-block {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .search-bar {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .search-barcode-btn {
+            padding: 10px;
+            background-color: #000;
+            color: white;
+            border: 1px solid #333;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .search-barcode-btn:hover {
+            background-color: #333;
+        }
+        .barcode-scanner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+        .barcode-scanner video {
+            width: 80%;
+            max-width: 500px;
+            margin-bottom: 20px;
+            border: 2px solid white;
+            border-radius: 5px;
+        }
+        .barcode-scanner button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .barcode-scanner button:hover {
+            background-color: #555;
+        }
+        .quantidade-controller {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .quantidade-controller button {
+            width: 25px;
+            height: 25px;
+            border: none;
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .quantidade-controller button:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+        .categorias {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        .categorias::-webkit-scrollbar {
+            height: 4px;
+        }
+        .categorias::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+        .categorias::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 2px;
+        }
+        .categoria-btn {
+            padding: 6px 12px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .categoria-btn:hover {
+            background-color: #e0e0e0;
+        }
+        .categoria-btn.active {
+            background-color: #000;
+            color: white;
+        }
+        .cadastro-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #000;
+        }
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 14px;
+        }
+        .form-select:focus {
+            outline: none;
+            border-color: #000;
+        }
+        .generate-barcode-btn {
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.2s;
+        }
+        .generate-barcode-btn:hover {
+            background-color: #e0e0e0;
+        }
+        .pagamento-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        .pagamento-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .pagamento-option input {
+            margin-right: 10px;
+        }
+        .troco-section {
+            margin-top: 10px;
+            display: none;
+        }
+        .troco-section.active {
+            display: block;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .modal-title {
+            margin-top: 0;
+            color: #000;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .help-shortcuts {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #000;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 13px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: background-color 0.2s;
+        }
+        .help-shortcuts:hover {
+            background-color: #333;
+        }
+        .shortcuts-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        .shortcuts-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .shortcuts-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .shortcuts-table th, .shortcuts-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .shortcuts-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        .historico-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            width: 100%;
+            border: 1px solid #e0e0e0;
+        }
+        .historico-mes {
+            margin-bottom: 20px;
+        }
+        .historico-mes-title {
+            background-color: #000;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        .historico-mes-title:hover {
+            background-color: #333;
+        }
+        .historico-mes-content {
+            margin-top: 10px;
+            display: none;
+        }
+        .historico-mes-content.active {
+            display: block;
+        }
+        .historico-venda {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: white;
+        }
+        .historico-venda-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .historico-venda-itens {
+            margin-top: 10px;
+        }
+        .historico-venda-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 14px;
+        }
+        .importar-excel {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 2px dashed #ddd;
+        }
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        .file-input-button {
+            padding: 10px 15px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            transition: background-color 0.2s;
+        }
+        .file-input-button:hover {
+            background-color: #333;
+        }
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-input-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .file-input-instructions {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .tab-content.active {
+                flex-direction: column;
+            }
+            .produtos-section, .venda-section {
+                width: 100%;
+            }
+            .produtos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .tabs {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+        }
+    </style>
+    <!-- Incluindo a biblioteca QuaggaJS para leitura de código de barras -->
+    <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+    <!-- Incluindo a biblioteca xlsx para leitura de arquivos Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
-<body class="bg-gradient-to-br from-gray-900 to-black text-white min-h-screen px-4 py-6">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-center mb-10">
-      <h1 class="text-4xl font-extrabold">Adega Pai D'égua</h1>
-      <button onclick="verCarrinho()" class="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold hover:bg-yellow-300 transition">
-        Carrinho (<span id="contador-carrinho">0</span>)
-      </button>
+<body>
+    <header>
+        <div class="logo">PDV Adega</div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="pdv">PDV</button>
+            <button class="tab-btn" data-tab="cadastro">Cadastro</button>
+            <button class="tab-btn" data-tab="historico">Histórico</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Aba do PDV -->
+        <div id="pdv-tab" class="tab-content active">
+            <section class="produtos-section">
+                <h1>Produtos Disponíveis</h1>
+                
+                <div class="search-container">
+                    <input type="text" class="search-bar" placeholder="Buscar produtos ou código de barras..." id="searchInput" autofocus>
+                    <button class="search-barcode-btn" id="scanBarcodeBtn">Ler Código</button>
+                </div>
+                
+                <div class="categorias">
+                    <button class="categoria-btn active" data-categoria="todos">Todos</button>
+                    <button class="categoria-btn" data-categoria="vinhos">Tabacaria</button>
+                    <button class="categoria-btn" data-categoria="espumantes">Refrigerantes</button>
+                    <button class="categoria-btn" data-categoria="cervejas">Cervejas</button>
+                    <button class="categoria-btn" data-categoria="destilados">Destilados</button>
+                    <button class="categoria-btn" data-categoria="aperitivos">Salgadinhos</button>
+                </div>
+                
+                <div class="produtos-grid" id="produtosGrid">
+                    <!-- Produtos serão inseridos aqui via JavaScript -->
+                </div>
+            </section>
+            
+            <section class="venda-section">
+                <h2>Venda em Andamento</h2>
+                
+                <div class="itens-venda" id="itensVenda">
+                    <!-- Itens da venda serão inseridos aqui -->
+                    <p style="text-align: center;">Nenhum item adicionado</p>
+                </div>
+                
+                <div class="total-section">
+                    <div style="display: flex; justify-content: space-between; font-size: 18px;">
+                        <span>Total:</span>
+                        <span id="totalVenda">R$ 0,00</span>
+                    </div>
+                    
+                    <div class="pagamento-section">
+                        <h3 style="margin-top: 0; margin-bottom: 15px;">Forma de Pagamento</h3>
+                        
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoDinheiro" name="pagamento" value="dinheiro" checked>
+                            <label for="pagamentoDinheiro">Dinheiro</label>
+                        </div>
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoDebito" name="pagamento" value="debito">
+                            <label for="pagamentoDebito">Cartão de Débito</label>
+                        </div>
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoCredito" name="pagamento" value="credito">
+                            <label for="pagamentoCredito">Cartão de Crédito</label>
+                        </div>
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoPix" name="pagamento" value="pix">
+                            <label for="pagamentoPix">PIX</label>
+                        </div>
+                        
+                        <div class="troco-section" id="trocoSection">
+                            <div class="form-group" style="margin-top: 10px;">
+                                <label for="valorRecebido">Valor Recebido</label>
+                                <input type="number" id="valorRecebido" class="form-control" step="0.01" min="0">
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <strong>Troco:</strong> <span id="valorTroco">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-block" id="finalizarVenda">Finalizar Venda</button>
+                    <button class="btn btn-danger btn-block" id="cancelarVenda">Cancelar Venda</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Aba de Cadastro de Produtos -->
+        <div id="cadastro-tab" class="tab-content">
+            <section class="cadastro-form">
+                <h1>Cadastro de Produtos</h1>
+                
+                <div class="importar-excel">
+                    <h3>Importar Produtos via Excel</h3>
+                    <div class="file-input-container">
+                        <button class="file-input-button">Selecionar Arquivo Excel</button>
+                        <input type="file" id="excelFileInput" class="file-input" accept=".xlsx, .xls, .csv">
+                    </div>
+                    <div class="file-input-info" id="fileInputInfo">Nenhum arquivo selecionado</div>
+                    
+                    <div class="file-input-instructions">
+                        <strong>Instruções:</strong> O arquivo Excel deve conter as colunas: Nome, Preço, Categoria (vinhos, espumantes, cervejas, destilados, aperitivos). 
+                        Opcionais: Código, Imagem (URL). A primeira linha deve ser o cabeçalho.
+                    </div>
+                    
+                    <button class="btn btn-primary" id="importarProdutosBtn" style="margin-top: 10px; display: none;">Importar Produtos</button>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Cadastrar Produto Manualmente</h3>
+                <form id="formProduto">
+                    <div class="form-group">
+                        <label for="produtoNome">Nome do Produto</label>
+                        <input type="text" id="produtoNome" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoPreco">Preço (R$)</label>
+                        <input type="number" id="produtoPreco" class="form-control" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoCategoria">Categoria</label>
+                        <select id="produtoCategoria" class="form-select" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="vinhos">Vinhos</option>
+                            <option value="espumantes">Espumantes</option>
+                            <option value="cervejas">Cervejas</option>
+                            <option value="destilados">Destilados</option>
+                            <option value="aperitivos">Aperitivos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoCodigo">Código de Barras</label>
+                        <input type="text" id="produtoCodigo" class="form-control" placeholder="Digite ou escaneie o código">
+                        <button type="button" class="generate-barcode-btn" id="generateBarcodeBtn">Gerar Código Automático</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoImagem">URL da Imagem</label>
+                        <input type="text" id="produtoImagem" class="form-control" placeholder="https://...">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Cadastrar Produto</button>
+                </form>
+            </section>
+            
+            <section style="margin-top: 30px;">
+                <h2>Produtos Cadastrados</h2>
+                <div class="produtos-grid" id="produtosCadastrados">
+                    <!-- Produtos cadastrados serão listados aqui -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Aba de Histórico de Vendas -->
+        <div id="historico-tab" class="tab-content">
+            <section class="historico-section">
+                <h2>Histórico de Vendas</h2>
+                <div id="historicoVendas">
+                    <!-- Histórico será carregado aqui -->
+                    <p style="text-align: center;">Nenhuma venda registrada ainda</p>
+                </div>
+            </section>
+        </div>
     </div>
 
-    <div id="toast" class="toast">Item adicionado ao carrinho!</div>
-
-    <div>
-      <h2 class="text-2xl font-bold mb-4 text-yellow-400">Cervejas</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10" id="cervejas"></div>
-
-      <h2 class="text-2xl font-bold mb-4 text-yellow-400">Whisky</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10" id="whiskys"></div>
-
-      <h2 class="text-2xl font-bold mb-4 text-yellow-400">Gin</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10" id="gins"></div>
-
-      <h2 class="text-2xl font-bold mb-4 text-yellow-400">Cachaças</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10" id="cachaças"></div>
-
-      <h2 class="text-2xl font-bold mb-4 text-yellow-400">Energeticos</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10" id="energeticos"></div>
+    <!-- Modal de leitura de código de barras -->
+    <div class="barcode-scanner" id="barcodeScanner">
+        <video id="barcodeScannerVideo"></video>
+        <button id="closeBarcodeScanner">Fechar Scanner</button>
     </div>
-  </div>
 
-  <!-- Modal do carrinho -->
-  <div id="modal-carrinho" class="fixed inset-0 bg-black/80 hidden z-40 flex items-center justify-center">
-    <div class="bg-white text-black p-6 rounded-xl w-full max-w-lg shadow-xl relative">
-      <h2 class="text-2xl font-bold mb-4">Seu Carrinho</h2>
-      <ul id="lista-carrinho" class="mb-4 space-y-2 max-h-60 overflow-y-auto"></ul>
-      <div class="flex justify-between items-center font-semibold text-lg mb-4">
-        <span>Total:</span>
-        <span id="total-carrinho">R$ 0,00</span>
-      </div>
-      <div class="flex gap-4">
-        <button onclick="abrirModalNome()" class="bg-yellow-500 w-full py-2 rounded-xl font-bold hover:bg-yellow-400">Finalizar Pedido</button>
-        <button onclick="limparCarrinho()" class="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-400">Limpar</button>
-      </div>
-      <button onclick="fecharCarrinho()" class="absolute top-2 right-4 text-black font-bold text-xl">&times;</button>
-    </div>
-  </div>
-
-  <!-- Modal para pegar o nome -->
-  <div id="modal-nome" class="fixed inset-0 bg-black/80 hidden z-40 flex items-center justify-center">
-    <div class="bg-white text-black p-6 rounded-xl w-full max-w-lg shadow-xl">
-      <h2 class="text-2xl font-bold mb-4">Qual o seu nome?</h2>
-      <input id="nome-cliente" type="text" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Digite seu nome" />
-      <div class="flex gap-4 mt-6">
-        <button onclick="finalizarPedido()" class="bg-yellow-500 w-full py-2 rounded-xl font-bold hover:bg-yellow-400">Enviar para o WhatsApp</button>
-        <button onclick="fecharModalNome()" class="bg-red-500 w-full py-2 rounded-xl font-bold hover:bg-red-400">Cancelar</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const cervejas = [
-      { nome: "Heineken", preco: 9.90, descricao: "lata e longneck", imagem: "https://th.bing.com/th/id/OIP.gLGHPrgQbovtQU4wXE6hYwHaHa?rs=1&pid=ImgDetMain" },
-      { nome: "Budweiser", preco: 13.90, descricao: "lata e caixa", imagem: "https://down-br.img.susercontent.com/file/6cf56f35c9005d4f45ced45db0c30edb" },
-      { nome: "Império", preco: 4.90, imagem: "https://tfchgi.vteximg.com.br/arquivos/ids/171586-1000-1000/7898915949209.jpg?v=637783886469700000" },
-      { nome: "Original", preco: 10.90, descricao: "lata e caixa", imagem: "https://coopsp.vtexassets.com/arquivos/ids/232285-800-800?v=638158831793470000&width=800&height=800&aspect=true" },
-      { nome: "Brahma Duplo Malte", preco: 5.90, descricao: "lata e caixa", imagem: "https://lelecodelivery.com.br/wp-content/uploads/2020/10/BRAHMA-DUPLO-MALTE-1024x1024.png" },
-      { nome: "Skol", preco: 3.90, descricao: "lata e caixa", imagem: "https://armazemseuluiz.com.br/storage/app/uploads/public/637/bc8/624/637bc8624b183689503712" },
-      { nome: "Petra", preco: 4.50, descricao: "lata e caixa", imagem: "https://www.imigrantesbebidas.com.br/bebida/images/products/full/88162-cerveja-petra-puro-malte-lata-269ml.jpg" },
-      { nome: "Estrella Galicia", preco: 4.50, imagem: "https://statics.angeloni.com.br/super/files/produtos/3999454/3999454_1_zoom.jpg" },
-      { nome: "Spaten", preco: 4.50, imagem: "https://th.bing.com/th/id/OIP.zr9UqRQG88fka5u9w8wa4QHaHa?rs=1&pid=ImgDetMain" },
-    ];
-
-    const whiskys = [
-      { nome: "Red Label", preco: 99.90, imagem: "https://i5.walmartimages.com/asr/70d063f5-8328-44b2-91ee-9eec40f5908c_2.53a1ae92e78bba8bafae76f4d204b660.jpeg" },
-      { nome: "Jack Daniel's", preco: 139.90, imagem: "https://imagevault.skulibrary.com/ColesLiquor/NoPrefix/e2520ee2b408c79be0916bdd062e372f1423c031/images/2400/id/CLG-8331431-1.jpg" },
-      { nome: "Jack Daniel's Fire", preco: 149.90, imagem: "https://cdn.myshoptet.com/usr/www.bumbaj.sk/user/shop/big/519_jack-daniel-s-fire-35--0-70-l.jpg?6362878e" },
-    ];
-
-    const cachaças = [
-    { nome: "Kariri", preco: 99.90, imagem: "https://a-static.mlcdn.com.br/800x560/cachaca-kariri-com-k-ouro-960ml/lojamegaadegakanguru/58808/1a65b5b3a20645039770b3618c58abaf.jpeg" },
-    { nome: "51", preco: 139.90, imagem: "https://th.bing.com/th/id/OIP.fXxl1bXRfFe5mBvlfe8OHgHaHa?rs=1&pid=ImgDetMain" },
-    { nome: "Dreher", preco: 149.90, imagem: "https://th.bing.com/th/id/OIP.5VQoPaa8pU-60wwDUGYMpQHaKe?rs=1&pid=ImgDetMain" },
-  ];
-
-  
-  const energeticos = [
-    { nome: "Red Bull", preco: 9.90, descricao: "diversos sabores", imagem: "https://www.imigrantesbebidas.com.br/img/bebida/images/products/full/3401-energetico-red-bull-energy-drink-250ml.jpg?s=60f44e2e30f15d9fb0bee05c289d03a9" },
-    { nome: "Monster", preco: 12.90, descricao: "diversos sabores", imagem: "https://images.tcdn.com.br/img/img_prod/774261/energy_monster_lata_473ml_306_1_2081e6152f57ef62aa20d9698098229a.jpg" },
-    { nome: "Baly", preco: 7.90, descricao: "diversos sabores", imagem: "https://images.tcdn.com.br/img/img_prod/1091246/energetico_baly_maca_verde_2l_695_1_c7f8899cac7db5a7593faf51d0e3026c.jpg" },
-    { nome: "Vibe", preco: 6.90, descricao: "diversos sabores", imagem: "https://th.bing.com/th/id/OIP.6yO_wZZX3vwUdnj8JLQI_gHaHa?rs=1&pid=ImgDetMain" },
- ];
-
-    const gins = [
-      { nome: "Eternity Morango", preco: 79.90, imagem: "https://bebidasfamosas.vtexassets.com/arquivos/ids/161573/Gin-Eternity-Strawberry-900ml.jpg?v=638514746107800000" },
-      { nome: "Eternity Maçã Verde", preco: 79.90, imagem: "https://bebidasfamosas.vtexassets.com/arquivos/ids/161572/Gin-Eternity-Maca-Verde-900ml.jpg?v=638514742696530000  " },
-      { nome: "Eternity Melancia", preco: 79.90, imagem: "https://th.bing.com/th/id/OIP.65UuUchhCVT8-w4ldjxCKAHaHa?rs=1&pid=ImgDetMain" },
-      { nome: "Eternity Tropical", preco: 79.90, imagem: "https://www.imigrantesbebidas.com.br/img/bebida/images/products/full/19543-gin-eternity-tropical-fruits-900ml.20240626131948.jpg?p=product_regular&s=c715ec724cb701a0e7ef8517e5e62a34" },
-    ];
-
-    const contadorCarrinho = document.getElementById("contador-carrinho");
-    const listaCarrinho = document.getElementById("lista-carrinho");
-    const totalCarrinho = document.getElementById("total-carrinho");
-    const modalCarrinho = document.getElementById("modal-carrinho");
-    const modalNome = document.getElementById("modal-nome");
-
-    const renderCategoria = (produtos, containerId) => {
-      const container = document.getElementById(containerId);
-      produtos.forEach((p, i) => {
-        container.innerHTML += `
-          <div class="glass p-6 rounded-2xl shadow-xl hover:scale-[1.02] transition-transform">
-            <img src="${p.imagem}" class="rounded-xl mb-4 w-full h-40 object-cover" alt="${p.nome}">
-            <h3 class="text-xl font-bold mb-2">${p.nome}</h3>
-            <p class="text-gray-300 mb-2">${p.descricao || "Produto gelado e pronto para você!"}</p>
-            <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold text-yellow-400">R$ ${p.preco.toFixed(2)}</span>
-              <button onclick="adicionarCarrinho('${p.nome}', ${p.preco})" class="bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-1.5 rounded-xl">Pedir</button>
+    <!-- Modal de confirmação de venda -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modalTitle">Confirmar Venda</h3>
+            <div id="modalContent">
+                <p>Deseja finalizar esta venda?</p>
+                <div id="modalPagamentoInfo"></div>
             </div>
-          </div>
-        `;
-      });
-    };
-
-    function adicionarCarrinho(nome, preco) {
-      let carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
-      const existente = carrinho.find(item => item.nome === nome);
-      if (existente) {
-        existente.qtd++;
-      } else {
-        carrinho.push({ nome, preco, qtd: 1 });
-      }
-      localStorage.setItem("carrinho", JSON.stringify(carrinho));
-      atualizarContador();
-      mostrarToast();
-    }
-
-    function atualizarContador() {
-      let carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
-      const totalItens = carrinho.reduce((acc, item) => acc + item.qtd, 0);
-      contadorCarrinho.textContent = totalItens;
-    }
-
-    function verCarrinho() {
-      let carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
-      listaCarrinho.innerHTML = "";
-      let total = 0;
-      carrinho.forEach((item, i) => {
-        total += item.preco * item.qtd;
-        listaCarrinho.innerHTML += `
-          <li class="flex justify-between items-center">
-            <span class="w-1/2">${item.nome}</span>
-            <div class="flex items-center gap-2">
-              <button onclick="alterarQtd(${i}, -1)" class="bg-gray-200 px-2 rounded">−</button>
-              <span>${item.qtd}</span>
-              <button onclick="alterarQtd(${i}, 1)" class="bg-gray-200 px-2 rounded">+</button>
+            <div class="modal-buttons">
+                <button class="btn btn-danger" id="modalCancelBtn">Cancelar</button>
+                <button class="btn btn-primary" id="modalConfirmBtn">Confirmar</button>
             </div>
-            <span class="w-20 text-right">R$ ${(item.preco * item.qtd).toFixed(2)}</span>
-            <button onclick="removerItem(${i})" class="text-red-500 ml-2 font-bold">×</button>
-          </li>
-        `;
-      });
-      totalCarrinho.textContent = "R$ " + total.toFixed(2);
-      modalCarrinho.classList.remove("hidden");
-    }
+        </div>
+    </div>
 
-    function alterarQtd(index, delta) {
-      let carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
-      carrinho[index].qtd += delta;
-      if (carrinho[index].qtd <= 0) carrinho.splice(index, 1);
-      localStorage.setItem("carrinho", JSON.stringify(carrinho));
-      verCarrinho();
-      atualizarContador();
-    }
+    <!-- Botão de ajuda para atalhos -->
+    <div class="help-shortcuts" id="helpShortcuts">
+        Atalhos (F1)
+    </div>
 
-    function removerItem(index) {
-      let carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
-      carrinho.splice(index, 1);
-      localStorage.setItem("carrinho", JSON.stringify(carrinho));
-      verCarrinho();
-      atualizarContador();
-    }
+    <!-- Modal de atalhos do teclado -->
+    <div class="shortcuts-modal" id="shortcutsModal">
+        <div class="shortcuts-content">
+            <h2>Atalhos do Teclado</h2>
+            <table class="shortcuts-table">
+                <tr>
+                    <th>Atalho</th>
+                    <th>Ação</th>
+                </tr>
+                <tr>
+                    <td><strong>F1</strong></td>
+                    <td>Abrir esta tela de ajuda</td>
+                </tr>
+                <tr>
+                    <td><strong>F12</strong></td>
+                    <td>Focar na barra de busca</td>
+                </tr>
+                <tr>
+                    <td><strong>Enter</strong> (na busca)</td>
+                    <td>Adicionar produto por código</td>
+                </tr>
+                <tr>
+                    <td><strong>F2</strong></td>
+                    <td>Selecionar pagamento em Dinheiro</td>
+                </tr>
+                <tr>
+                    <td><strong>F3</strong></td>
+                    <td>Selecionar pagamento em Débito</td>
+                </tr>
+                <tr>
+                    <td><strong>F4</strong></td>
+                    <td>Selecionar pagamento em Crédito</td>
+                </tr>
+                <tr>
+                    <td><strong>F5</strong></td>
+                    <td>Selecionar pagamento em PIX</td>
+                </tr>
+                <tr>
+                    <td><strong>F9</strong></td>
+                    <td>Finalizar venda</td>
+                </tr>
+                <tr>
+                    <td><strong>F10</strong></td>
+                    <td>Cancelar venda</td>
+                </tr>
+                <tr>
+                    <td><strong>ESC</strong></td>
+                    <td>Fechar modais/cancelar ações</td>
+                </tr>
+            </table>
+            <div style="margin-top: 20px; text-align: right;">
+                <button class="btn btn-primary" id="closeShortcutsBtn">Fechar</button>
+            </div>
+        </div>
+    </div>
 
-    function limparCarrinho() {
-      localStorage.removeItem("carrinho");
-      verCarrinho();
-      atualizarContador();
-    }
+    <script>
+        // Funções auxiliares
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
 
-    function fecharCarrinho() {
-      modalCarrinho.classList.add("hidden");
-    }
+        function formatarData(data) {
+            const options = { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(data).toLocaleDateString('pt-BR', options);
+        }
 
-    function abrirModalNome() {
-      modalNome.classList.remove("hidden");
-    }
+        function gerarId() {
+            return Math.floor(Math.random() * 1000000);
+        }
 
-    function fecharModalNome() {
-      modalNome.classList.add("hidden");
-    }
+        function gerarCodigoBarras() {
+            // Gera um código de barras fictício no formato EAN-13
+            const pais = '789'; // Código do Brasil
+            const empresa = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            const produto = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            
+            // Calcula o dígito verificador
+            const codigoSemDigito = pais + empresa + produto;
+            let soma = 0;
+            
+            for (let i = 0; i < codigoSemDigito.length; i++) {
+                const digito = parseInt(codigoSemDigito[i]);
+                soma += (i % 2 === 0) ? digito * 1 : digito * 3;
+            }
+            
+            const digitoVerificador = (10 - (soma % 10)) % 10;
+            
+            return codigoSemDigito + digitoVerificador;
+        }
 
-    function finalizarPedido() {
-      const nome = document.getElementById("nome-cliente").value.trim();
-      if (!nome) {
-        alert("Por favor, informe seu nome.");
-        return;
-      }
+        function agruparPorMes(vendas) {
+            const meses = {};
+            
+            vendas.forEach(venda => {
+                const data = new Date(venda.data);
+                const mesAno = `${data.getMonth() + 1}/${data.getFullYear()}`;
+                const nomeMes = data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+                
+                if (!meses[mesAno]) {
+                    meses[mesAno] = {
+                        nome: nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1),
+                        vendas: []
+                    };
+                }
+                
+                meses[mesAno].vendas.push(venda);
+            });
+            
+            return meses;
+        }
 
-      let carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
-      let mensagem = `*Pedido da Adega Pai D'égua*\n\nNome: ${nome}\n\nItens:\n`;
-      carrinho.forEach(item => {
-        mensagem += `${item.nome} - ${item.qtd} x R$ ${item.preco.toFixed(2)}\n`;
-      });
-      mensagem += `\nTotal: R$ ${(carrinho.reduce((acc, item) => acc + item.preco * item.qtd, 0)).toFixed(2)}`;
+        // Gerenciamento de abas
+        const tabs = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const searchInput = document.getElementById('searchInput');
 
-      const whatsappLink = `https://wa.me/5511914042925?text=${encodeURIComponent(mensagem)}`;
-      window.open(whatsappLink, "_blank");
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                
+                // Atualiza as abas ativas
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+                
+                // Foca no campo de busca quando a aba do PDV estiver ativa
+                if (tabId === 'pdv') {
+                    searchInput.focus();
+                    carregarProdutos();
+                    renderizarProdutos();
+                }
+                
+                // Se for a aba de cadastro, recarrega a lista de produtos cadastrados
+                if (tabId === 'cadastro') {
+                    carregarProdutos();
+                    renderizarProdutosCadastrados();
+                }
+                
+                // Se for a aba de histórico, carrega o histórico
+                if (tabId === 'historico') {
+                    carregarHistorico();
+                    renderizarHistorico();
+                }
+            });
+        });
 
-      limparCarrinho();
-      fecharCarrinho();
-      fecharModalNome();
-    }
+        // Sistema de PDV
+        let carrinho = [];
+        let categoriaAtual = "todos";
+        let produtos = [];
+        let historicoVendas = [];
 
-    function mostrarToast() {
-      const toast = document.getElementById("toast");
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2500);
-    }
+        // Elementos do DOM - PDV
+        const produtosGrid = document.getElementById('produtosGrid');
+        const itensVenda = document.getElementById('itensVenda');
+        const totalVenda = document.getElementById('totalVenda');
+        const categoriaBtns = document.querySelectorAll('.categoria-btn');
+        const finalizarVendaBtn = document.getElementById('finalizarVenda');
+        const cancelarVendaBtn = document.getElementById('cancelarVenda');
+        const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
+        const trocoSection = document.getElementById('trocoSection');
+        const valorRecebido = document.getElementById('valorRecebido');
+        const valorTroco = document.getElementById('valorTroco');
+        const pagamentoOptions = document.querySelectorAll('input[name="pagamento"]');
+        const pagamentoDinheiro = document.getElementById('pagamentoDinheiro');
+        const pagamentoDebito = document.getElementById('pagamentoDebito');
+        const pagamentoCredito = document.getElementById('pagamentoCredito');
+        const pagamentoPix = document.getElementById('pagamentoPix');
 
-    renderCategoria(cervejas, "cervejas");
-    renderCategoria(whiskys, "whiskys");
-    renderCategoria(gins, "gins");
-    renderCategoria(cachaças, "cachaças");
-    renderCategoria(energeticos, "energeticos");
-    atualizarContador();
-  </script>
+        // Elementos do DOM - Cadastro
+        const formProduto = document.getElementById('formProduto');
+        const produtosCadastrados = document.getElementById('produtosCadastrados');
+        const produtoCodigoInput = document.getElementById('produtoCodigo');
+        const generateBarcodeBtn = document.getElementById('generateBarcodeBtn');
+        const excelFileInput = document.getElementById('excelFileInput');
+        const fileInputInfo = document.getElementById('fileInputInfo');
+        const importarProdutosBtn = document.getElementById('importarProdutosBtn');
+
+        // Elementos do DOM - Histórico
+        const historicoVendasContainer = document.getElementById('historicoVendas');
+
+        // Elementos do DOM - Scanner de código de barras
+        const barcodeScanner = document.getElementById('barcodeScanner');
+        const barcodeScannerVideo = document.getElementById('barcodeScannerVideo');
+        const closeBarcodeScanner = document.getElementById('closeBarcodeScanner');
+
+        // Elementos do DOM - Modal de confirmação
+        const confirmModal = document.getElementById('confirmModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const modalPagamentoInfo = document.getElementById('modalPagamentoInfo');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+
+        // Elementos do DOM - Atalhos
+        const helpShortcuts = document.getElementById('helpShortcuts');
+        const shortcutsModal = document.getElementById('shortcutsModal');
+        const closeShortcutsBtn = document.getElementById('closeShortcutsBtn');
+
+        // Carregar dados do LocalStorage
+        function carregarProdutos() {
+            const produtosSalvos = localStorage.getItem('produtosAdega');
+            if (produtosSalvos) {
+                produtos = JSON.parse(produtosSalvos);
+            } else {
+                // Dados iniciais caso não haja nada salvo
+                produtos = [
+                    { id: gerarId(), nome: "Vinho Tinto Seco", preco: 89.90, categoria: "vinhos", codigo: gerarCodigoBarras(), imagem: "https://via.placeholder.com/150?text=Vinho+Tinto" },
+                    { id: gerarId(), nome: "Vinho Branco Suave", preco: 65.50, categoria: "vinhos", codigo: gerarCodigoBarras(), imagem: "https://via.placeholder.com/150?text=Vinho+Branco" },
+                    { id: gerarId(), nome: "Espumante Brut", preco: 120.00, categoria: "espumantes", codigo: gerarCodigoBarras(), imagem: "https://via.placeholder.com/150?text=Espumante" },
+                    { id: gerarId(), nome: "Cerveja Artesanal IPA", preco: 18.90, categoria: "cervejas", codigo: gerarCodigoBarras(), imagem: "https://via.placeholder.com/150?text=Cerveja+IPA" },
+                    { id: gerarId(), nome: "Whisky 12 anos", preco: 199.90, categoria: "destilados", codigo: gerarCodigoBarras(), imagem: "https://via.placeholder.com/150?text=Whisky" }
+                ];
+                salvarProdutos();
+            }
+        }
+
+        function carregarCarrinho() {
+            const carrinhoSalvo = localStorage.getItem('carrinhoAdega');
+            if (carrinhoSalvo) {
+                carrinho = JSON.parse(carrinhoSalvo);
+                atualizarCarrinho();
+            }
+        }
+
+        function carregarHistorico() {
+            const historicoSalvo = localStorage.getItem('historicoAdega');
+            if (historicoSalvo) {
+                historicoVendas = JSON.parse(historicoSalvo);
+            }
+        }
+
+        function salvarProdutos() {
+            localStorage.setItem('produtosAdega', JSON.stringify(produtos));
+        }
+
+        function salvarCarrinho() {
+            localStorage.setItem('carrinhoAdega', JSON.stringify(carrinho));
+        }
+
+        function salvarHistorico() {
+            localStorage.setItem('historicoAdega', JSON.stringify(historicoVendas));
+        }
+
+        // Funções do PDV
+        function renderizarProdutos() {
+            produtosGrid.innerHTML = '';
+            
+            const termoBusca = searchInput.value.toLowerCase();
+            
+            produtos.filter(produto => {
+                const correspondeBusca = produto.nome.toLowerCase().includes(termoBusca) || 
+                                      (produto.codigo && produto.codigo.includes(termoBusca));
+                const correspondeCategoria = categoriaAtual === 'todos' || produto.categoria === categoriaAtual;
+                return correspondeBusca && correspondeCategoria;
+            }).forEach(produto => {
+                const produtoCard = document.createElement('div');
+                produtoCard.className = 'produto-card';
+                produtoCard.innerHTML = `
+                    <img src="${produto.imagem || 'https://via.placeholder.com/150?text=Sem+Imagem'}" alt="${produto.nome}">
+                    <div class="produto-info">
+                        <div class="produto-nome">${produto.nome}</div>
+                        <div class="produto-preco">${formatarMoeda(produto.preco)}</div>
+                        ${produto.codigo ? `<div class="produto-codigo">Cód: ${produto.codigo}</div>` : ''}
+                    </div>
+                `;
+                produtoCard.addEventListener('click', () => adicionarAoCarrinho(produto));
+                produtosGrid.appendChild(produtoCard);
+            });
+        }
+
+        function adicionarAoCarrinho(produto) {
+            const itemExistente = carrinho.find(item => item.id === produto.id);
+            
+            if (itemExistente) {
+                itemExistente.quantidade += 1;
+            } else {
+                carrinho.push({
+                    ...produto,
+                    quantidade: 1
+                });
+            }
+            
+            atualizarCarrinho();
+            salvarCarrinho();
+            searchInput.value = '';
+            searchInput.focus();
+        }
+
+        function adicionarPorCodigo(codigo) {
+            const produto = produtos.find(p => p.codigo === codigo);
+            if (produto) {
+                adicionarAoCarrinho(produto);
+                return true;
+            }
+            return false;
+        }
+
+        function atualizarCarrinho() {
+            if (carrinho.length === 0) {
+                itensVenda.innerHTML = '<p style="text-align: center;">Nenhum item adicionado</p>';
+                totalVenda.textContent = formatarMoeda(0);
+                return;
+            }
+            
+            itensVenda.innerHTML = '';
+            
+            let total = 0;
+            
+            carrinho.forEach(item => {
+                const subtotal = item.preco * item.quantidade;
+                total += subtotal;
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item-venda';
+                itemElement.innerHTML = `
+                    <div>
+                        <div>${item.nome}</div>
+                        <div style="font-size: 12px;">${formatarMoeda(item.preco)} x ${item.quantidade}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span>${formatarMoeda(subtotal)}</span>
+                        <div class="quantidade-controller">
+                            <button onclick="alterarQuantidade(${item.id}, -1)">-</button>
+                            <span>${item.quantidade}</span>
+                            <button onclick="alterarQuantidade(${item.id}, 1)">+</button>
+                        </div>
+                        <button style="background: none; border: none; color: white; cursor: pointer;" onclick="removerItem(${item.id})">×</button>
+                    </div>
+                `;
+                itensVenda.appendChild(itemElement);
+            });
+            
+            totalVenda.textContent = formatarMoeda(total);
+            atualizarTroco();
+        }
+
+        function alterarQuantidade(id, mudanca) {
+            const item = carrinho.find(item => item.id === id);
+            
+            if (item) {
+                item.quantidade += mudanca;
+                
+                if (item.quantidade <= 0) {
+                    carrinho = carrinho.filter(item => item.id !== id);
+                }
+                
+                atualizarCarrinho();
+                salvarCarrinho();
+            }
+        }
+
+        function removerItem(id) {
+            carrinho = carrinho.filter(item => item.id !== id);
+            atualizarCarrinho();
+            salvarCarrinho();
+        }
+
+        function calcularTotal() {
+            return carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+        }
+
+        function atualizarTroco() {
+            const total = calcularTotal();
+            const recebido = parseFloat(valorRecebido.value) || 0;
+            const troco = recebido - total;
+            
+            valorTroco.textContent = formatarMoeda(troco > 0 ? troco : 0);
+        }
+
+        function mostrarModalConfirmacao() {
+            const total = calcularTotal();
+            const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
+            let pagamentoText = '';
+            let recebido = 0;
+            let troco = 0;
+            
+            if (formaPagamento === 'dinheiro') {
+                recebido = parseFloat(valorRecebido.value) || 0;
+                troco = recebido - total;
+                pagamentoText = `
+                    <p><strong>Forma de Pagamento:</strong> Dinheiro</p>
+                    <p><strong>Valor Recebido:</strong> ${formatarMoeda(recebido)}</p>
+                    <p><strong>Troco:</strong> ${formatarMoeda(troco > 0 ? troco : 0)}</p>
+                `;
+            } else {
+                let formaText = '';
+                switch(formaPagamento) {
+                    case 'debito': formaText = 'Cartão de Débito'; break;
+                    case 'credito': formaText = 'Cartão de Crédito'; break;
+                    case 'pix': formaText = 'PIX'; break;
+                }
+                pagamentoText = `<p><strong>Forma de Pagamento:</strong> ${formaText}</p>`;
+            }
+            
+            modalTitle.textContent = 'Confirmar Venda';
+            modalContent.innerHTML = `<p>Deseja finalizar esta venda?</p><p><strong>Total:</strong> ${formatarMoeda(total)}</p>`;
+            modalPagamentoInfo.innerHTML = pagamentoText;
+            
+            confirmModal.style.display = 'flex';
+        }
+
+        function finalizarVenda() {
+            if (carrinho.length === 0) {
+                alert('Adicione itens à venda antes de finalizar!');
+                return;
+            }
+            
+            const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
+            
+            if (formaPagamento === 'dinheiro') {
+                const total = calcularTotal();
+                const recebido = parseFloat(valorRecebido.value) || 0;
+                
+                if (recebido < total) {
+                    alert('O valor recebido é menor que o total da venda!');
+                    return;
+                }
+            }
+            
+            mostrarModalConfirmacao();
+        }
+
+        function confirmarVenda() {
+            const total = calcularTotal();
+            const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
+            let mensagem = `Venda finalizada com sucesso!\nTotal: ${formatarMoeda(total)}\nForma de Pagamento: `;
+            
+            // Criar objeto de venda para o histórico
+            const novaVenda = {
+                id: gerarId(),
+                data: new Date().toISOString(),
+                itens: [...carrinho],
+                total: total,
+                formaPagamento: formaPagamento,
+                valorRecebido: formaPagamento === 'dinheiro' ? parseFloat(valorRecebido.value) || 0 : null,
+                troco: formaPagamento === 'dinheiro' ? (parseFloat(valorRecebido.value) || 0) - total : null
+            };
+            
+            // Adicionar ao histórico
+            historicoVendas.unshift(novaVenda);
+            salvarHistorico();
+            
+            switch(formaPagamento) {
+                case 'dinheiro':
+                    const recebido = parseFloat(valorRecebido.value) || 0;
+                    const troco = recebido - total;
+                    mensagem += `Dinheiro\nValor Recebido: ${formatarMoeda(recebido)}\nTroco: ${formatarMoeda(troco > 0 ? troco : 0)}`;
+                    break;
+                case 'debito': mensagem += 'Cartão de Débito'; break;
+                case 'credito': mensagem += 'Cartão de Crédito'; break;
+                case 'pix': mensagem += 'PIX'; break;
+            }
+            
+            alert(mensagem);
+            
+            // Limpar carrinho e resetar formulário
+            carrinho = [];
+            atualizarCarrinho();
+            salvarCarrinho();
+            pagamentoDinheiro.checked = true;
+            valorRecebido.value = '';
+            confirmModal.style.display = 'none';
+            searchInput.focus();
+            
+            // Atualizar histórico se estiver visível
+            if (document.getElementById('historico-tab').classList.contains('active')) {
+                renderizarHistorico();
+            }
+        }
+
+        function cancelarVenda() {
+            if (carrinho.length === 0 || confirm('Tem certeza que deseja cancelar esta venda?')) {
+                carrinho = [];
+                atualizarCarrinho();
+                salvarCarrinho();
+                pagamentoDinheiro.checked = true;
+                valorRecebido.value = '';
+                searchInput.focus();
+            }
+        }
+
+        // Funções do Histórico
+        function renderizarHistorico() {
+            historicoVendasContainer.innerHTML = '';
+            
+            if (historicoVendas.length === 0) {
+                historicoVendasContainer.innerHTML = '<p style="text-align: center;">Nenhuma venda registrada ainda</p>';
+                return;
+            }
+            
+            const meses = agruparPorMes(historicoVendas);
+            
+            for (const mesAno in meses) {
+                const mes = meses[mesAno];
+                
+                const mesContainer = document.createElement('div');
+                mesContainer.className = 'historico-mes';
+                
+                const mesTitle = document.createElement('div');
+                mesTitle.className = 'historico-mes-title';
+                mesTitle.innerHTML = `
+                    <span>${mes.nome}</span>
+                    <span>${mes.vendas.length} venda(s)</span>
+                `;
+                
+                const mesContent = document.createElement('div');
+                mesContent.className = 'historico-mes-content';
+                
+                mes.vendas.forEach(venda => {
+                    const vendaElement = document.createElement('div');
+                    vendaElement.className = 'historico-venda';
+                    
+                    const vendaHeader = document.createElement('div');
+                    vendaHeader.className = 'historico-venda-header';
+                    vendaHeader.innerHTML = `
+                        <span>${formatarData(venda.data)}</span>
+                        <span>${formatarMoeda(venda.total)}</span>
+                    `;
+                    
+                    const vendaItens = document.createElement('div');
+                    vendaItens.className = 'historico-venda-itens';
+                    
+                    venda.itens.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'historico-venda-item';
+                        itemElement.innerHTML = `
+                            <span>${item.nome} x${item.quantidade}</span>
+                            <span>${formatarMoeda(item.preco * item.quantidade)}</span>
+                        `;
+                        vendaItens.appendChild(itemElement);
+                    });
+                    
+                    const vendaFooter = document.createElement('div');
+                    vendaFooter.className = 'historico-venda-footer';
+                    vendaFooter.style.marginTop = '10px';
+                    vendaFooter.style.paddingTop = '5px';
+                    vendaFooter.style.borderTop = '1px solid #eee';
+                    vendaFooter.innerHTML = `
+                        <div><strong>Pagamento:</strong> ${formatarFormaPagamento(venda.formaPagamento)}</div>
+                        ${venda.formaPagamento === 'dinheiro' ? `
+                            <div><strong>Recebido:</strong> ${formatarMoeda(venda.valorRecebido)}</div>
+                            <div><strong>Troco:</strong> ${formatarMoeda(venda.troco)}</div>
+                        ` : ''}
+                    `;
+                    
+                    vendaElement.appendChild(vendaHeader);
+                    vendaElement.appendChild(vendaItens);
+                    vendaElement.appendChild(vendaFooter);
+                    mesContent.appendChild(vendaElement);
+                });
+                
+                mesTitle.addEventListener('click', () => {
+                    mesContent.classList.toggle('active');
+                });
+                
+                mesContainer.appendChild(mesTitle);
+                mesContainer.appendChild(mesContent);
+                historicoVendasContainer.appendChild(mesContainer);
+            }
+        }
+
+        function formatarFormaPagamento(forma) {
+            switch(forma) {
+                case 'dinheiro': return 'Dinheiro';
+                case 'debito': return 'Cartão de Débito';
+                case 'credito': return 'Cartão de Crédito';
+                case 'pix': return 'PIX';
+                default: return forma;
+            }
+        }
+
+        // Funções do Cadastro de Produtos
+        function renderizarProdutosCadastrados() {
+            produtosCadastrados.innerHTML = '';
+            
+            if (produtos.length === 0) {
+                produtosCadastrados.innerHTML = '<p>Nenhum produto cadastrado ainda.</p>';
+                return;
+            }
+            
+            produtos.forEach(produto => {
+                const produtoCard = document.createElement('div');
+                produtoCard.className = 'produto-card';
+                produtoCard.innerHTML = `
+                    <img src="${produto.imagem || 'https://via.placeholder.com/150?text=Sem+Imagem'}" alt="${produto.nome}">
+                    <div class="produto-info">
+                        <div class="produto-nome">${produto.nome}</div>
+                        <div class="produto-preco">${formatarMoeda(produto.preco)}</div>
+                        <div style="font-size: 12px; margin-top: 5px;">${produto.categoria}</div>
+                        ${produto.codigo ? `<div style="font-size: 10px; color: #777;">Código: ${produto.codigo}</div>` : ''}
+                        <button onclick="removerProduto(${produto.id})" style="margin-top: 8px; width: 100%; padding: 5px; background-color: #ff3333; color: white; border: none; border-radius: 3px; cursor: pointer;">Remover</button>
+                    </div>
+                `;
+                produtosCadastrados.appendChild(produtoCard);
+            });
+        }
+
+        function removerProduto(id) {
+            if (confirm('Tem certeza que deseja remover este produto?')) {
+                produtos = produtos.filter(produto => produto.id !== id);
+                salvarProdutos();
+                renderizarProdutosCadastrados();
+                
+                // Atualiza o carrinho caso o produto removido esteja nele
+                carrinho = carrinho.filter(item => item.id !== id);
+                salvarCarrinho();
+                atualizarCarrinho();
+            }
+        }
+
+        // Funções para importação de Excel
+        function processarArquivoExcel(file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                
+                // Pegar a primeira planilha
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                
+                // Converter para JSON
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                
+                if (jsonData.length === 0) {
+                    alert('O arquivo Excel está vazio ou não está no formato correto!');
+                    return;
+                }
+                
+                // Verificar colunas mínimas necessárias
+                const primeiraLinha = jsonData[0];
+                if (!('Nome' in primeiraLinha) || !('Preço' in primeiraLinha) || !('Categoria' in primeiraLinha)) {
+                    alert('O arquivo Excel deve conter as colunas: Nome, Preço e Categoria!');
+                    return;
+                }
+                
+                // Preparar produtos para importação
+                const produtosParaImportar = jsonData.map(linha => {
+                    return {
+                        id: gerarId(),
+                        nome: linha['Nome'] || '',
+                        preco: parseFloat(linha['Preço']) || 0,
+                        categoria: linha['Categoria'].toLowerCase() || 'outros',
+                        codigo: linha['Código'] || linha['Codigo'] || gerarCodigoBarras(),
+                        imagem: linha['Imagem'] || linha['URL'] || ''
+                    };
+                }).filter(produto => produto.nome && produto.preco > 0);
+                
+                if (produtosParaImportar.length === 0) {
+                    alert('Nenhum produto válido encontrado no arquivo!');
+                    return;
+                }
+                
+                // Mostrar preview e botão de importação
+                fileInputInfo.innerHTML = `Pronto para importar ${produtosParaImportar.length} produtos do arquivo: ${file.name}`;
+                importarProdutosBtn.style.display = 'block';
+                
+                // Configurar ação do botão de importação
+                importarProdutosBtn.onclick = function() {
+                    produtos = [...produtos, ...produtosParaImportar];
+                    salvarProdutos();
+                    renderizarProdutosCadastrados();
+                    alert(`${produtosParaImportar.length} produtos importados com sucesso!`);
+                    
+                    // Resetar o formulário
+                    fileInputInfo.textContent = 'Nenhum arquivo selecionado';
+                    importarProdutosBtn.style.display = 'none';
+                    excelFileInput.value = '';
+                };
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Funções do Scanner de Código de Barras
+        function iniciarScanner() {
+            barcodeScanner.style.display = 'flex';
+            
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: barcodeScannerVideo,
+                    constraints: {
+                        width: 480,
+                        height: 320,
+                        facingMode: "environment"
+                    },
+                },
+                decoder: {
+                    readers: ["ean_reader", "ean_8_reader", "code_128_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader"]
+                },
+            }, function(err) {
+                if (err) {
+                    console.error(err);
+                    alert("Erro ao iniciar o scanner: " + err);
+                    return;
+                }
+                Quagga.start();
+            });
+
+            Quagga.onDetected(function(result) {
+                const codigo = result.codeResult.code;
+                Quagga.stop();
+                barcodeScanner.style.display = 'none';
+                
+                // Verifica em qual aba estamos
+                const abaAtiva = document.querySelector('.tab-btn.active').dataset.tab;
+                
+                if (abaAtiva === 'pdv') {
+                    if (!adicionarPorCodigo(codigo)) {
+                        alert('Produto não encontrado com este código de barras!');
+                    }
+                } else if (abaAtiva === 'cadastro') {
+                    produtoCodigoInput.value = codigo;
+                }
+            });
+        }
+
+        function pararScanner() {
+            Quagga.stop();
+            barcodeScanner.style.display = 'none';
+        }
+
+        // Funções para atalhos do teclado
+        function configurarAtalhosTeclado() {
+            document.addEventListener('keydown', function(e) {
+                // Ignorar se estiver digitando em um campo de texto
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                switch(e.key) {
+                    case 'F1':
+                        e.preventDefault();
+                        shortcutsModal.style.display = 'flex';
+                        break;
+                    case 'F12':
+                        e.preventDefault();
+                        if (document.getElementById('pdv-tab').classList.contains('active')) {
+                            searchInput.focus();
+                        }
+                        break;
+                    case 'F2':
+                        e.preventDefault();
+                        pagamentoDinheiro.checked = true;
+                        if (trocoSection) trocoSection.classList.add('active');
+                        if (valorRecebido) valorRecebido.focus();
+                        break;
+                    case 'F3':
+                        e.preventDefault();
+                        pagamentoDebito.checked = true;
+                        if (trocoSection) trocoSection.classList.remove('active');
+                        break;
+                    case 'F4':
+                        e.preventDefault();
+                        pagamentoCredito.checked = true;
+                        if (trocoSection) trocoSection.classList.remove('active');
+                        break;
+                    case 'F5':
+                        e.preventDefault();
+                        pagamentoPix.checked = true;
+                        if (trocoSection) trocoSection.classList.remove('active');
+                        break;
+                    case 'F9':
+                        e.preventDefault();
+                        finalizarVenda();
+                        break;
+                    case 'F10':
+                        e.preventDefault();
+                        cancelarVenda();
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        if (confirmModal.style.display === 'flex') {
+                            confirmModal.style.display = 'none';
+                        } else if (shortcutsModal.style.display === 'flex') {
+                            shortcutsModal.style.display = 'none';
+                        } else if (barcodeScanner.style.display === 'flex') {
+                            pararScanner();
+                        }
+                        break;
+                }
+            });
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('input', renderizarProdutos);
+
+        // Busca por código de barras ao pressionar Enter
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const codigo = this.value;
+                if (codigo.length >= 8) { // Códigos de barras geralmente têm 8+ dígitos
+                    if (adicionarPorCodigo(codigo)) {
+                        this.value = '';
+                    } else {
+                        alert('Produto não encontrado com este código de barras!');
+                    }
+                }
+            }
+        });
+
+        categoriaBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoriaBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                categoriaAtual = btn.dataset.categoria;
+                renderizarProdutos();
+            });
+        });
+
+        finalizarVendaBtn.addEventListener('click', finalizarVenda);
+        cancelarVendaBtn.addEventListener('click', cancelarVenda);
+        modalConfirmBtn.addEventListener('click', confirmarVenda);
+        modalCancelBtn.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+        });
+
+        // Atualiza a seção de troco quando a forma de pagamento mudar
+        pagamentoOptions.forEach(option => {
+            option.addEventListener('change', function() {
+                trocoSection.classList.toggle('active', this.value === 'dinheiro');
+                if (this.value === 'dinheiro' && valorRecebido) {
+                    valorRecebido.focus();
+                }
+            });
+        });
+
+        // Atualiza o troco quando o valor recebido mudar
+        valorRecebido.addEventListener('input', atualizarTroco);
+
+        formProduto.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nome = document.getElementById('produtoNome').value;
+            const preco = parseFloat(document.getElementById('produtoPreco').value);
+            const categoria = document.getElementById('produtoCategoria').value;
+            const codigo = document.getElementById('produtoCodigo').value;
+            const imagem = document.getElementById('produtoImagem').value;
+            
+            const novoProduto = {
+                id: gerarId(),
+                nome,
+                preco,
+                categoria,
+                codigo: codigo || undefined,
+                imagem: imagem || undefined
+            };
+            
+            produtos.push(novoProduto);
+            salvarProdutos();
+            renderizarProdutosCadastrados();
+            
+            // Limpa o formulário
+            formProduto.reset();
+            
+            alert('Produto cadastrado com sucesso!');
+        });
+
+        generateBarcodeBtn.addEventListener('click', function() {
+            produtoCodigoInput.value = gerarCodigoBarras();
+        });
+
+        // Event listeners para importação de Excel
+        excelFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (!file.name.match(/\.(xlsx|xls|csv)$/)) {
+                alert('Por favor, selecione um arquivo Excel (.xlsx, .xls) ou CSV!');
+                return;
+            }
+            
+            fileInputInfo.textContent = `Processando arquivo: ${file.name}...`;
+            importarProdutosBtn.style.display = 'none';
+            
+            processarArquivoExcel(file);
+        });
+
+        scanBarcodeBtn.addEventListener('click', iniciarScanner);
+        closeBarcodeScanner.addEventListener('click', pararScanner);
+        helpShortcuts.addEventListener('click', () => {
+            shortcutsModal.style.display = 'flex';
+        });
+        closeShortcutsBtn.addEventListener('click', () => {
+            shortcutsModal.style.display = 'none';
+        });
+
+        // Focar no campo de busca quando a página carregar
+        window.addEventListener('load', function() {
+            if (document.getElementById('pdv-tab').classList.contains('active')) {
+                searchInput.focus();
+            }
+            
+            // Carregar todos os dados iniciais
+            carregarProdutos();
+            carregarCarrinho();
+            carregarHistorico();
+            renderizarProdutos();
+            renderizarProdutosCadastrados();
+            configurarAtalhosTeclado();
+        });
+
+        // Funções globais para os botões
+        window.alterarQuantidade = alterarQuantidade;
+        window.removerItem = removerItem;
+        window.removerProduto = removerProduto;
+    </script>
 </body>
-  </html>
+</html>
