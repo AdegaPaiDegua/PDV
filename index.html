@@ -716,10 +716,10 @@
                         <select id="produtoCategoria" class="form-select" required>
                             <option value="">Selecione uma categoria</option>
                             <option value="vinhos">Vinhos</option>
-                            <option value="espumantes">Espumantes</option>
+                            <option value="tabacaria">Tabacaria</option>
                             <option value="cervejas">Cervejas</option>
                             <option value="destilados">Destilados</option>
-                            <option value="aperitivos">Aperitivos</option>
+                            <option value="salgadinhos">Salgadinhos</option>
                         </select>
                     </div>
                     
@@ -1000,11 +1000,8 @@
             } else {
                 // Dados iniciais caso não haja nada salvo
                 produtos = [
-                    { id: gerarId(), nome: "Vinho Tinto Seco", preco: 89.90, categoria: "vinhos", codigo: gerarCodigoBarras(), imagem: "https://via.placeholder.com/150?text=Vinho+Tinto" },
-                    { id: gerarId(), nome: "Vinho Branco Suave", preco: 65.50, categoria: "vinhos", codigo: gerarCodigoBarras(), imagem: "https://via.placeholder.com/150?text=Vinho+Branco" },
-                    { id: gerarId(), nome: "Espumante Brut", preco: 120.00, categoria: "espumantes", codigo: gerarCodigoBarras(), imagem: "https://via.placeholder.com/150?text=Espumante" },
-                    { id: gerarId(), nome: "Cerveja Artesanal IPA", preco: 18.90, categoria: "cervejas", codigo: gerarCodigoBarras(), imagem: "https://via.placeholder.com/150?text=Cerveja+IPA" },
-                    { id: gerarId(), nome: "Whisky 12 anos", preco: 199.90, categoria: "destilados", codigo: gerarCodigoBarras(), imagem: "https://via.placeholder.com/150?text=Whisky" }
+                    { id: gerarId(), nome: "Amstel", preco: 3.50, categoria: "cervejas", codigo: gerarCodigoBarras(), imagem: "https://a.imagem.app/B5wpfV.png" },
+
                 ];
                 salvarProdutos();
             }
