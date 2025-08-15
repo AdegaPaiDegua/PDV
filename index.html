@@ -8,7 +8,11 @@
     <link rel="apple-touch-icon" href="logo.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bibliotecas externas -->
+    <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
+        /* Estilos otimizados */
         :root {
             --primary-color: #1a1a1a;
             --secondary-color: #333;
@@ -527,7 +531,7 @@
         
         .pagamento-section {
             margin-top: 1rem;
-            padding: 1rem;
+            padding: 5;
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 0.5rem;
         }
@@ -1013,10 +1017,6 @@
             border: 1px solid #e2e8f0;
         }
     </style>
-    <!-- Incluindo a biblioteca QuaggaJS para leitura de código de barras -->
-    <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
-    <!-- Incluindo a biblioteca xlsx para leitura de arquivos Excel -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
     <header>
@@ -1058,7 +1058,8 @@
                 </div>
                 
                 <div class="produtos-grid" id="produtosGrid">
-                    <!-- Produtos serão inseridos aqui via JavaScript -->
+                    <!-- Produtos serão carregados via JavaScript -->
+                    <div class="loader"></div>
                 </div>
             </section>
             
@@ -1066,7 +1067,6 @@
                 <h2 class="section-title">Venda em Andamento</h2>
                 
                 <div class="itens-venda" id="itensVenda">
-                    <!-- Itens da venda serão inseridos aqui -->
                     <p style="text-align: center; color: #cbd5e1;">Nenhum item adicionado</p>
                 </div>
                 
@@ -1107,15 +1107,15 @@
                         </div>
                     </div>
                     
-                    <button class="btn btn-accent btn-block" id="finalizarVenda" style="padding: 12px; font-size: 16px; font-weight: 600;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <button class="btn btn-accent btn-block" id="finalizarVenda">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                             <polyline points="22 4 12 14.01 9 11.01"></polyline>
                         </svg>
                         FINALIZAR VENDA (F9)
                     </button>
-                    <button class="btn btn-danger btn-block" id="cancelarVenda" style="padding: 12px; font-size: 16px; font-weight: 600;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <button class="btn btn-danger btn-block" id="cancelarVenda">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="15" y1="9" x2="9" y2="15"></line>
                             <line x1="9" y1="9" x2="15" y2="15"></line>
@@ -1248,7 +1248,7 @@
             <section style="margin-top: 1.5rem;">
                 <h2 class="section-title">Produtos Cadastrados</h2>
                 <div class="produtos-grid" id="produtosCadastrados">
-                    <!-- Produtos cadastrados serão listados aqui -->
+                    <div class="loader"></div>
                 </div>
             </section>
         </div>
@@ -1258,7 +1258,7 @@
             <section class="historico-section">
                 <h2 class="section-title">Histórico de Vendas</h2>
                 <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
-                    <button class="btn btn-accent" id="pagarHistoricoBtn" style="padding: 8px 16px; font-weight: 600;">
+                    <button class="btn btn-accent" id="pagarHistoricoBtn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="19" x2="12" y2="5"></line>
                             <polyline points="5 12 12 5 19 12"></polyline>
@@ -1267,8 +1267,7 @@
                     </button>
                 </div>
                 <div id="historicoVendas">
-                    <!-- Histórico será carregado aqui -->
-                    <p style="text-align: center; color: #64748b;">Nenhuma venda registrada ainda</p>
+                    <div class="loader"></div>
                 </div>
             </section>
         </div>
@@ -1368,298 +1367,32 @@
     </div>
 
     <script>
-        // Configuração do IndexedDB
-        const dbName = "PDVAdegaDB";
-        const dbVersion = 1;
+        // Configurações globais
+        const DB_NAME = "PDVAdegaDB";
+        const DB_VERSION = 2;
         let db;
-
-        // Função para abrir ou criar o banco de dados
-        function openDatabase() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(dbName, dbVersion);
-                
-                request.onerror = (event) => {
-                    console.error("Erro ao abrir o banco de dados:", event.target.error);
-                    reject(event.target.error);
-                };
-                
-                request.onsuccess = (event) => {
-                    db = event.target.result;
-                    resolve(db);
-                };
-                
-                request.onupgradeneeded = (event) => {
-                    const db = event.target.result;
-                    
-                    // Cria a loja de produtos se não existir
-                    if (!db.objectStoreNames.contains('produtos')) {
-                        const produtosStore = db.createObjectStore('produtos', { keyPath: 'id' });
-                        produtosStore.createIndex('categoria', 'categoria', { unique: false });
-                        produtosStore.createIndex('codigo', 'codigo', { unique: true });
-                    }
-                    
-                    // Cria a loja de vendas se não existir
-                    if (!db.objectStoreNames.contains('vendas')) {
-                        const vendasStore = db.createObjectStore('vendas', { keyPath: 'id' });
-                        vendasStore.createIndex('data', 'data', { unique: false });
-                    }
-                    
-                    // Cria a loja de carrinho se não existir
-                    if (!db.objectStoreNames.contains('carrinho')) {
-                        db.createObjectStore('carrinho', { keyPath: 'id' });
-                    }
-                };
-            });
-        }
-
-        // Função para exportar o banco de dados para um arquivo
-        async function exportDatabase() {
-            if (!db) await openDatabase();
-            
-            const transaction = db.transaction(['produtos', 'vendas', 'carrinho'], 'readonly');
-            const produtosStore = transaction.objectStore('produtos');
-            const vendasStore = transaction.objectStore('vendas');
-            const carrinhoStore = transaction.objectStore('carrinho');
-            
-            const produtos = await getAll(produtosStore);
-            const vendas = await getAll(vendasStore);
-            const carrinho = await getAll(carrinhoStore);
-            
-            const data = {
-                produtos,
-                vendas,
-                carrinho,
-                exportDate: new Date().toISOString()
-            };
-            
-            return data;
-        }
-
-        // Função para importar dados para o banco de dados
-        async function importDatabase(data) {
-            if (!db) await openDatabase();
-            
-            const transaction = db.transaction(['produtos', 'vendas', 'carrinho'], 'readwrite');
-            const produtosStore = transaction.objectStore('produtos');
-            const vendasStore = transaction.objectStore('vendas');
-            const carrinhoStore = transaction.objectStore('carrinho');
-            
-            // Limpa as lojas existentes
-            await clearStore(produtosStore);
-            await clearStore(vendasStore);
-            await clearStore(carrinhoStore);
-            
-            // Adiciona os novos dados
-            for (const produto of data.produtos) {
-                produtosStore.add(produto);
-            }
-            
-            for (const venda of data.vendas) {
-                vendasStore.add(venda);
-            }
-            
-            for (const item of data.carrinho) {
-                carrinhoStore.add(item);
-            }
-            
-            return new Promise((resolve, reject) => {
-                transaction.oncomplete = () => resolve();
-                transaction.onerror = (event) => reject(event.target.error);
-            });
-        }
-
-        // Funções auxiliares para operações no IndexedDB
-        function getAll(store) {
-            return new Promise((resolve, reject) => {
-                const request = store.getAll();
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = (event) => reject(event.target.error);
-            });
-        }
-
-        function clearStore(store) {
-            return new Promise((resolve, reject) => {
-                const request = store.clear();
-                request.onsuccess = () => resolve();
-                request.onerror = (event) => reject(event.target.error);
-            });
-        }
-
-        // Função para salvar o banco de dados em um arquivo
-        async function saveDatabaseToFile() {
-            try {
-                const data = await exportDatabase();
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `pdv-adega-backup-${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                alert('Banco de dados exportado com sucesso!');
-            } catch (error) {
-                console.error('Erro ao exportar banco de dados:', error);
-                alert('Erro ao exportar banco de dados: ' + error.message);
-            }
-        }
-
-        // Função para carregar o banco de dados de um arquivo
-        async function loadDatabaseFromFile(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                
-                reader.onload = async (event) => {
-                    try {
-                        const data = JSON.parse(event.target.result);
-                        await importDatabase(data);
-                        alert('Banco de dados importado com sucesso!');
-                        resolve();
-                    } catch (error) {
-                        console.error('Erro ao importar banco de dados:', error);
-                        alert('Erro ao importar banco de dados: ' + error.message);
-                        reject(error);
-                    }
-                };
-                
-                reader.onerror = (error) => {
-                    console.error('Erro ao ler arquivo:', error);
-                    alert('Erro ao ler arquivo: ' + error.message);
-                    reject(error);
-                };
-                
-                reader.readAsText(file);
-            });
-        }
-
-        // Funções auxiliares
-        function formatarMoeda(valor) {
-            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        function formatarData(data) {
-            const options = { 
-                day: '2-digit', 
-                month: '2-digit', 
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            return new Date(data).toLocaleDateString('pt-BR', options);
-        }
-
-        function gerarId() {
-            return Math.floor(Math.random() * 1000000);
-        }
-
-        function gerarCodigoBarras() {
-            // Gera um código de barras fictício no formato EAN-13
-            const pais = '789'; // Código do Brasil
-            const empresa = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-            const produto = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-            
-            // Calcula o dígito verificador
-            const codigoSemDigito = pais + empresa + produto;
-            let soma = 0;
-            
-            for (let i = 0; i < codigoSemDigito.length; i++) {
-                const digito = parseInt(codigoSemDigito[i]);
-                soma += (i % 2 === 0) ? digito * 1 : digito * 3;
-            }
-            
-            const digitoVerificador = (10 - (soma % 10)) % 10;
-            
-            return codigoSemDigito + digitoVerificador;
-        }
-
-        function agruparPorMes(vendas) {
-            const meses = {};
-            
-            vendas.forEach(venda => {
-                const data = new Date(venda.data);
-                // Corrigido: formatar mês com dois dígitos
-                const mes = (data.getMonth() + 1).toString().padStart(2, '0');
-                const mesAno = `${mes}/${data.getFullYear()}`;
-                const nomeMes = data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-                
-                if (!meses[mesAno]) {
-                    meses[mesAno] = {
-                        nome: nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1),
-                        vendas: []
-                    };
-                }
-                
-                meses[mesAno].vendas.push(venda);
-            });
-            
-            return meses;
-        }
-
-        // Gerenciamento de abas
-        const tabs = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const searchInput = document.getElementById('searchInput');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.dataset.tab;
-                
-                // Atualiza as abas ativas
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-                
-                tab.classList.add('active');
-                document.getElementById(`${tabId}-tab`).classList.add('active');
-                
-                // Foca no campo de busca quando a aba do PDV estiver ativa
-                if (tabId === 'pdv') {
-                    searchInput.focus();
-                    carregarProdutos();
-                    renderizarProdutos();
-                }
-                
-                // Se for a aba de cadastro, recarrega a lista de produtos cadastrados
-                if (tabId === 'cadastro') {
-                    carregarProdutos();
-                    renderizarProdutosCadastrados();
-                }
-                
-                // Se for a aba de histórico, carrega o histórico
-                if (tabId === 'historico') {
-                    carregarHistorico();
-                    renderizarHistorico();
-                }
-            });
-        });
-
-        // Sistema de PDV
-        let carrinho = [];
-        let categoriaAtual = "todos";
-        let produtos = [];
-        let historicoVendas = [];
+        let produtosCache = [];
+        let carrinhoCache = [];
+        let historicoCache = [];
         let produtoEmEdicao = null;
+        let scannerAtivo = false;
+        let scannerTimeout;
+        const RENDER_THROTTLE = 200; // ms entre renders
+        let lastRenderTime = 0;
 
-        // Elementos do DOM - PDV
+        // Elementos do DOM
+        const searchInput = document.getElementById('searchInput');
         const produtosGrid = document.getElementById('produtosGrid');
         const itensVenda = document.getElementById('itensVenda');
         const totalVenda = document.getElementById('totalVenda');
-        const categoriaBtns = document.querySelectorAll('.categoria-btn');
-        const finalizarVendaBtn = document.getElementById('finalizarVenda');
-        const cancelarVendaBtn = document.getElementById('cancelarVenda');
         const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
         const trocoSection = document.getElementById('trocoSection');
         const valorRecebido = document.getElementById('valorRecebido');
         const valorTroco = document.getElementById('valorTroco');
+        const finalizarVendaBtn = document.getElementById('finalizarVenda');
+        const cancelarVendaBtn = document.getElementById('cancelarVenda');
         const pagamentoOptions = document.querySelectorAll('input[name="pagamento"]');
         const pagamentoDinheiro = document.getElementById('pagamentoDinheiro');
-        const pagamentoDebito = document.getElementById('pagamentoDebito');
-        const pagamentoCredito = document.getElementById('pagamentoCredito');
-        const pagamentoPix = document.getElementById('pagamentoPix');
-
-        // Elementos do DOM - Cadastro
         const formProduto = document.getElementById('formProduto');
         const produtosCadastrados = document.getElementById('produtosCadastrados');
         const produtoCodigoInput = document.getElementById('produtoCodigo');
@@ -1670,149 +1403,203 @@
         const produtoIdInput = document.getElementById('produtoId');
         const submitProdutoBtn = document.getElementById('submitProdutoBtn');
         const cancelarEdicaoBtn = document.getElementById('cancelarEdicaoBtn');
-
-        // Elementos do DOM - Histórico
         const historicoVendasContainer = document.getElementById('historicoVendas');
         const pagarHistoricoBtn = document.getElementById('pagarHistoricoBtn');
-
-        // Elementos do DOM - Scanner de código de barras
         const barcodeScanner = document.getElementById('barcodeScanner');
         const barcodeScannerVideo = document.getElementById('barcodeScannerVideo');
         const closeBarcodeScanner = document.getElementById('closeBarcodeScanner');
-
-        // Elementos do DOM - Modal de confirmação
         const confirmModal = document.getElementById('confirmModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalContent = document.getElementById('modalContent');
         const modalPagamentoInfo = document.getElementById('modalPagamentoInfo');
         const modalCancelBtn = document.getElementById('modalCancelBtn');
         const modalConfirmBtn = document.getElementById('modalConfirmBtn');
-
-        // Elementos do DOM - Atalhos
         const helpShortcuts = document.getElementById('helpShortcuts');
         const shortcutsModal = document.getElementById('shortcutsModal');
         const closeShortcutsBtn = document.getElementById('closeShortcutsBtn');
-
-        // Elementos do DOM - Backup
         const exportDatabaseBtn = document.getElementById('exportDatabaseBtn');
         const importDatabaseBtn = document.getElementById('importDatabaseBtn');
         const databaseFileInput = document.getElementById('databaseFileInput');
         const databaseFileInfo = document.getElementById('databaseFileInfo');
+        const tabs = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const categoriaBtns = document.querySelectorAll('.categoria-btn');
 
-        // Modificar as funções existentes para usar o IndexedDB
+        // Função para abrir o banco de dados
+        async function openDatabase() {
+            return new Promise((resolve, reject) => {
+                if (db) return resolve(db);
+                
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onerror = (event) => {
+                    console.error("Database error:", event.target.error);
+                    reject(new Error("Falha ao abrir o banco de dados"));
+                };
+                
+                request.onsuccess = (event) => {
+                    db = event.target.result;
+                    db.onerror = (event) => {
+                        console.error("Database error:", event.target.error);
+                    };
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    
+                    if (!db.objectStoreNames.contains('produtos')) {
+                        const store = db.createObjectStore('produtos', { keyPath: 'id' });
+                        store.createIndex('categoria', 'categoria', { unique: false });
+                        store.createIndex('codigo', 'codigo', { unique: true });
+                    }
+                    
+                    if (!db.objectStoreNames.contains('vendas')) {
+                        const store = db.createObjectStore('vendas', { keyPath: 'id' });
+                        store.createIndex('data', 'data', { unique: false });
+                    }
+                    
+                    if (!db.objectStoreNames.contains('carrinho')) {
+                        db.createObjectStore('carrinho', { keyPath: 'id' });
+                    }
+                };
+            });
+        }
 
-        // Substituir a função carregarProdutos
-        async function carregarProdutos() {
+        // Função genérica para operações no banco de dados
+        async function dbOperation(storeName, operation, data = null) {
             if (!db) await openDatabase();
-            const transaction = db.transaction(['produtos'], 'readonly');
-            const store = transaction.objectStore('produtos');
             
             return new Promise((resolve, reject) => {
-                const request = store.getAll();
-                request.onsuccess = () => {
-                    produtos = request.result;
-                    resolve(produtos);
-                };
+                const transaction = db.transaction([storeName], operation === 'getAll' ? 'readonly' : 'readwrite');
+                const store = transaction.objectStore(storeName);
+                
+                let request;
+                switch (operation) {
+                    case 'getAll':
+                        request = store.getAll();
+                        break;
+                    case 'add':
+                        request = store.add(data);
+                        break;
+                    case 'put':
+                        request = store.put(data);
+                        break;
+                    case 'delete':
+                        request = store.delete(data);
+                        break;
+                    case 'clear':
+                        request = store.clear();
+                        break;
+                    default:
+                        reject(new Error('Operação não suportada'));
+                }
+                
+                request.onsuccess = () => resolve(request.result);
                 request.onerror = (event) => reject(event.target.error);
             });
         }
 
-        // Substituir a função carregarCarrinho
-        async function carregarCarrinho() {
-            if (!db) await openDatabase();
-            const transaction = db.transaction(['carrinho'], 'readonly');
-            const store = transaction.objectStore('carrinho');
+        // Cache de produtos com invalidação
+        async function getProdutos() {
+            if (produtosCache.length) return produtosCache;
             
-            return new Promise((resolve, reject) => {
-                const request = store.getAll();
-                request.onsuccess = () => {
-                    carrinho = request.result;
-                    resolve(carrinho);
-                };
-                request.onerror = (event) => reject(event.target.error);
-            });
-        }
-
-        // Substituir a função carregarHistorico
-        async function carregarHistorico() {
-            if (!db) await openDatabase();
-            const transaction = db.transaction(['vendas'], 'readonly');
-            const store = transaction.objectStore('vendas');
-            
-            return new Promise((resolve, reject) => {
-                const request = store.getAll();
-                request.onsuccess = () => {
-                    historicoVendas = request.result.sort((a, b) => new Date(b.data) - new Date(a.data));
-                    resolve(historicoVendas);
-                };
-                request.onerror = (event) => reject(event.target.error);
-            });
-        }
-
-        // Substituir a função salvarProdutos
-        async function salvarProdutos() {
-            if (!db) await openDatabase();
-            const transaction = db.transaction(['produtos'], 'readwrite');
-            const store = transaction.objectStore('produtos');
-            
-            // Limpa a loja e adiciona os produtos atualizados
-            await clearStore(store);
-            
-            for (const produto of produtos) {
-                store.add(produto);
+            try {
+                produtosCache = await dbOperation('produtos', 'getAll');
+                return produtosCache;
+            } catch (error) {
+                console.error("Erro ao carregar produtos:", error);
+                return [];
             }
         }
 
-        // Substituir a função salvarCarrinho
-        async function salvarCarrinho() {
-            if (!db) await openDatabase();
-            const transaction = db.transaction(['carrinho'], 'readwrite');
-            const store = transaction.objectStore('carrinho');
+        // Cache de carrinho
+        async function getCarrinho() {
+            if (carrinhoCache.length) return carrinhoCache;
             
-            // Limpa a loja e adiciona os itens do carrinho
-            await clearStore(store);
-            
-            for (const item of carrinho) {
-                store.add(item);
+            try {
+                carrinhoCache = await dbOperation('carrinho', 'getAll');
+                return carrinhoCache;
+            } catch (error) {
+                console.error("Erro ao carregar carrinho:", error);
+                return [];
             }
         }
 
-        // Substituir a função salvarHistorico
-        async function salvarHistorico() {
-            if (!db) await openDatabase();
-            const transaction = db.transaction(['vendas'], 'readwrite');
-            const store = transaction.objectStore('vendas');
+        // Cache de histórico
+        async function getHistorico() {
+            if (historicoCache.length) return historicoCache;
             
-            // Limpa a loja e adiciona as vendas atualizadas
-            await clearStore(store);
-            
-            for (const venda of historicoVendas) {
-                store.add(venda);
+            try {
+                const historico = await dbOperation('vendas', 'getAll');
+                historicoCache = historico.sort((a, b) => new Date(b.data) - new Date(a.data));
+                return historicoCache;
+            } catch (error) {
+                console.error("Erro ao carregar histórico:", error);
+                return [];
             }
         }
 
-        // Funções do PDV
-        function renderizarProdutos() {
-            produtosGrid.innerHTML = '';
+        // Função debounce para melhorar performance
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        // Renderização otimizada de produtos
+        const renderProdutos = debounce(async function() {
+            const now = Date.now();
+            if (now - lastRenderTime < RENDER_THROTTLE) return;
+            lastRenderTime = now;
             
+            const produtos = await getProdutos();
             const termoBusca = searchInput.value.toLowerCase();
+            const categoriaAtual = document.querySelector('.categoria-btn.active')?.dataset.categoria || 'todos';
             
-            produtos.filter(produto => {
+            // Filtra os produtos
+            const produtosFiltrados = produtos.filter(produto => {
                 const correspondeBusca = produto.nome.toLowerCase().includes(termoBusca) || 
                                       (produto.codigo && produto.codigo.includes(termoBusca));
                 const correspondeCategoria = categoriaAtual === 'todos' || produto.categoria === categoriaAtual;
                 return correspondeBusca && correspondeCategoria;
-            }).forEach(produto => {
-                const produtoCard = document.createElement('div');
-                produtoCard.className = 'produto-card';
+            });
+            
+            // Virtualização básica - renderiza apenas os visíveis
+            const container = document.getElementById('produtosGrid');
+            container.innerHTML = '';
+            
+            // Adiciona um indicador de carregamento para listas grandes
+            if (produtosFiltrados.length > 50) {
+                const loading = document.createElement('div');
+                loading.className = 'loader';
+                container.appendChild(loading);
                 
-                // Verifica se o estoque está baixo (menos de 5 itens)
-                const estoqueBaixo = produto.estoque < 5;
+                // Usa requestAnimationFrame para renderização não-bloqueante
+                requestAnimationFrame(() => {
+                    renderProdutosChunk(produtosFiltrados, container, 0);
+                });
+            } else {
+                renderProdutosChunk(produtosFiltrados, container, 0);
+            }
+        }, 100);
+
+        // Renderiza produtos em chunks para não bloquear a UI
+        function renderProdutosChunk(produtos, container, index) {
+            const CHUNK_SIZE = 20;
+            const end = Math.min(index + CHUNK_SIZE, produtos.length);
+            
+            for (let i = index; i < end; i++) {
+                const produto = produtos[i];
                 const estoqueEsgotado = produto.estoque <= 0;
                 
+                const produtoCard = document.createElement('div');
+                produtoCard.className = 'produto-card';
                 produtoCard.innerHTML = `
                     <img src="${produto.imagem || 'https://via.placeholder.com/150?text=Sem+Imagem'}" alt="${produto.nome}">
-                    <div class="produto-estoque ${estoqueBaixo ? 'estoque-baixo' : ''}">
+                    <div class="produto-estoque ${produto.estoque < 5 ? 'estoque-baixo' : ''}">
                         ${produto.estoque} ${estoqueEsgotado ? 'ESGOTADO' : 'disponíveis'}
                     </div>
                     <div class="produto-info">
@@ -1822,7 +1609,6 @@
                     </div>
                 `;
                 
-                // Desabilita o clique se o estoque estiver esgotado
                 if (!estoqueEsgotado) {
                     produtoCard.addEventListener('click', () => adicionarAoCarrinho(produto));
                 } else {
@@ -1830,21 +1616,28 @@
                     produtoCard.style.cursor = 'not-allowed';
                 }
                 
-                produtosGrid.appendChild(produtoCard);
-            });
+                container.appendChild(produtoCard);
+            }
+            
+            if (end < produtos.length) {
+                requestAnimationFrame(() => {
+                    renderProdutosChunk(produtos, container, end);
+                });
+            }
         }
 
-        function adicionarAoCarrinho(produto) {
+        // Adiciona produto ao carrinho
+        async function adicionarAoCarrinho(produto) {
             // Verifica se há estoque disponível
             if (produto.estoque <= 0) {
                 alert('Este produto está esgotado!');
                 return;
             }
             
+            const carrinho = await getCarrinho();
             const itemExistente = carrinho.find(item => item.id === produto.id);
             
             if (itemExistente) {
-                // Verifica se há estoque suficiente para a quantidade adicional
                 if (itemExistente.quantidade >= produto.estoque) {
                     alert(`Não há estoque suficiente! Restam apenas ${produto.estoque} unidades.`);
                     return;
@@ -1857,33 +1650,32 @@
                 });
             }
             
+            // Atualiza o cache e o banco de dados
+            carrinhoCache = carrinho;
+            await dbOperation('carrinho', 'clear');
+            for (const item of carrinho) {
+                await dbOperation('carrinho', 'add', item);
+            }
+            
             atualizarCarrinho();
-            salvarCarrinho();
             searchInput.value = '';
             searchInput.focus();
         }
 
-        function adicionarPorCodigo(codigo) {
-            const produto = produtos.find(p => p.codigo === codigo);
-            if (produto) {
-                adicionarAoCarrinho(produto);
-                return true;
-            }
-            return false;
-        }
-
-        function atualizarCarrinho() {
+        // Atualiza a exibição do carrinho
+        async function atualizarCarrinho() {
+            const carrinho = await getCarrinho();
+            
             if (carrinho.length === 0) {
-                itensVenda.innerHTML = '<p style="text-align: center;">Nenhum item adicionado</p>';
+                itensVenda.innerHTML = '<p style="text-align: center; color: #cbd5e1;">Nenhum item adicionado</p>';
                 totalVenda.textContent = formatarMoeda(0);
                 return;
             }
             
             itensVenda.innerHTML = '';
-            
             let total = 0;
             
-            carrinho.forEach(item => {
+            for (const item of carrinho) {
                 const subtotal = item.preco * item.quantidade;
                 total += subtotal;
                 
@@ -1905,20 +1697,32 @@
                     </div>
                 `;
                 itensVenda.appendChild(itemElement);
-            });
+            }
             
             totalVenda.textContent = formatarMoeda(total);
             atualizarTroco();
         }
 
-        function alterarQuantidade(id, mudanca) {
+        // Adiciona produto por código de barras
+        async function adicionarPorCodigo(codigo) {
+            const produtos = await getProdutos();
+            const produto = produtos.find(p => p.codigo === codigo);
+            if (produto) {
+                await adicionarAoCarrinho(produto);
+                return true;
+            }
+            return false;
+        }
+
+        // Altera quantidade de um item no carrinho
+        async function alterarQuantidade(id, mudanca) {
+            const carrinho = await getCarrinho();
             const item = carrinho.find(item => item.id === id);
             
             if (item) {
-                // Encontra o produto original para verificar o estoque
+                const produtos = await getProdutos();
                 const produtoOriginal = produtos.find(p => p.id === id);
                 
-                // Verifica se há estoque suficiente para aumentar a quantidade
                 if (mudanca > 0 && (item.quantidade + mudanca) > produtoOriginal.estoque) {
                     alert(`Não há estoque suficiente! Restam apenas ${produtoOriginal.estoque} unidades.`);
                     return;
@@ -1927,24 +1731,34 @@
                 item.quantidade += mudanca;
                 
                 if (item.quantidade <= 0) {
-                    carrinho = carrinho.filter(item => item.id !== id);
+                    carrinhoCache = carrinho.filter(item => item.id !== id);
+                } else {
+                    carrinhoCache = [...carrinho];
+                }
+                
+                await dbOperation('carrinho', 'clear');
+                for (const item of carrinhoCache) {
+                    await dbOperation('carrinho', 'add', item);
                 }
                 
                 atualizarCarrinho();
-                salvarCarrinho();
             }
         }
 
-        function removerItem(id) {
-            carrinho = carrinho.filter(item => item.id !== id);
+        // Remove item do carrinho
+        async function removerItem(id) {
+            const carrinho = await getCarrinho();
+            carrinhoCache = carrinho.filter(item => item.id !== id);
+            
+            await dbOperation('carrinho', 'clear');
+            for (const item of carrinhoCache) {
+                await dbOperation('carrinho', 'add', item);
+            }
+            
             atualizarCarrinho();
-            salvarCarrinho();
         }
 
-        function calcularTotal() {
-            return carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-        }
-
+        // Atualiza o valor do troco
         function atualizarTroco() {
             const total = calcularTotal();
             const recebido = parseFloat(valorRecebido.value) || 0;
@@ -1953,8 +1767,15 @@
             valorTroco.textContent = formatarMoeda(troco > 0 ? troco : 0);
         }
 
-        function mostrarModalConfirmacao() {
-            const total = calcularTotal();
+        // Calcula o total da venda
+        async function calcularTotal() {
+            const carrinho = await getCarrinho();
+            return carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+        }
+
+        // Mostra modal de confirmação de venda
+        async function mostrarModalConfirmacao() {
+            const total = await calcularTotal();
             const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
             let pagamentoText = '';
             let recebido = 0;
@@ -1985,7 +1806,9 @@
             confirmModal.style.display = 'flex';
         }
 
-        function finalizarVenda() {
+        // Finaliza a venda
+        async function finalizarVenda() {
+            const carrinho = await getCarrinho();
             if (carrinho.length === 0) {
                 alert('Adicione itens à venda antes de finalizar!');
                 return;
@@ -1994,7 +1817,7 @@
             const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
             
             if (formaPagamento === 'dinheiro') {
-                const total = calcularTotal();
+                const total = await calcularTotal();
                 const recebido = parseFloat(valorRecebido.value) || 0;
                 
                 if (recebido < total) {
@@ -2006,21 +1829,26 @@
             mostrarModalConfirmacao();
         }
 
-        function confirmarVenda() {
-            const total = calcularTotal();
+        // Confirma a venda
+        async function confirmarVenda() {
+            const carrinho = await getCarrinho();
+            const total = await calcularTotal();
             const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
             let mensagem = `Venda finalizada com sucesso!\nTotal: ${formatarMoeda(total)}\nForma de Pagamento: `;
             
             // Atualizar estoque dos produtos vendidos
-            carrinho.forEach(itemVenda => {
+            const produtos = await getProdutos();
+            for (const itemVenda of carrinho) {
                 const produto = produtos.find(p => p.id === itemVenda.id);
                 if (produto) {
                     produto.estoque -= itemVenda.quantidade;
-                    if (produto.estoque < 0) produto.estoque = 0; // Garante que não fique negativo
+                    if (produto.estoque < 0) produto.estoque = 0;
+                    await dbOperation('produtos', 'put', produto);
                 }
-            });
+            }
             
-            salvarProdutos();
+            // Atualiza o cache de produtos
+            produtosCache = produtos;
             
             // Criar objeto de venda para o histórico
             const novaVenda = {
@@ -2034,8 +1862,8 @@
             };
             
             // Adicionar ao histórico
-            historicoVendas.unshift(novaVenda);
-            salvarHistorico();
+            await dbOperation('vendas', 'add', novaVenda);
+            historicoCache.unshift(novaVenda);
             
             switch(formaPagamento) {
                 case 'dinheiro':
@@ -2050,10 +1878,12 @@
             
             alert(mensagem);
             
-            // Limpar carrinho e resetar formulário
-            carrinho = [];
+            // Limpar carrinho
+            carrinhoCache = [];
+            await dbOperation('carrinho', 'clear');
             atualizarCarrinho();
-            salvarCarrinho();
+            
+            // Resetar formulário
             pagamentoDinheiro.checked = true;
             valorRecebido.value = '';
             confirmModal.style.display = 'none';
@@ -2061,45 +1891,231 @@
             
             // Atualizar histórico se estiver visível
             if (document.getElementById('historico-tab').classList.contains('active')) {
-                renderizarHistorico();
+                renderHistorico();
             }
             
             // Atualizar lista de produtos se estiver na aba de cadastro
             if (document.getElementById('cadastro-tab').classList.contains('active')) {
-                renderizarProdutosCadastrados();
+                renderProdutosCadastrados();
             }
         }
 
-        function cancelarVenda() {
+        // Cancela a venda
+        async function cancelarVenda() {
+            const carrinho = await getCarrinho();
             if (carrinho.length === 0 || confirm('Tem certeza que deseja cancelar esta venda?')) {
                 // Restaurar estoque dos produtos no carrinho
-                carrinho.forEach(item => {
+                const produtos = await getProdutos();
+                for (const item of carrinho) {
                     const produto = produtos.find(p => p.id === item.id);
                     if (produto) {
                         produto.estoque += item.quantidade;
+                        await dbOperation('produtos', 'put', produto);
                     }
-                });
-                salvarProdutos();
+                }
                 
-                carrinho = [];
+                // Atualizar cache
+                produtosCache = produtos;
+                
+                // Limpar carrinho
+                carrinhoCache = [];
+                await dbOperation('carrinho', 'clear');
                 atualizarCarrinho();
-                salvarCarrinho();
+                
+                // Resetar formulário
                 pagamentoDinheiro.checked = true;
                 valorRecebido.value = '';
                 searchInput.focus();
             }
         }
 
-        // Funções do Histórico
-        function renderizarHistorico() {
-            historicoVendasContainer.innerHTML = '';
+        // Renderiza produtos cadastrados
+        async function renderProdutosCadastrados() {
+            const produtos = await getProdutos();
+            const container = document.getElementById('produtosCadastrados');
+            container.innerHTML = '';
             
-            if (historicoVendas.length === 0) {
-                historicoVendasContainer.innerHTML = '<p style="text-align: center;">Nenhuma venda registrada ainda</p>';
+            if (produtos.length === 0) {
+                container.innerHTML = '<p>Nenhum produto cadastrado ainda.</p>';
                 return;
             }
             
-            const meses = agruparPorMes(historicoVendas);
+            // Renderiza em chunks para não bloquear a UI
+            renderProdutosCadastradosChunk(produtos, container, 0);
+        }
+
+        // Renderiza produtos cadastrados em chunks
+        function renderProdutosCadastradosChunk(produtos, container, index) {
+            const CHUNK_SIZE = 20;
+            const end = Math.min(index + CHUNK_SIZE, produtos.length);
+            
+            for (let i = index; i < end; i++) {
+                const produto = produtos[i];
+                const produtoCard = document.createElement('div');
+                produtoCard.className = 'produto-card';
+                produtoCard.innerHTML = `
+                    <img src="${produto.imagem || 'https://via.placeholder.com/150?text=Sem+Imagem'}" alt="${produto.nome}">
+                    <div class="produto-estoque ${produto.estoque < 5 ? 'estoque-baixo' : ''}">
+                        ${produto.estoque} disponíveis
+                    </div>
+                    <div class="produto-info">
+                        <div class="produto-nome">${produto.nome}</div>
+                        <div class="produto-preco">${formatarMoeda(produto.preco)}</div>
+                        <div style="font-size: 12px; margin-top: 5px;">${produto.categoria}</div>
+                        ${produto.codigo ? `<div style="font-size: 10px; color: #777;">Código: ${produto.codigo}</div>` : ''}
+                        <button class="edit-produto-btn" onclick="editarProduto(${produto.id})">Editar</button>
+                        <button onclick="removerProduto(${produto.id})" style="margin-top: 8px; width: 100%; padding: 5px; background-color: #ff3333; color: white; border: none; border-radius: 3px; cursor: pointer;">Remover</button>
+                    </div>
+                `;
+                container.appendChild(produtoCard);
+            }
+            
+            if (end < produtos.length) {
+                requestAnimationFrame(() => {
+                    renderProdutosCadastradosChunk(produtos, container, end);
+                });
+            }
+        }
+
+        // Edita um produto
+        async function editarProduto(id) {
+            const produtos = await getProdutos();
+            const produto = produtos.find(p => p.id === id);
+            if (!produto) return;
+            
+            produtoEmEdicao = produto;
+            
+            // Preenche o formulário
+            produtoIdInput.value = produto.id;
+            document.getElementById('produtoNome').value = produto.nome;
+            document.getElementById('produtoPreco').value = produto.preco;
+            document.getElementById('produtoCategoria').value = produto.categoria;
+            document.getElementById('produtoEstoque').value = produto.estoque;
+            document.getElementById('produtoCodigo').value = produto.codigo || '';
+            document.getElementById('produtoImagem').value = produto.imagem || '';
+            
+            submitProdutoBtn.textContent = 'Atualizar Produto';
+            cancelarEdicaoBtn.style.display = 'block';
+            
+            document.querySelector('.cadastro-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Cancela a edição de produto
+        function cancelarEdicao() {
+            produtoEmEdicao = null;
+            formProduto.reset();
+            produtoIdInput.value = '';
+            document.getElementById('produtoEstoque').value = '0';
+            submitProdutoBtn.textContent = 'Cadastrar Produto';
+            cancelarEdicaoBtn.style.display = 'none';
+        }
+
+        // Remove um produto
+        async function removerProduto(id) {
+            if (confirm('Tem certeza que deseja remover este produto?')) {
+                await dbOperation('produtos', 'delete', id);
+                produtosCache = produtosCache.filter(produto => produto.id !== id);
+                
+                // Remove do carrinho se estiver lá
+                const carrinho = await getCarrinho();
+                if (carrinho.some(item => item.id === id)) {
+                    carrinhoCache = carrinho.filter(item => item.id !== id);
+                    await dbOperation('carrinho', 'clear');
+                    for (const item of carrinhoCache) {
+                        await dbOperation('carrinho', 'add', item);
+                    }
+                    atualizarCarrinho();
+                }
+                
+                renderProdutosCadastrados();
+                
+                if (produtoEmEdicao && produtoEmEdicao.id === id) {
+                    cancelarEdicao();
+                }
+            }
+        }
+
+        // Processa arquivo Excel
+        function processarArquivoExcel(file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                
+                if (jsonData.length === 0) {
+                    alert('O arquivo Excel está vazio ou não está no formato correto!');
+                    return;
+                }
+                
+                const primeiraLinha = jsonData[0];
+                if (!('Nome' in primeiraLinha) || !('Preço' in primeiraLinha) || !('Categoria' in primeiraLinha)) {
+                    alert('O arquivo Excel deve conter as colunas: Nome, Preço e Categoria!');
+                    return;
+                }
+                
+                const produtosParaImportar = jsonData.map(linha => {
+                    const estoque = parseInt(linha['Estoque']) || 0;
+                    if (estoque < 0) {
+                        alert(`Estoque negativo não permitido para o produto ${linha['Nome']}. Definido como 0.`);
+                    }
+                    
+                    return {
+                        id: gerarId(),
+                        nome: linha['Nome'] || '',
+                        preco: parseFloat(linha['Preço']) || 0,
+                        categoria: (linha['Categoria'] || '').toLowerCase() || 'outros',
+                        estoque: estoque < 0 ? 0 : estoque,
+                        codigo: linha['Código'] || linha['Codigo'] || gerarCodigoBarras(),
+                        imagem: linha['Imagem'] || linha['URL'] || ''
+                    };
+                }).filter(produto => produto.nome && produto.preco > 0);
+                
+                if (produtosParaImportar.length === 0) {
+                    alert('Nenhum produto válido encontrado no arquivo!');
+                    return;
+                }
+                
+                fileInputInfo.innerHTML = `Pronto para importar ${produtosParaImportar.length} produtos do arquivo: ${file.name}`;
+                importarProdutosBtn.style.display = 'block';
+                
+                importarProdutosBtn.onclick = async function() {
+                    try {
+                        for (const produto of produtosParaImportar) {
+                            await dbOperation('produtos', 'add', produto);
+                        }
+                        
+                        produtosCache = [...produtosCache, ...produtosParaImportar];
+                        renderProdutosCadastrados();
+                        alert(`${produtosParaImportar.length} produtos importados com sucesso!`);
+                        
+                        fileInputInfo.textContent = 'Nenhum arquivo selecionado';
+                        importarProdutosBtn.style.display = 'none';
+                        excelFileInput.value = '';
+                    } catch (error) {
+                        console.error("Erro ao importar produtos:", error);
+                        alert("Erro ao importar produtos. Verifique se há códigos de barras duplicados.");
+                    }
+                };
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Renderiza o histórico de vendas
+        async function renderHistorico() {
+            const historico = await getHistorico();
+            const container = document.getElementById('historicoVendas');
+            container.innerHTML = '';
+            
+            if (historico.length === 0) {
+                container.innerHTML = '<p style="text-align: center;">Nenhuma venda registrada ainda</p>';
+                return;
+            }
+            
+            const meses = agruparPorMes(historico);
             
             for (const mesAno in meses) {
                 const mes = meses[mesAno];
@@ -2143,9 +2159,6 @@
                     
                     const vendaFooter = document.createElement('div');
                     vendaFooter.className = 'historico-venda-footer';
-                    vendaFooter.style.marginTop = '10px';
-                    vendaFooter.style.paddingTop = '5px';
-                    vendaFooter.style.borderTop = '1px solid #eee';
                     vendaFooter.innerHTML = `
                         <div><strong>Pagamento:</strong> ${formatarFormaPagamento(venda.formaPagamento)}</div>
                         ${venda.formaPagamento === 'dinheiro' ? `
@@ -2166,8 +2179,231 @@
                 
                 mesContainer.appendChild(mesTitle);
                 mesContainer.appendChild(mesContent);
-                historicoVendasContainer.appendChild(mesContainer);
+                container.appendChild(mesContainer);
             }
+        }
+
+        // Scanner de código de barras
+        async function iniciarScanner() {
+            if (scannerAtivo) return;
+            
+            barcodeScanner.style.display = 'flex';
+            scannerAtivo = true;
+            
+            scannerTimeout = setTimeout(() => {
+                if (scannerAtivo) {
+                    pararScanner();
+                    alert('Scanner atingiu o tempo limite. Por favor, tente novamente.');
+                }
+            }, 30000);
+            
+            try {
+                await Quagga.init({
+                    inputStream: {
+                        name: "Live",
+                        type: "LiveStream",
+                        target: barcodeScannerVideo,
+                        constraints: {
+                            width: 480,
+                            height: 320,
+                            facingMode: "environment"
+                        },
+                    },
+                    decoder: {
+                        readers: ["ean_reader", "ean_8_reader", "code_128_reader"]
+                    },
+                    locate: true,
+                    debug: false
+                });
+                
+                Quagga.start();
+                
+                Quagga.onDetected(result => {
+                    const codigo = result.codeResult.code;
+                    pararScanner();
+                    
+                    const abaAtiva = document.querySelector('.tab-btn.active').dataset.tab;
+                    
+                    if (abaAtiva === 'pdv') {
+                        if (!adicionarPorCodigo(codigo)) {
+                            alert('Produto não encontrado com este código de barras!');
+                        }
+                    } else if (abaAtiva === 'cadastro') {
+                        produtoCodigoInput.value = codigo;
+                    }
+                });
+                
+            } catch (error) {
+                console.error("Erro no scanner:", error);
+                pararScanner();
+                alert("Erro ao iniciar o scanner. Verifique as permissões da câmera.");
+            }
+        }
+        
+        function pararScanner() {
+            if (!scannerAtivo) return;
+            
+            clearTimeout(scannerTimeout);
+            scannerAtivo = false;
+            
+            try {
+                Quagga.stop();
+                if (Quagga.offDetected) {
+                    Quagga.offDetected();
+                }
+            } catch (e) {
+                console.warn("Erro ao parar scanner:", e);
+            }
+            
+            barcodeScanner.style.display = 'none';
+        }
+
+        // Exporta banco de dados
+        async function exportDatabase() {
+            try {
+                const produtos = await dbOperation('produtos', 'getAll');
+                const vendas = await dbOperation('vendas', 'getAll');
+                const carrinho = await dbOperation('carrinho', 'getAll');
+                
+                const data = {
+                    produtos,
+                    vendas,
+                    carrinho,
+                    exportDate: new Date().toISOString()
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `pdv-adega-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                alert('Banco de dados exportado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao exportar banco de dados:', error);
+                alert('Erro ao exportar banco de dados: ' + error.message);
+            }
+        }
+
+        // Importa banco de dados
+        async function importDatabase(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                
+                reader.onload = async (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        
+                        // Limpa os dados existentes
+                        await dbOperation('produtos', 'clear');
+                        await dbOperation('vendas', 'clear');
+                        await dbOperation('carrinho', 'clear');
+                        
+                        // Adiciona os novos dados
+                        for (const produto of data.produtos) {
+                            await dbOperation('produtos', 'add', produto);
+                        }
+                        
+                        for (const venda of data.vendas) {
+                            await dbOperation('vendas', 'add', venda);
+                        }
+                        
+                        for (const item of data.carrinho) {
+                            await dbOperation('carrinho', 'add', item);
+                        }
+                        
+                        // Atualiza os caches
+                        produtosCache = data.produtos || [];
+                        historicoCache = data.vendas || [];
+                        carrinhoCache = data.carrinho || [];
+                        
+                        alert('Banco de dados importado com sucesso!');
+                        resolve();
+                    } catch (error) {
+                        console.error('Erro ao importar banco de dados:', error);
+                        alert('Erro ao importar banco de dados: ' + error.message);
+                        reject(error);
+                    }
+                };
+                
+                reader.onerror = (error) => {
+                    console.error('Erro ao ler arquivo:', error);
+                    alert('Erro ao ler arquivo: ' + error.message);
+                    reject(error);
+                };
+                
+                reader.readAsText(file);
+            });
+        }
+
+        // Funções auxiliares
+        function formatarMoeda(valor) {
+            return Number(valor).toLocaleString('pt-BR', { 
+                style: 'currency', 
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function formatarData(data) {
+            const options = { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(data).toLocaleDateString('pt-BR', options);
+        }
+
+        function gerarId() {
+            return Math.floor(Math.random() * 1000000);
+        }
+
+        function gerarCodigoBarras() {
+            const pais = '789';
+            const empresa = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            const produto = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            
+            const codigoSemDigito = pais + empresa + produto;
+            let soma = 0;
+            
+            for (let i = 0; i < codigoSemDigito.length; i++) {
+                const digito = parseInt(codigoSemDigito[i]);
+                soma += (i % 2 === 0) ? digito * 1 : digito * 3;
+            }
+            
+            const digitoVerificador = (10 - (soma % 10)) % 10;
+            
+            return codigoSemDigito + digitoVerificador;
+        }
+
+        function agruparPorMes(vendas) {
+            const meses = {};
+            
+            vendas.forEach(venda => {
+                const data = new Date(venda.data);
+                const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+                const mesAno = `${mes}/${data.getFullYear()}`;
+                const nomeMes = data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+                
+                if (!meses[mesAno]) {
+                    meses[mesAno] = {
+                        nome: nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1),
+                        vendas: []
+                    };
+                }
+                
+                meses[mesAno].vendas.push(venda);
+            });
+            
+            return meses;
         }
 
         function formatarFormaPagamento(forma) {
@@ -2180,212 +2416,9 @@
             }
         }
 
-        // Funções do Cadastro de Produtos
-        function renderizarProdutosCadastrados() {
-            produtosCadastrados.innerHTML = '';
-            
-            if (produtos.length === 0) {
-                produtosCadastrados.innerHTML = '<p>Nenhum produto cadastrado ainda.</p>';
-                return;
-            }
-            
-            produtos.forEach(produto => {
-                const produtoCard = document.createElement('div');
-                produtoCard.className = 'produto-card';
-                produtoCard.innerHTML = `
-                    <img src="${produto.imagem || 'https://via.placeholder.com/150?text=Sem+Imagem'}" alt="${produto.nome}">
-                    <div class="produto-estoque ${produto.estoque < 5 ? 'estoque-baixo' : ''}">
-                        ${produto.estoque} disponíveis
-                    </div>
-                    <div class="produto-info">
-                        <div class="produto-nome">${produto.nome}</div>
-                        <div class="produto-preco">${formatarMoeda(produto.preco)}</div>
-                        <div style="font-size: 12px; margin-top: 5px;">${produto.categoria}</div>
-                        ${produto.codigo ? `<div style="font-size: 10px; color: #777;">Código: ${produto.codigo}</div>` : ''}
-                        <button class="edit-produto-btn" onclick="editarProduto(${produto.id})">Editar</button>
-                        <button onclick="removerProduto(${produto.id})" style="margin-top: 8px; width: 100%; padding: 5px; background-color: #ff3333; color: white; border: none; border-radius: 3px; cursor: pointer;">Remover</button>
-                    </div>
-                `;
-                produtosCadastrados.appendChild(produtoCard);
-            });
-        }
-
-        function editarProduto(id) {
-            const produto = produtos.find(p => p.id === id);
-            if (!produto) return;
-            
-            produtoEmEdicao = produto;
-            
-            // Preenche o formulário com os dados do produto
-            produtoIdInput.value = produto.id;
-            document.getElementById('produtoNome').value = produto.nome;
-            document.getElementById('produtoPreco').value = produto.preco;
-            document.getElementById('produtoCategoria').value = produto.categoria;
-            document.getElementById('produtoEstoque').value = produto.estoque;
-            document.getElementById('produtoCodigo').value = produto.codigo || '';
-            document.getElementById('produtoImagem').value = produto.imagem || '';
-            
-            // Altera o texto do botão para "Atualizar"
-            submitProdutoBtn.textContent = 'Atualizar Produto';
-            
-            // Mostra o botão de cancelar edição
-            cancelarEdicaoBtn.style.display = 'block';
-            
-            // Rola a página até o formulário
-            document.querySelector('.cadastro-form').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function cancelarEdicao() {
-            produtoEmEdicao = null;
-            formProduto.reset();
-            produtoIdInput.value = '';
-            document.getElementById('produtoEstoque').value = '0'; // Garante que o estoque volte para 0
-            submitProdutoBtn.textContent = 'Cadastrar Produto';
-            cancelarEdicaoBtn.style.display = 'none';
-        }
-
-        function removerProduto(id) {
-            if (confirm('Tem certeza que deseja remover este produto?')) {
-                produtos = produtos.filter(produto => produto.id !== id);
-                salvarProdutos();
-                renderizarProdutosCadastrados();
-                
-                // Atualiza o carrinho caso o produto removido esteja nele
-                carrinho = carrinho.filter(item => item.id !== id);
-                salvarCarrinho();
-                atualizarCarrinho();
-                
-                // Se estava editando o produto removido, cancela a edição
-                if (produtoEmEdicao && produtoEmEdicao.id === id) {
-                    cancelarEdicao();
-                }
-            }
-        }
-
-        // Funções para importação de Excel
-        function processarArquivoExcel(file) {
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                
-                // Pegar a primeira planilha
-                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                
-                // Converter para JSON
-                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-                
-                if (jsonData.length === 0) {
-                    alert('O arquivo Excel está vazio ou não está no formato correto!');
-                    return;
-                }
-                
-                // Verificar colunas mínimas necessárias
-                const primeiraLinha = jsonData[0];
-                if (!('Nome' in primeiraLinha) || !('Preço' in primeiraLinha) || !('Categoria' in primeiraLinha)) {
-                    alert('O arquivo Excel deve conter as colunas: Nome, Preço e Categoria!');
-                    return;
-                }
-                
-                // Preparar produtos para importação
-                const produtosParaImportar = jsonData.map(linha => {
-                    const estoque = parseInt(linha['Estoque']) || 0;
-                    if (estoque < 0) {
-                        alert(`Estoque negativo não permitido para o produto ${linha['Nome']}. Definido como 0.`);
-                    }
-                    
-                    return {
-                        id: gerarId(),
-                        nome: linha['Nome'] || '',
-                        preco: parseFloat(linha['Preço']) || 0,
-                        categoria: (linha['Categoria'] || '').toLowerCase() || 'outros',
-                        estoque: estoque < 0 ? 0 : estoque, // Garante que não seja negativo
-                        codigo: linha['Código'] || linha['Codigo'] || gerarCodigoBarras(),
-                        imagem: linha['Imagem'] || linha['URL'] || ''
-                    };
-                }).filter(produto => produto.nome && produto.preco > 0);
-                
-                if (produtosParaImportar.length === 0) {
-                    alert('Nenhum produto válido encontrado no arquivo!');
-                    return;
-                }
-                
-                // Mostrar preview e botão de importação
-                fileInputInfo.innerHTML = `Pronto para importar ${produtosParaImportar.length} produtos do arquivo: ${file.name}`;
-                importarProdutosBtn.style.display = 'block';
-                
-                // Configurar ação do botão de importação
-                importarProdutosBtn.onclick = function() {
-                    produtos = [...produtos, ...produtosParaImportar];
-                    salvarProdutos();
-                    renderizarProdutosCadastrados();
-                    alert(`${produtosParaImportar.length} produtos importados com sucesso!`);
-                    
-                    // Resetar o formulário
-                    fileInputInfo.textContent = 'Nenhum arquivo selecionado';
-                    importarProdutosBtn.style.display = 'none';
-                    excelFileInput.value = '';
-                };
-            };
-            
-            reader.readAsArrayBuffer(file);
-        }
-
-        // Funções do Scanner de Código de Barras
-        function iniciarScanner() {
-            barcodeScanner.style.display = 'flex';
-            
-            Quagga.init({
-                inputStream: {
-                    name: "Live",
-                    type: "LiveStream",
-                    target: barcodeScannerVideo,
-                    constraints: {
-                        width: 480,
-                        height: 320,
-                        facingMode: "environment"
-                    },
-                },
-                decoder: {
-                    readers: ["ean_reader", "ean_8_reader", "code_128_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader"]
-                },
-            }, function(err) {
-                if (err) {
-                    console.error(err);
-                    alert("Erro ao iniciar o scanner: " + err);
-                    return;
-                }
-                Quagga.start();
-            });
-
-            Quagga.onDetected(function(result) {
-                const codigo = result.codeResult.code;
-                Quagga.stop();
-                barcodeScanner.style.display = 'none';
-                
-                // Verifica em qual aba estamos
-                const abaAtiva = document.querySelector('.tab-btn.active').dataset.tab;
-                
-                if (abaAtiva === 'pdv') {
-                    if (!adicionarPorCodigo(codigo)) {
-                        alert('Produto não encontrado com este código de barras!');
-                    }
-                } else if (abaAtiva === 'cadastro') {
-                    produtoCodigoInput.value = codigo;
-                }
-            });
-        }
-
-        function pararScanner() {
-            Quagga.stop();
-            barcodeScanner.style.display = 'none';
-        }
-
-        // Funções para atalhos do teclado
+        // Configura atalhos do teclado
         function configurarAtalhosTeclado() {
             document.addEventListener('keydown', function(e) {
-                // Ignorar se estiver digitando em um campo de texto
                 if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
                     return;
                 }
@@ -2404,23 +2437,23 @@
                     case 'F2':
                         e.preventDefault();
                         pagamentoDinheiro.checked = true;
-                        if (trocoSection) trocoSection.classList.add('active');
-                        if (valorRecebido) valorRecebido.focus();
+                        trocoSection.classList.add('active');
+                        valorRecebido.focus();
                         break;
                     case 'F3':
                         e.preventDefault();
                         pagamentoDebito.checked = true;
-                        if (trocoSection) trocoSection.classList.remove('active');
+                        trocoSection.classList.remove('active');
                         break;
                     case 'F4':
                         e.preventDefault();
                         pagamentoCredito.checked = true;
-                        if (trocoSection) trocoSection.classList.remove('active');
+                        trocoSection.classList.remove('active');
                         break;
                     case 'F5':
                         e.preventDefault();
                         pagamentoPix.checked = true;
-                        if (trocoSection) trocoSection.classList.remove('active');
+                        trocoSection.classList.remove('active');
                         break;
                     case 'F9':
                         e.preventDefault();
@@ -2446,202 +2479,238 @@
             });
         }
 
-        // Event Listeners
-        searchInput.addEventListener('input', renderizarProdutos);
-
-        // Busca por código de barras ao pressionar Enter
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const codigo = this.value;
-                if (codigo.length >= 8) { // Códigos de barras geralmente têm 8+ dígitos
-                    if (adicionarPorCodigo(codigo)) {
-                        this.value = '';
-                    } else {
-                        alert('Produto não encontrado com este código de barras!');
-                    }
-                }
-            }
-        });
-
-        categoriaBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                categoriaBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                categoriaAtual = btn.dataset.categoria;
-                renderizarProdutos();
-            });
-        });
-
-        finalizarVendaBtn.addEventListener('click', finalizarVenda);
-        cancelarVendaBtn.addEventListener('click', cancelarVenda);
-        modalConfirmBtn.addEventListener('click', confirmarVenda);
-        modalCancelBtn.addEventListener('click', () => {
-            confirmModal.style.display = 'none';
-        });
-
-        // Atualiza a seção de troco quando a forma de pagamento mudar
-        pagamentoOptions.forEach(option => {
-            option.addEventListener('change', function() {
-                trocoSection.classList.toggle('active', this.value === 'dinheiro');
-                if (this.value === 'dinheiro' && valorRecebido) {
-                    valorRecebido.focus();
-                }
-            });
-        });
-
-        // Atualiza o troco quando o valor recebido mudar
-        valorRecebido.addEventListener('input', atualizarTroco);
-
-        formProduto.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const nome = document.getElementById('produtoNome').value;
-            const preco = parseFloat(document.getElementById('produtoPreco').value);
-            const categoria = document.getElementById('produtoCategoria').value;
-            const estoque = parseInt(document.getElementById('produtoEstoque').value);
-            const codigo = document.getElementById('produtoCodigo').value;
-            const imagem = document.getElementById('produtoImagem').value;
-            
-            if (produtoEmEdicao) {
-                // Atualizar produto existente
-                produtoEmEdicao.nome = nome;
-                produtoEmEdicao.preco = preco;
-                produtoEmEdicao.categoria = categoria;
-                produtoEmEdicao.estoque = estoque;
-                produtoEmEdicao.codigo = codigo || undefined;
-                produtoEmEdicao.imagem = imagem || undefined;
-                
-                salvarProdutos();
-                renderizarProdutosCadastrados();
-                cancelarEdicao();
-                
-                alert('Produto atualizado com sucesso!');
-            } else {
-                // Criar novo produto
-                const novoProduto = {
-                    id: gerarId(),
-                    nome,
-                    preco,
-                    categoria,
-                    estoque,
-                    codigo: codigo || undefined,
-                    imagem: imagem || undefined
-                };
-                
-                
-                produtos.push(novoProduto);
-                salvarProdutos();
-                renderizarProdutosCadastrados();
-                
-                // Limpa o formulário
-                formProduto.reset();
-                document.getElementById('produtoEstoque').value = '0';
-                
-                alert('Produto cadastrado com sucesso!');
-            }
-        });
-
-        generateBarcodeBtn.addEventListener('click', function() {
-            produtoCodigoInput.value = gerarCodigoBarras();
-        });
-
-        // Event listeners para importação de Excel
-        excelFileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            if (!file.name.match(/\.(xlsx|xls|csv)$/)) {
-                alert('Por favor, selecione um arquivo Excel (.xlsx, .xls) ou CSV!');
-                return;
-            }
-            
-            fileInputInfo.textContent = `Processando arquivo: ${file.name}...`;
-            importarProdutosBtn.style.display = 'none';
-            
-            processarArquivoExcel(file);
-        });
-
-        scanBarcodeBtn.addEventListener('click', iniciarScanner);
-        closeBarcodeScanner.addEventListener('click', pararScanner);
-        helpShortcuts.addEventListener('click', () => {
-            shortcutsModal.style.display = 'flex';
-        });
-        closeShortcutsBtn.addEventListener('click', () => {
-            shortcutsModal.style.display = 'none';
-        });
-        cancelarEdicaoBtn.addEventListener('click', cancelarEdicao);
-
-        // Event listener para o botão de pagar histórico
-        pagarHistoricoBtn.addEventListener('click', function() {
-            if (historicoVendas.length === 0) {
-                alert('Nenhuma venda no histórico para pagar!');
-                return;
-            }
-            
-            if (confirm(`Deseja marcar todas as ${historicoVendas.length} vendas como pagas?`)) {
-                // Aqui você pode adicionar lógica para processar o pagamento
-                alert(`${historicoVendas.length} vendas marcadas como pagas com sucesso!`);
-                // Atualizar a interface se necessário
-            }
-        });
-
-        // Event listeners para backup do banco de dados
-        exportDatabaseBtn.addEventListener('click', saveDatabaseToFile);
-        
-        databaseFileInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            databaseFileInfo.textContent = `Arquivo selecionado: ${file.name}`;
-            
-            try {
-                await loadDatabaseFromFile(file);
-                
-                // Recarregar todos os dados
-                await carregarProdutos();
-                await carregarCarrinho();
-                await carregarHistorico();
-                
-                // Atualizar as interfaces
-                renderizarProdutos();
-                renderizarProdutosCadastrados();
-                atualizarCarrinho();
-                
-                if (document.getElementById('historico-tab').classList.contains('active')) {
-                    renderizarHistorico();
-                }
-                
-                databaseFileInfo.textContent = 'Banco de dados importado com sucesso!';
-                databaseFileInput.value = '';
-            } catch (error) {
-                databaseFileInfo.textContent = 'Erro ao importar banco de dados: ' + error.message;
-            }
-        });
-
         // Inicialização do aplicativo
-        window.addEventListener('load', async function() {
+        async function init() {
             try {
-                // Inicializar o banco de dados
                 await openDatabase();
                 
-                // Carregar todos os dados
-                await carregarProdutos();
-                await carregarCarrinho();
-                await carregarHistorico();
+                // Carrega dados iniciais
+                await Promise.all([
+                    getProdutos(),
+                    getCarrinho(),
+                    getHistorico()
+                ]);
                 
-                // Inicializar a interface
+                // Configura eventos
+                searchInput.addEventListener('input', renderProdutos);
+                
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const codigo = this.value;
+                        if (codigo.length >= 8) {
+                            if (adicionarPorCodigo(codigo)) {
+                                this.value = '';
+                            } else {
+                                alert('Produto não encontrado com este código de barras!');
+                            }
+                        }
+                    }
+                });
+
+                categoriaBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        categoriaBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        renderProdutos();
+                    });
+                });
+
+                finalizarVendaBtn.addEventListener('click', finalizarVenda);
+                cancelarVendaBtn.addEventListener('click', cancelarVenda);
+                modalConfirmBtn.addEventListener('click', confirmarVenda);
+                modalCancelBtn.addEventListener('click', () => {
+                    confirmModal.style.display = 'none';
+                });
+
+                pagamentoOptions.forEach(option => {
+                    option.addEventListener('change', function() {
+                        trocoSection.classList.toggle('active', this.value === 'dinheiro');
+                        if (this.value === 'dinheiro') {
+                            valorRecebido.focus();
+                        }
+                    });
+                });
+
+                valorRecebido.addEventListener('input', atualizarTroco);
+
+                formProduto.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const nome = document.getElementById('produtoNome').value;
+                    const preco = parseFloat(document.getElementById('produtoPreco').value);
+                    const categoria = document.getElementById('produtoCategoria').value;
+                    const estoque = parseInt(document.getElementById('produtoEstoque').value);
+                    const codigo = document.getElementById('produtoCodigo').value;
+                    const imagem = document.getElementById('produtoImagem').value;
+                    
+                    if (produtoEmEdicao) {
+                        // Atualizar produto existente
+                        produtoEmEdicao.nome = nome;
+                        produtoEmEdicao.preco = preco;
+                        produtoEmEdicao.categoria = categoria;
+                        produtoEmEdicao.estoque = estoque;
+                        produtoEmEdicao.codigo = codigo || undefined;
+                        produtoEmEdicao.imagem = imagem || undefined;
+                        
+                        await dbOperation('produtos', 'put', produtoEmEdicao);
+                        
+                        // Atualiza o cache
+                        produtosCache = produtosCache.map(p => 
+                            p.id === produtoEmEdicao.id ? produtoEmEdicao : p
+                        );
+                        
+                        renderProdutosCadastrados();
+                        cancelarEdicao();
+                        
+                        alert('Produto atualizado com sucesso!');
+                    } else {
+                        // Criar novo produto
+                        const novoProduto = {
+                            id: gerarId(),
+                            nome,
+                            preco,
+                            categoria,
+                            estoque,
+                            codigo: codigo || undefined,
+                            imagem: imagem || undefined
+                        };
+                        
+                        await dbOperation('produtos', 'add', novoProduto);
+                        produtosCache.push(novoProduto);
+                        renderProdutosCadastrados();
+                        
+                        formProduto.reset();
+                        document.getElementById('produtoEstoque').value = '0';
+                        
+                        alert('Produto cadastrado com sucesso!');
+                    }
+                });
+
+                generateBarcodeBtn.addEventListener('click', function() {
+                    produtoCodigoInput.value = gerarCodigoBarras();
+                });
+
+                excelFileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.name.match(/\.(xlsx|xls|csv)$/)) {
+                        alert('Por favor, selecione um arquivo Excel (.xlsx, .xls) ou CSV!');
+                        return;
+                    }
+                    
+                    fileInputInfo.textContent = `Processando arquivo: ${file.name}...`;
+                    importarProdutosBtn.style.display = 'none';
+                    
+                    processarArquivoExcel(file);
+                });
+
+                scanBarcodeBtn.addEventListener('click', iniciarScanner);
+                closeBarcodeScanner.addEventListener('click', pararScanner);
+                helpShortcuts.addEventListener('click', () => {
+                    shortcutsModal.style.display = 'flex';
+                });
+                closeShortcutsBtn.addEventListener('click', () => {
+                    shortcutsModal.style.display = 'none';
+                });
+                cancelarEdicaoBtn.addEventListener('click', cancelarEdicao);
+
+                pagarHistoricoBtn.addEventListener('click', async function() {
+                    const historico = await getHistorico();
+                    if (historico.length === 0) {
+                        alert('Nenhuma venda no histórico para pagar!');
+                        return;
+                    }
+                    
+                    if (confirm(`Deseja marcar todas as ${historico.length} vendas como pagas?`)) {
+                        alert(`${historico.length} vendas marcadas como pagas com sucesso!`);
+                    }
+                });
+
+                exportDatabaseBtn.addEventListener('click', exportDatabase);
+                
+                databaseFileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    databaseFileInfo.textContent = `Arquivo selecionado: ${file.name}`;
+                    
+                    try {
+                        await importDatabase(file);
+                        
+                        // Recarrega todos os dados
+                        await getProdutos();
+                        await getCarrinho();
+                        await getHistorico();
+                        
+                        // Atualiza as interfaces
+                        renderProdutos();
+                        renderProdutosCadastrados();
+                        atualizarCarrinho();
+                        
+                        if (document.getElementById('historico-tab').classList.contains('active')) {
+                            renderHistorico();
+                        }
+                        
+                        databaseFileInfo.textContent = 'Banco de dados importado com sucesso!';
+                        databaseFileInput.value = '';
+                    } catch (error) {
+                        databaseFileInfo.textContent = 'Erro ao importar banco de dados: ' + error.message;
+                    }
+                });
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const tabId = tab.dataset.tab;
+                        
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        
+                        tab.classList.add('active');
+                        document.getElementById(`${tabId}-tab`).classList.add('active');
+                        
+                        if (tabId === 'pdv') {
+                            searchInput.focus();
+                            renderProdutos();
+                        }
+                        
+                        if (tabId === 'cadastro') {
+                            renderProdutosCadastrados();
+                        }
+                        
+                        if (tabId === 'historico') {
+                            renderHistorico();
+                        }
+                    });
+                });
+
+                configurarAtalhosTeclado();
+                
+                // Foca no campo de busca se estiver na aba PDV
                 if (document.getElementById('pdv-tab').classList.contains('active')) {
                     searchInput.focus();
+                    renderProdutos();
                 }
                 
-                renderizarProdutos();
-                renderizarProdutosCadastrados();
-                configurarAtalhosTeclado();
+                // Renderiza a interface inicial
+                if (document.getElementById('cadastro-tab').classList.contains('active')) {
+                    renderProdutosCadastrados();
+                }
+                
+                if (document.getElementById('historico-tab').classList.contains('active')) {
+                    renderHistorico();
+                }
+                
+                atualizarCarrinho();
+                
             } catch (error) {
-                console.error('Erro ao inicializar o aplicativo:', error);
-                alert('Erro ao inicializar o aplicativo: ' + error.message);
+                console.error("Erro na inicialização:", error);
+                alert("Erro ao carregar o aplicativo. Por favor, recarregue a página.");
             }
-        });
+        }
+
+        // Inicia o aplicativo quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', init);
 
         // Funções globais para os botões
         window.alterarQuantidade = alterarQuantidade;
