@@ -1,0 +1,2317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDV Adega</title>
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="logo.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #333;
+            --accent-color: #4f46e5;
+            --light-color: #f8fafc;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+        }
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            color: white;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 2px;
+        }
+        
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 0.375rem;
+            color: white;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .tab-btn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .tab-btn.active {
+            background-color: white;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tab-content {
+            display: none;
+            flex: 1;
+        }
+        
+        .tab-content.active {
+            display: flex;
+            gap: 1.5rem;
+            height: 100%;
+        }
+        
+        .produtos-section {
+            flex: 2;
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .venda-section {
+            flex: 1;
+            min-width: 350px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        h1, h2, h3 {
+            margin: 0;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .venda-section h2, .historico-section h2 {
+            color: white;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .venda-section .section-title {
+            border-bottom-color: #475569;
+        }
+        
+        .produtos-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex: 1;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+        }
+
+        .produtos-grid::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .produtos-grid::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .produtos-grid::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .produto-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 180px;
+            max-width: 180px;
+        }
+        
+        .produto-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        .produto-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 0.375rem;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 0.75rem;
+        }
+        
+        .produto-info {
+            margin-top: auto;
+        }
+        
+        .produto-nome {
+            font-weight: 500;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .produto-preco {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+        
+        .produto-codigo {
+            font-size: 0.6875rem;
+            color: #64748b;
+            margin-top: 0.125rem;
+        }
+        
+        .produto-estoque {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.75rem;
+            font-size: 0.6875rem;
+            font-weight: 500;
+        }
+        
+        .estoque-baixo {
+            background-color: rgba(239, 68, 68, 0.9);
+        }
+        
+        .estoque-bom {
+            background-color: rgba(16, 185, 129, 0.9);
+        }
+        
+        .itens-venda {
+            margin: 1rem 0;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+        
+        .itens-venda::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .itens-venda::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .itens-venda::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        
+        .item-venda {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+        }
+        
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .item-nome {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .item-details {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            margin-top: 0.125rem;
+        }
+        
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .item-subtotal {
+            font-weight: 500;
+            min-width: 70px;
+            text-align: right;
+        }
+        
+        .total-section {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .total-value {
+            font-weight: 600;
+        }
+        
+        .btn {
+            padding: 0.625rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+        }
+        
+        .btn-primary {
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+            color: white;
+            border: 1px solid var(--accent-color);
+        }
+        
+        .btn-accent:hover {
+            background-color: #4338ca;
+            border-color: #4338ca;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+            border: 1px solid var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #dc2626;
+            border-color: #dc2626;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .search-bar {
+            flex: 1;
+            padding: 0.625rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+        
+        .search-barcode-btn {
+            padding: 0.625rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: 1px solid #334155;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .search-barcode-btn:hover {
+            background-color: #262626;
+        }
+        
+        .categorias {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+        }
+        
+        .categorias::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .categorias::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        .categorias::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+        
+        .categoria-btn {
+            padding: 0.375rem 0.75rem;
+            background-color: #f1f5f9;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 0.8125rem;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .categoria-btn:hover {
+            background-color: #e2e8f0;
+        }
+        
+        .categoria-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .cadastro-form {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.375rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #334155;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            background-color: white;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+        
+        .generate-barcode-btn {
+            margin-top: 0.25rem;
+            padding: 0.375rem;
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+        
+        .generate-barcode-btn:hover {
+            background-color: #e2e8f0;
+        }
+        
+        .pagamento-section {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+        }
+        
+        .pagamento-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .pagamento-option input {
+            margin-right: 0.5rem;
+            accent-color: var(--accent-color);
+        }
+        
+        .pagamento-option label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .troco-section {
+            margin-top: 0.75rem;
+            display: none;
+        }
+        
+        .troco-section.active {
+            display: block;
+        }
+        
+        .troco-info {
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .troco-value {
+            font-weight: 600;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-title {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .modal-text {
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .help-shortcuts {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.625rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 0.8125rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        
+        .help-shortcuts:hover {
+            background-color: #262626;
+        }
+        
+        .shortcuts-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .shortcuts-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .shortcuts-title {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .shortcuts-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .shortcuts-table th, .shortcuts-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .shortcuts-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #334155;
+        }
+        
+        .shortcuts-table td {
+            color: #475569;
+        }
+        
+        .shortcuts-close {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+        
+        .historico-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .historico-mes {
+            margin-bottom: 1.5rem;
+        }
+        
+        .historico-mes-title {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .historico-mes-title:hover {
+            background-color: #262626;
+        }
+        
+        .historico-mes-content {
+            margin-top: 0.75rem;
+            display: none;
+        }
+        
+        .historico-mes-content.active {
+            display: block;
+        }
+        
+        .historico-venda {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: white;
+        }
+        
+        .historico-venda-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .historico-venda-data {
+            font-weight: 500;
+        }
+        
+        .historico-venda-total {
+            font-weight: 600;
+        }
+        
+        .historico-venda-itens {
+            margin-top: 0.75rem;
+        }
+        
+        .historico-venda-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+        }
+        
+        .historico-venda-footer {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.875rem;
+        }
+        
+        .historico-venda-pagamento {
+            margin-bottom: 0.25rem;
+        }
+        
+        .importar-excel {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            border: 2px dashed #cbd5e1;
+        }
+        
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-button {
+            padding: 0.625rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            transition: background-color 0.2s;
+            font-weight: 500;
+        }
+        
+        .file-input-button:hover {
+            background-color: #262626;
+        }
+        
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-input-info {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .file-input-instructions {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: #f1f5f9;
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            color: #475569;
+        }
+        
+        .file-input-instructions strong {
+            color: #334155;
+        }
+        
+        .edit-produto-btn {
+            margin-top: 0.5rem;
+            width: 100%;
+            padding: 0.5rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .edit-produto-btn:hover {
+            background-color: #4338ca;
+        }
+        
+        .remove-produto-btn {
+            margin-top: 0.5rem;
+            width: 100%;
+            padding: 0.5rem;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .remove-produto-btn:hover {
+            background-color: #dc2626;
+        }
+        
+        /* Estilos para os novos botões */
+        #finalizarVenda, #cancelarVenda {
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        #finalizarVenda:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+        }
+        
+        #cancelarVenda:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+        }
+        
+        #pagarHistoricoBtn {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+        
+        #pagarHistoricoBtn:hover {
+            background-color: #4338ca;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .tab-content.active {
+                flex-direction: column;
+            }
+            
+            .produtos-section, .venda-section {
+                width: 100%;
+            }
+            
+            .venda-section {
+                min-width: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+            
+            .produtos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+                padding: 0.75rem 1rem;
+            }
+            
+            .tabs {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 0.25rem;
+            }
+            
+            .cadastro-form {
+                padding: 1rem;
+            }
+            
+            .importar-excel {
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .produtos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-barcode-btn {
+                width: 100%;
+            }
+        }
+    </style>
+    <!-- Incluindo a biblioteca QuaggaJS para leitura de código de barras -->
+    <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+    <!-- Incluindo a biblioteca xlsx para leitura de arquivos Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">PDV Adega</div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="pdv">PDV</button>
+            <button class="tab-btn" data-tab="cadastro">Cadastro</button>
+            <button class="tab-btn" data-tab="historico">Histórico</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Aba do PDV -->
+        <div id="pdv-tab" class="tab-content active">
+            <section class="produtos-section">
+                <h2 class="section-title">Produtos Disponíveis</h2>
+                
+                <div class="search-container">
+                    <input type="text" class="search-bar" placeholder="Buscar produtos ou código de barras..." id="searchInput" autofocus>
+                    <button class="search-barcode-btn" id="scanBarcodeBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 5h4v14H3z"></path>
+                            <path d="M10 5h4v14h-4z"></path>
+                            <path d="M17 5h4v14h-4z"></path>
+                            <path d="M21 15h-4"></path>
+                            <path d="M21 9h-4"></path>
+                        </svg>
+                        Código
+                    </button>
+                </div>
+                
+                <div class="categorias">
+                    <button class="categoria-btn active" data-categoria="todos">Todos</button>
+                    <button class="categoria-btn" data-categoria="tabacaria">Tabacaria</button>
+                    <button class="categoria-btn" data-categoria="refrigerantes">Refrigerantes</button>
+                    <button class="categoria-btn" data-categoria="cervejas">Cervejas</button>
+                    <button class="categoria-btn" data-categoria="destilados">Destilados</button>
+                    <button class="categoria-btn" data-categoria="salgadinhos">Salgadinhos</button>
+                </div>
+                
+                <div class="produtos-grid" id="produtosGrid">
+                    <!-- Produtos serão inseridos aqui via JavaScript -->
+                </div>
+            </section>
+            
+            <section class="venda-section">
+                <h2 class="section-title">Venda em Andamento</h2>
+                
+                <div class="itens-venda" id="itensVenda">
+                    <!-- Itens da venda serão inseridos aqui -->
+                    <p style="text-align: center; color: #cbd5e1;">Nenhum item adicionado</p>
+                </div>
+                
+                <div class="total-section">
+                    <div class="total-row">
+                        <span>Total:</span>
+                        <span class="total-value" id="totalVenda">R$ 0,00</span>
+                    </div>
+                    
+                    <div class="pagamento-section">
+                        <h3 style="margin-top: 0; margin-bottom: 0.75rem;">Forma de Pagamento</h3>
+                        
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoDinheiro" name="pagamento" value="dinheiro" checked>
+                            <label for="pagamentoDinheiro">Dinheiro</label>
+                        </div>
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoDebito" name="pagamento" value="debito">
+                            <label for="pagamentoDebito">Cartão de Débito</label>
+                        </div>
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoCredito" name="pagamento" value="credito">
+                            <label for="pagamentoCredito">Cartão de Crédito</label>
+                        </div>
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoPix" name="pagamento" value="pix">
+                            <label for="pagamentoPix">PIX</label>
+                        </div>
+                        
+                        <div class="troco-section" id="trocoSection">
+                            <div class="form-group" style="margin-top: 0.75rem;">
+                                <label for="valorRecebido">Valor Recebido</label>
+                                <input type="number" id="valorRecebido" class="form-control" step="0.01" min="0">
+                            </div>
+                            <div class="troco-info">
+                                <strong>Troco:</strong> <span class="troco-value" id="valorTroco">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-accent btn-block" id="finalizarVenda" style="padding: 12px; font-size: 16px; font-weight: 600;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        FINALIZAR VENDA (F9)
+                    </button>
+                    <button class="btn btn-danger btn-block" id="cancelarVenda" style="padding: 12px; font-size: 16px; font-weight: 600;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                        CANCELAR VENDA (F10)
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Aba de Cadastro de Produtos -->
+        <div id="cadastro-tab" class="tab-content">
+            <section class="cadastro-form">
+                <h2 class="section-title">Cadastro de Produtos</h2>
+                
+                <div class="importar-excel">
+                    <h3 style="margin-top: 0; margin-bottom: 1rem;">Importar Produtos via Excel</h3>
+                    <div class="file-input-container">
+                        <button class="file-input-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            Selecionar Arquivo Excel
+                        </button>
+                        <input type="file" id="excelFileInput" class="file-input" accept=".xlsx, .xls, .csv">
+                    </div>
+                    <div class="file-input-info" id="fileInputInfo">Nenhum arquivo selecionado</div>
+                    
+                    <div class="file-input-instructions">
+                        <strong>Instruções:</strong> O arquivo Excel deve conter as colunas: Nome, Preço, Categoria (tabacaria, refrigerantes, cervejas, destilados, salgadinhos). 
+                        Opcionais: Código, Imagem (URL), Estoque. A primeira linha deve ser o cabeçalho.
+                    </div>
+                    
+                    <button class="btn btn-accent" id="importarProdutosBtn" style="margin-top: 0.75rem; display: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Importar Produtos
+                    </button>
+                </div>
+                
+                <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">Cadastrar Produto Manualmente</h3>
+                <form id="formProduto">
+                    <input type="hidden" id="produtoId" value="">
+                    <div class="form-group">
+                        <label for="produtoNome">Nome do Produto</label>
+                        <input type="text" id="produtoNome" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoPreco">Preço (R$)</label>
+                        <input type="number" id="produtoPreco" class="form-control" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoCategoria">Categoria</label>
+                        <select id="produtoCategoria" class="form-select" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="tabacaria">Tabacaria</option>
+                            <option value="refrigerantes">Refrigerantes</option>
+                            <option value="cervejas">Cervejas</option>
+                            <option value="destilados">Destilados</option>
+                            <option value="salgadinhos">Salgadinhos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoEstoque">Estoque</label>
+                        <input type="number" id="produtoEstoque" class="form-control" min="0" value="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoCodigo">Código de Barras</label>
+                        <input type="text" id="produtoCodigo" class="form-control" placeholder="Digite ou escaneie o código">
+                        <button type="button" class="generate-barcode-btn" id="generateBarcodeBtn">Gerar Código Automático</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoImagem">URL da Imagem</label>
+                        <input type="text" id="produtoImagem" class="form-control" placeholder="https://...">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-accent" id="submitProdutoBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Cadastrar Produto
+                    </button>
+                    <button type="button" class="btn btn-danger" id="cancelarEdicaoBtn" style="display: none; margin-top: 0.75rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6L6 18"></path>
+                            <path d="M6 6l12 12"></path>
+                        </svg>
+                        Cancelar Edição
+                    </button>
+                </form>
+            </section>
+            
+            <section style="margin-top: 1.5rem;">
+                <h2 class="section-title">Produtos Cadastrados</h2>
+                <div class="produtos-grid" id="produtosCadastrados">
+                    <!-- Produtos cadastrados serão listados aqui -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Aba de Histórico de Vendas -->
+        <div id="historico-tab" class="tab-content">
+            <section class="historico-section">
+                <h2 class="section-title">Histórico de Vendas</h2>
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+                    <button class="btn btn-accent" id="pagarHistoricoBtn" style="padding: 8px 16px; font-weight: 600;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                            <polyline points="5 12 12 5 19 12"></polyline>
+                        </svg>
+                        Pagar Histórico
+                    </button>
+                </div>
+                <div id="historicoVendas">
+                    <!-- Histórico será carregado aqui -->
+                    <p style="text-align: center; color: #64748b;">Nenhuma venda registrada ainda</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Modal de leitura de código de barras -->
+    <div class="barcode-scanner" id="barcodeScanner">
+        <video id="barcodeScannerVideo"></video>
+        <button id="closeBarcodeScanner">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6L6 18"></path>
+                <path d="M6 6l12 12"></path>
+            </svg>
+            Fechar Scanner
+        </button>
+    </div>
+
+    <!-- Modal de confirmação de venda -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modalTitle">Confirmar Venda</h3>
+            <div class="modal-text" id="modalContent">
+                <p>Deseja finalizar esta venda?</p>
+                <div id="modalPagamentoInfo"></div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-danger" id="modalCancelBtn">Cancelar</button>
+                <button class="btn btn-accent" id="modalConfirmBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão de ajuda para atalhos -->
+    <div class="help-shortcuts" id="helpShortcuts">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        Atalhos (F1)
+    </div>
+
+    <!-- Modal de atalhos do teclado -->
+    <div class="shortcuts-modal" id="shortcutsModal">
+        <div class="shortcuts-content">
+            <h2 class="shortcuts-title">Atalhos do Teclado</h2>
+            <table class="shortcuts-table">
+                <tr>
+                    <th>Atalho</th>
+                    <th>Ação</th>
+                </tr>
+                <tr>
+                    <td><strong>F1</strong></td>
+                    <td>Abrir esta tela de ajuda</td>
+                </tr>
+                <tr>
+                    <td><strong>F12</strong></td>
+                    <td>Focar na barra de busca</td>
+                </tr>
+                <tr>
+                    <td><strong>Enter</strong> (na busca)</td>
+                    <td>Adicionar produto por código</td>
+                </tr>
+                <tr>
+                    <td><strong>F2</strong></td>
+                    <td>Selecionar pagamento em Dinheiro</td>
+                </tr>
+                <tr>
+                    <td><strong>F3</strong></td>
+                    <td>Selecionar pagamento em Débito</td>
+                </tr>
+                <tr>
+                    <td><strong>F4</strong></td>
+                    <td>Selecionar pagamento em Crédito</td>
+                </tr>
+                <tr>
+                    <td><strong>F5</strong></td>
+                    <td>Selecionar pagamento em PIX</td>
+                </tr>
+                <tr>
+                    <td><strong>F9</strong></td>
+                    <td>Finalizar venda</td>
+                </tr>
+                <tr>
+                    <td><strong>F10</strong></td>
+                    <td>Cancelar venda</td>
+                </tr>
+                <tr>
+                    <td><strong>ESC</strong></td>
+                    <td>Fechar modais/cancelar ações</td>
+                </tr>
+            </table>
+            <div class="shortcuts-close">
+                <button class="btn btn-accent" id="closeShortcutsBtn">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funções auxiliares
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function formatarData(data) {
+            const options = { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(data).toLocaleDateString('pt-BR', options);
+        }
+
+        function gerarId() {
+            return Math.floor(Math.random() * 1000000);
+        }
+
+        function gerarCodigoBarras() {
+            // Gera um código de barras fictício no formato EAN-13
+            const pais = '789'; // Código do Brasil
+            const empresa = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            const produto = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            
+            // Calcula o dígito verificador
+            const codigoSemDigito = pais + empresa + produto;
+            let soma = 0;
+            
+            for (let i = 0; i < codigoSemDigito.length; i++) {
+                const digito = parseInt(codigoSemDigito[i]);
+                soma += (i % 2 === 0) ? digito * 1 : digito * 3;
+            }
+            
+            const digitoVerificador = (10 - (soma % 10)) % 10;
+            
+            return codigoSemDigito + digitoVerificador;
+        }
+
+        function agruparPorMes(vendas) {
+            const meses = {};
+            
+            vendas.forEach(venda => {
+                const data = new Date(venda.data);
+                // Corrigido: formatar mês com dois dígitos
+                const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+                const mesAno = `${mes}/${data.getFullYear()}`;
+                const nomeMes = data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+                
+                if (!meses[mesAno]) {
+                    meses[mesAno] = {
+                        nome: nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1),
+                        vendas: []
+                    };
+                }
+                
+                meses[mesAno].vendas.push(venda);
+            });
+            
+            return meses;
+        }
+
+        // Gerenciamento de abas
+        const tabs = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const searchInput = document.getElementById('searchInput');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                
+                // Atualiza as abas ativas
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+                
+                // Foca no campo de busca quando a aba do PDV estiver ativa
+                if (tabId === 'pdv') {
+                    searchInput.focus();
+                    carregarProdutos();
+                    renderizarProdutos();
+                }
+                
+                // Se for a aba de cadastro, recarrega a lista de produtos cadastrados
+                if (tabId === 'cadastro') {
+                    carregarProdutos();
+                    renderizarProdutosCadastrados();
+                }
+                
+                // Se for a aba de histórico, carrega o histórico
+                if (tabId === 'historico') {
+                    carregarHistorico();
+                    renderizarHistorico();
+                }
+            });
+        });
+
+        // Sistema de PDV
+        let carrinho = [];
+        let categoriaAtual = "todos";
+        let produtos = [];
+        let historicoVendas = [];
+        let produtoEmEdicao = null;
+
+        // Elementos do DOM - PDV
+        const produtosGrid = document.getElementById('produtosGrid');
+        const itensVenda = document.getElementById('itensVenda');
+        const totalVenda = document.getElementById('totalVenda');
+        const categoriaBtns = document.querySelectorAll('.categoria-btn');
+        const finalizarVendaBtn = document.getElementById('finalizarVenda');
+        const cancelarVendaBtn = document.getElementById('cancelarVenda');
+        const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
+        const trocoSection = document.getElementById('trocoSection');
+        const valorRecebido = document.getElementById('valorRecebido');
+        const valorTroco = document.getElementById('valorTroco');
+        const pagamentoOptions = document.querySelectorAll('input[name="pagamento"]');
+        const pagamentoDinheiro = document.getElementById('pagamentoDinheiro');
+        const pagamentoDebito = document.getElementById('pagamentoDebito');
+        const pagamentoCredito = document.getElementById('pagamentoCredito');
+        const pagamentoPix = document.getElementById('pagamentoPix');
+
+        // Elementos do DOM - Cadastro
+        const formProduto = document.getElementById('formProduto');
+        const produtosCadastrados = document.getElementById('produtosCadastrados');
+        const produtoCodigoInput = document.getElementById('produtoCodigo');
+        const generateBarcodeBtn = document.getElementById('generateBarcodeBtn');
+        const excelFileInput = document.getElementById('excelFileInput');
+        const fileInputInfo = document.getElementById('fileInputInfo');
+        const importarProdutosBtn = document.getElementById('importarProdutosBtn');
+        const produtoIdInput = document.getElementById('produtoId');
+        const submitProdutoBtn = document.getElementById('submitProdutoBtn');
+        const cancelarEdicaoBtn = document.getElementById('cancelarEdicaoBtn');
+
+        // Elementos do DOM - Histórico
+        const historicoVendasContainer = document.getElementById('historicoVendas');
+        const pagarHistoricoBtn = document.getElementById('pagarHistoricoBtn');
+
+        // Elementos do DOM - Scanner de código de barras
+        const barcodeScanner = document.getElementById('barcodeScanner');
+        const barcodeScannerVideo = document.getElementById('barcodeScannerVideo');
+        const closeBarcodeScanner = document.getElementById('closeBarcodeScanner');
+
+        // Elementos do DOM - Modal de confirmação
+        const confirmModal = document.getElementById('confirmModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const modalPagamentoInfo = document.getElementById('modalPagamentoInfo');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+
+        // Elementos do DOM - Atalhos
+        const helpShortcuts = document.getElementById('helpShortcuts');
+        const shortcutsModal = document.getElementById('shortcutsModal');
+        const closeShortcutsBtn = document.getElementById('closeShortcutsBtn');
+
+        // Carregar dados do LocalStorage
+        function carregarProdutos() {
+            const produtosSalvos = localStorage.getItem('produtosAdega');
+            if (produtosSalvos) {
+                produtos = JSON.parse(produtosSalvos);
+            } else {
+                // Dados iniciais caso não haja nada salvo
+                produtos = [
+                    { id: gerarId(), nome: "Amstel", preco: 3.50, categoria: "cervejas", estoque: 50, codigo: gerarCodigoBarras(), imagem: "https://a.imagem.app/B5wpfV.png" },
+                ];
+                salvarProdutos();
+            }
+        }
+
+        function carregarCarrinho() {
+            const carrinhoSalvo = localStorage.getItem('carrinhoAdega');
+            if (carrinhoSalvo) {
+                carrinho = JSON.parse(carrinhoSalvo);
+                atualizarCarrinho();
+            }
+        }
+
+        function carregarHistorico() {
+            const historicoSalvo = localStorage.getItem('historicoAdega');
+            if (historicoSalvo) {
+                historicoVendas = JSON.parse(historicoSalvo);
+            }
+        }
+
+        function salvarProdutos() {
+            localStorage.setItem('produtosAdega', JSON.stringify(produtos));
+        }
+
+        function salvarCarrinho() {
+            localStorage.setItem('carrinhoAdega', JSON.stringify(carrinho));
+        }
+
+        function salvarHistorico() {
+            localStorage.setItem('historicoAdega', JSON.stringify(historicoVendas));
+        }
+
+        // Funções do PDV
+        function renderizarProdutos() {
+            produtosGrid.innerHTML = '';
+            
+            const termoBusca = searchInput.value.toLowerCase();
+            
+            produtos.filter(produto => {
+                const correspondeBusca = produto.nome.toLowerCase().includes(termoBusca) || 
+                                      (produto.codigo && produto.codigo.includes(termoBusca));
+                const correspondeCategoria = categoriaAtual === 'todos' || produto.categoria === categoriaAtual;
+                return correspondeBusca && correspondeCategoria;
+            }).forEach(produto => {
+                const produtoCard = document.createElement('div');
+                produtoCard.className = 'produto-card';
+                
+                // Verifica se o estoque está baixo (menos de 5 itens)
+                const estoqueBaixo = produto.estoque < 5;
+                const estoqueEsgotado = produto.estoque <= 0;
+                
+                produtoCard.innerHTML = `
+                    <img src="${produto.imagem || 'https://via.placeholder.com/150?text=Sem+Imagem'}" alt="${produto.nome}">
+                    <div class="produto-estoque ${estoqueBaixo ? 'estoque-baixo' : ''}">
+                        ${produto.estoque} ${estoqueEsgotado ? 'ESGOTADO' : 'disponíveis'}
+                    </div>
+                    <div class="produto-info">
+                        <div class="produto-nome">${produto.nome}</div>
+                        <div class="produto-preco">${formatarMoeda(produto.preco)}</div>
+                        ${produto.codigo ? `<div class="produto-codigo">Cód: ${produto.codigo}</div>` : ''}
+                    </div>
+                `;
+                
+                // Desabilita o clique se o estoque estiver esgotado
+                if (!estoqueEsgotado) {
+                    produtoCard.addEventListener('click', () => adicionarAoCarrinho(produto));
+                } else {
+                    produtoCard.style.opacity = '0.7';
+                    produtoCard.style.cursor = 'not-allowed';
+                }
+                
+                produtosGrid.appendChild(produtoCard);
+            });
+        }
+
+        function adicionarAoCarrinho(produto) {
+            // Verifica se há estoque disponível
+            if (produto.estoque <= 0) {
+                alert('Este produto está esgotado!');
+                return;
+            }
+            
+            const itemExistente = carrinho.find(item => item.id === produto.id);
+            
+            if (itemExistente) {
+                // Verifica se há estoque suficiente para a quantidade adicional
+                if (itemExistente.quantidade >= produto.estoque) {
+                    alert(`Não há estoque suficiente! Restam apenas ${produto.estoque} unidades.`);
+                    return;
+                }
+                itemExistente.quantidade += 1;
+            } else {
+                carrinho.push({
+                    ...produto,
+                    quantidade: 1
+                });
+            }
+            
+            atualizarCarrinho();
+            salvarCarrinho();
+            searchInput.value = '';
+            searchInput.focus();
+        }
+
+        function adicionarPorCodigo(codigo) {
+            const produto = produtos.find(p => p.codigo === codigo);
+            if (produto) {
+                adicionarAoCarrinho(produto);
+                return true;
+            }
+            return false;
+        }
+
+        function atualizarCarrinho() {
+            if (carrinho.length === 0) {
+                itensVenda.innerHTML = '<p style="text-align: center;">Nenhum item adicionado</p>';
+                totalVenda.textContent = formatarMoeda(0);
+                return;
+            }
+            
+            itensVenda.innerHTML = '';
+            
+            let total = 0;
+            
+            carrinho.forEach(item => {
+                const subtotal = item.preco * item.quantidade;
+                total += subtotal;
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item-venda';
+                itemElement.innerHTML = `
+                    <div>
+                        <div>${item.nome}</div>
+                        <div style="font-size: 12px;">${formatarMoeda(item.preco)} x ${item.quantidade}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span>${formatarMoeda(subtotal)}</span>
+                        <div class="quantidade-controller">
+                            <button onclick="alterarQuantidade(${item.id}, -1)">-</button>
+                            <span>${item.quantidade}</span>
+                            <button onclick="alterarQuantidade(${item.id}, 1)">+</button>
+                        </div>
+                        <button style="background: none; border: none; color: white; cursor: pointer;" onclick="removerItem(${item.id})">×</button>
+                    </div>
+                `;
+                itensVenda.appendChild(itemElement);
+            });
+            
+            totalVenda.textContent = formatarMoeda(total);
+            atualizarTroco();
+        }
+
+        function alterarQuantidade(id, mudanca) {
+            const item = carrinho.find(item => item.id === id);
+            
+            if (item) {
+                // Encontra o produto original para verificar o estoque
+                const produtoOriginal = produtos.find(p => p.id === id);
+                
+                // Verifica se há estoque suficiente para aumentar a quantidade
+                if (mudanca > 0 && (item.quantidade + mudanca) > produtoOriginal.estoque) {
+                    alert(`Não há estoque suficiente! Restam apenas ${produtoOriginal.estoque} unidades.`);
+                    return;
+                }
+                
+                item.quantidade += mudanca;
+                
+                if (item.quantidade <= 0) {
+                    carrinho = carrinho.filter(item => item.id !== id);
+                }
+                
+                atualizarCarrinho();
+                salvarCarrinho();
+            }
+        }
+
+        function removerItem(id) {
+            carrinho = carrinho.filter(item => item.id !== id);
+            atualizarCarrinho();
+            salvarCarrinho();
+        }
+
+        function calcularTotal() {
+            return carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+        }
+
+        function atualizarTroco() {
+            const total = calcularTotal();
+            const recebido = parseFloat(valorRecebido.value) || 0;
+            const troco = recebido - total;
+            
+            valorTroco.textContent = formatarMoeda(troco > 0 ? troco : 0);
+        }
+
+        function mostrarModalConfirmacao() {
+            const total = calcularTotal();
+            const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
+            let pagamentoText = '';
+            let recebido = 0;
+            let troco = 0;
+            
+            if (formaPagamento === 'dinheiro') {
+                recebido = parseFloat(valorRecebido.value) || 0;
+                troco = recebido - total;
+                pagamentoText = `
+                    <p><strong>Forma de Pagamento:</strong> Dinheiro</p>
+                    <p><strong>Valor Recebido:</strong> ${formatarMoeda(recebido)}</p>
+                    <p><strong>Troco:</strong> ${formatarMoeda(troco > 0 ? troco : 0)}</p>
+                `;
+            } else {
+                let formaText = '';
+                switch(formaPagamento) {
+                    case 'debito': formaText = 'Cartão de Débito'; break;
+                    case 'credito': formaText = 'Cartão de Crédito'; break;
+                    case 'pix': formaText = 'PIX'; break;
+                }
+                pagamentoText = `<p><strong>Forma de Pagamento:</strong> ${formaText}</p>`;
+            }
+            
+            modalTitle.textContent = 'Confirmar Venda';
+            modalContent.innerHTML = `<p>Deseja finalizar esta venda?</p><p><strong>Total:</strong> ${formatarMoeda(total)}</p>`;
+            modalPagamentoInfo.innerHTML = pagamentoText;
+            
+            confirmModal.style.display = 'flex';
+        }
+
+        function finalizarVenda() {
+            if (carrinho.length === 0) {
+                alert('Adicione itens à venda antes de finalizar!');
+                return;
+            }
+            
+            const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
+            
+            if (formaPagamento === 'dinheiro') {
+                const total = calcularTotal();
+                const recebido = parseFloat(valorRecebido.value) || 0;
+                
+                if (recebido < total) {
+                    alert('O valor recebido é menor que o total da venda!');
+                    return;
+                }
+            }
+            
+            mostrarModalConfirmacao();
+        }
+
+        function confirmarVenda() {
+            const total = calcularTotal();
+            const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
+            let mensagem = `Venda finalizada com sucesso!\nTotal: ${formatarMoeda(total)}\nForma de Pagamento: `;
+            
+            // Atualizar estoque dos produtos vendidos
+            carrinho.forEach(itemVenda => {
+                const produto = produtos.find(p => p.id === itemVenda.id);
+                if (produto) {
+                    produto.estoque -= itemVenda.quantidade;
+                    if (produto.estoque < 0) produto.estoque = 0; // Garante que não fique negativo
+                }
+            });
+            
+            salvarProdutos();
+            
+            // Criar objeto de venda para o histórico
+            const novaVenda = {
+                id: gerarId(),
+                data: new Date().toISOString(),
+                itens: [...carrinho],
+                total: total,
+                formaPagamento: formaPagamento,
+                valorRecebido: formaPagamento === 'dinheiro' ? parseFloat(valorRecebido.value) || 0 : null,
+                troco: formaPagamento === 'dinheiro' ? (parseFloat(valorRecebido.value) || 0) - total : null
+            };
+            
+            // Adicionar ao histórico
+            historicoVendas.unshift(novaVenda);
+            salvarHistorico();
+            
+            switch(formaPagamento) {
+                case 'dinheiro':
+                    const recebido = parseFloat(valorRecebido.value) || 0;
+                    const troco = recebido - total;
+                    mensagem += `Dinheiro\nValor Recebido: ${formatarMoeda(recebido)}\nTroco: ${formatarMoeda(troco > 0 ? troco : 0)}`;
+                    break;
+                case 'debito': mensagem += 'Cartão de Débito'; break;
+                case 'credito': mensagem += 'Cartão de Crédito'; break;
+                case 'pix': mensagem += 'PIX'; break;
+            }
+            
+            alert(mensagem);
+            
+            // Limpar carrinho e resetar formulário
+            carrinho = [];
+            atualizarCarrinho();
+            salvarCarrinho();
+            pagamentoDinheiro.checked = true;
+            valorRecebido.value = '';
+            confirmModal.style.display = 'none';
+            searchInput.focus();
+            
+            // Atualizar histórico se estiver visível
+            if (document.getElementById('historico-tab').classList.contains('active')) {
+                renderizarHistorico();
+            }
+            
+            // Atualizar lista de produtos se estiver na aba de cadastro
+            if (document.getElementById('cadastro-tab').classList.contains('active')) {
+                renderizarProdutosCadastrados();
+            }
+        }
+
+        function cancelarVenda() {
+            if (carrinho.length === 0 || confirm('Tem certeza que deseja cancelar esta venda?')) {
+                // Restaurar estoque dos produtos no carrinho
+                carrinho.forEach(item => {
+                    const produto = produtos.find(p => p.id === item.id);
+                    if (produto) {
+                        produto.estoque += item.quantidade;
+                    }
+                });
+                salvarProdutos();
+                
+                carrinho = [];
+                atualizarCarrinho();
+                salvarCarrinho();
+                pagamentoDinheiro.checked = true;
+                valorRecebido.value = '';
+                searchInput.focus();
+            }
+        }
+
+        // Funções do Histórico
+        function renderizarHistorico() {
+            historicoVendasContainer.innerHTML = '';
+            
+            if (historicoVendas.length === 0) {
+                historicoVendasContainer.innerHTML = '<p style="text-align: center;">Nenhuma venda registrada ainda</p>';
+                return;
+            }
+            
+            const meses = agruparPorMes(historicoVendas);
+            
+            for (const mesAno in meses) {
+                const mes = meses[mesAno];
+                
+                const mesContainer = document.createElement('div');
+                mesContainer.className = 'historico-mes';
+                
+                const mesTitle = document.createElement('div');
+                mesTitle.className = 'historico-mes-title';
+                mesTitle.innerHTML = `
+                    <span>${mes.nome}</span>
+                    <span>${mes.vendas.length} venda(s)</span>
+                `;
+                
+                const mesContent = document.createElement('div');
+                mesContent.className = 'historico-mes-content';
+                
+                mes.vendas.forEach(venda => {
+                    const vendaElement = document.createElement('div');
+                    vendaElement.className = 'historico-venda';
+                    
+                    const vendaHeader = document.createElement('div');
+                    vendaHeader.className = 'historico-venda-header';
+                    vendaHeader.innerHTML = `
+                        <span>${formatarData(venda.data)}</span>
+                        <span>${formatarMoeda(venda.total)}</span>
+                    `;
+                    
+                    const vendaItens = document.createElement('div');
+                    vendaItens.className = 'historico-venda-itens';
+                    
+                    venda.itens.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'historico-venda-item';
+                        itemElement.innerHTML = `
+                            <span>${item.nome} x${item.quantidade}</span>
+                            <span>${formatarMoeda(item.preco * item.quantidade)}</span>
+                        `;
+                        vendaItens.appendChild(itemElement);
+                    });
+                    
+                    const vendaFooter = document.createElement('div');
+                    vendaFooter.className = 'historico-venda-footer';
+                    vendaFooter.style.marginTop = '10px';
+                    vendaFooter.style.paddingTop = '5px';
+                    vendaFooter.style.borderTop = '1px solid #eee';
+                    vendaFooter.innerHTML = `
+                        <div><strong>Pagamento:</strong> ${formatarFormaPagamento(venda.formaPagamento)}</div>
+                        ${venda.formaPagamento === 'dinheiro' ? `
+                            <div><strong>Recebido:</strong> ${formatarMoeda(venda.valorRecebido)}</div>
+                            <div><strong>Troco:</strong> ${formatarMoeda(venda.troco)}</div>
+                        ` : ''}
+                    `;
+                    
+                    vendaElement.appendChild(vendaHeader);
+                    vendaElement.appendChild(vendaItens);
+                    vendaElement.appendChild(vendaFooter);
+                    mesContent.appendChild(vendaElement);
+                });
+                
+                mesTitle.addEventListener('click', () => {
+                    mesContent.classList.toggle('active');
+                });
+                
+                mesContainer.appendChild(mesTitle);
+                mesContainer.appendChild(mesContent);
+                historicoVendasContainer.appendChild(mesContainer);
+            }
+        }
+
+        function formatarFormaPagamento(forma) {
+            switch(forma) {
+                case 'dinheiro': return 'Dinheiro';
+                case 'debito': return 'Cartão de Débito';
+                case 'credito': return 'Cartão de Crédito';
+                case 'pix': return 'PIX';
+                default: return forma;
+            }
+        }
+
+        // Funções do Cadastro de Produtos
+        function renderizarProdutosCadastrados() {
+            produtosCadastrados.innerHTML = '';
+            
+            if (produtos.length === 0) {
+                produtosCadastrados.innerHTML = '<p>Nenhum produto cadastrado ainda.</p>';
+                return;
+            }
+            
+            produtos.forEach(produto => {
+                const produtoCard = document.createElement('div');
+                produtoCard.className = 'produto-card';
+                produtoCard.innerHTML = `
+                    <img src="${produto.imagem || 'https://via.placeholder.com/150?text=Sem+Imagem'}" alt="${produto.nome}">
+                    <div class="produto-estoque ${produto.estoque < 5 ? 'estoque-baixo' : ''}">
+                        ${produto.estoque} disponíveis
+                    </div>
+                    <div class="produto-info">
+                        <div class="produto-nome">${produto.nome}</div>
+                        <div class="produto-preco">${formatarMoeda(produto.preco)}</div>
+                        <div style="font-size: 12px; margin-top: 5px;">${produto.categoria}</div>
+                        ${produto.codigo ? `<div style="font-size: 10px; color: #777;">Código: ${produto.codigo}</div>` : ''}
+                        <button class="edit-produto-btn" onclick="editarProduto(${produto.id})">Editar</button>
+                        <button onclick="removerProduto(${produto.id})" style="margin-top: 8px; width: 100%; padding: 5px; background-color: #ff3333; color: white; border: none; border-radius: 3px; cursor: pointer;">Remover</button>
+                    </div>
+                `;
+                produtosCadastrados.appendChild(produtoCard);
+            });
+        }
+
+        function editarProduto(id) {
+            const produto = produtos.find(p => p.id === id);
+            if (!produto) return;
+            
+            produtoEmEdicao = produto;
+            
+            // Preenche o formulário com os dados do produto
+            produtoIdInput.value = produto.id;
+            document.getElementById('produtoNome').value = produto.nome;
+            document.getElementById('produtoPreco').value = produto.preco;
+            document.getElementById('produtoCategoria').value = produto.categoria;
+            document.getElementById('produtoEstoque').value = produto.estoque;
+            document.getElementById('produtoCodigo').value = produto.codigo || '';
+            document.getElementById('produtoImagem').value = produto.imagem || '';
+            
+            // Altera o texto do botão para "Atualizar"
+            submitProdutoBtn.textContent = 'Atualizar Produto';
+            
+            // Mostra o botão de cancelar edição
+            cancelarEdicaoBtn.style.display = 'block';
+            
+            // Rola a página até o formulário
+            document.querySelector('.cadastro-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cancelarEdicao() {
+            produtoEmEdicao = null;
+            formProduto.reset();
+            produtoIdInput.value = '';
+            document.getElementById('produtoEstoque').value = '0'; // Garante que o estoque volte para 0
+            submitProdutoBtn.textContent = 'Cadastrar Produto';
+            cancelarEdicaoBtn.style.display = 'none';
+        }
+
+        function removerProduto(id) {
+            if (confirm('Tem certeza que deseja remover este produto?')) {
+                produtos = produtos.filter(produto => produto.id !== id);
+                salvarProdutos();
+                renderizarProdutosCadastrados();
+                
+                // Atualiza o carrinho caso o produto removido esteja nele
+                carrinho = carrinho.filter(item => item.id !== id);
+                salvarCarrinho();
+                atualizarCarrinho();
+                
+                // Se estava editando o produto removido, cancela a edição
+                if (produtoEmEdicao && produtoEmEdicao.id === id) {
+                    cancelarEdicao();
+                }
+            }
+        }
+
+        // Funções para importação de Excel
+        function processarArquivoExcel(file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                
+                // Pegar a primeira planilha
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                
+                // Converter para JSON
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                
+                if (jsonData.length === 0) {
+                    alert('O arquivo Excel está vazio ou não está no formato correto!');
+                    return;
+                }
+                
+                // Verificar colunas mínimas necessárias
+                const primeiraLinha = jsonData[0];
+                if (!('Nome' in primeiraLinha) || !('Preço' in primeiraLinha) || !('Categoria' in primeiraLinha)) {
+                    alert('O arquivo Excel deve conter as colunas: Nome, Preço e Categoria!');
+                    return;
+                }
+                
+                // Preparar produtos para importação
+                const produtosParaImportar = jsonData.map(linha => {
+                    const estoque = parseInt(linha['Estoque']) || 0;
+                    if (estoque < 0) {
+                        alert(`Estoque negativo não permitido para o produto ${linha['Nome']}. Definido como 0.`);
+                    }
+                    
+                    return {
+                        id: gerarId(),
+                        nome: linha['Nome'] || '',
+                        preco: parseFloat(linha['Preço']) || 0,
+                        categoria: (linha['Categoria'] || '').toLowerCase() || 'outros',
+                        estoque: estoque < 0 ? 0 : estoque, // Garante que não seja negativo
+                        codigo: linha['Código'] || linha['Codigo'] || gerarCodigoBarras(),
+                        imagem: linha['Imagem'] || linha['URL'] || ''
+                    };
+                }).filter(produto => produto.nome && produto.preco > 0);
+                
+                if (produtosParaImportar.length === 0) {
+                    alert('Nenhum produto válido encontrado no arquivo!');
+                    return;
+                }
+                
+                // Mostrar preview e botão de importação
+                fileInputInfo.innerHTML = `Pronto para importar ${produtosParaImportar.length} produtos do arquivo: ${file.name}`;
+                importarProdutosBtn.style.display = 'block';
+                
+                // Configurar ação do botão de importação
+                importarProdutosBtn.onclick = function() {
+                    produtos = [...produtos, ...produtosParaImportar];
+                    salvarProdutos();
+                    renderizarProdutosCadastrados();
+                    alert(`${produtosParaImportar.length} produtos importados com sucesso!`);
+                    
+                    // Resetar o formulário
+                    fileInputInfo.textContent = 'Nenhum arquivo selecionado';
+                    importarProdutosBtn.style.display = 'none';
+                    excelFileInput.value = '';
+                };
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Funções do Scanner de Código de Barras
+        function iniciarScanner() {
+            barcodeScanner.style.display = 'flex';
+            
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: barcodeScannerVideo,
+                    constraints: {
+                        width: 480,
+                        height: 320,
+                        facingMode: "environment"
+                    },
+                },
+                decoder: {
+                    readers: ["ean_reader", "ean_8_reader", "code_128_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader"]
+                },
+            }, function(err) {
+                if (err) {
+                    console.error(err);
+                    alert("Erro ao iniciar o scanner: " + err);
+                    return;
+                }
+                Quagga.start();
+            });
+
+            Quagga.onDetected(function(result) {
+                const codigo = result.codeResult.code;
+                Quagga.stop();
+                barcodeScanner.style.display = 'none';
+                
+                // Verifica em qual aba estamos
+                const abaAtiva = document.querySelector('.tab-btn.active').dataset.tab;
+                
+                if (abaAtiva === 'pdv') {
+                    if (!adicionarPorCodigo(codigo)) {
+                        alert('Produto não encontrado com este código de barras!');
+                    }
+                } else if (abaAtiva === 'cadastro') {
+                    produtoCodigoInput.value = codigo;
+                }
+            });
+        }
+
+        function pararScanner() {
+            Quagga.stop();
+            barcodeScanner.style.display = 'none';
+        }
+
+        // Funções para atalhos do teclado
+        function configurarAtalhosTeclado() {
+            document.addEventListener('keydown', function(e) {
+                // Ignorar se estiver digitando em um campo de texto
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                switch(e.key) {
+                    case 'F1':
+                        e.preventDefault();
+                        shortcutsModal.style.display = 'flex';
+                        break;
+                    case 'F12':
+                        e.preventDefault();
+                        if (document.getElementById('pdv-tab').classList.contains('active')) {
+                            searchInput.focus();
+                        }
+                        break;
+                    case 'F2':
+                        e.preventDefault();
+                        pagamentoDinheiro.checked = true;
+                        if (trocoSection) trocoSection.classList.add('active');
+                        if (valorRecebido) valorRecebido.focus();
+                        break;
+                    case 'F3':
+                        e.preventDefault();
+                        pagamentoDebito.checked = true;
+                        if (trocoSection) trocoSection.classList.remove('active');
+                        break;
+                    case 'F4':
+                        e.preventDefault();
+                        pagamentoCredito.checked = true;
+                        if (trocoSection) trocoSection.classList.remove('active');
+                        break;
+                    case 'F5':
+                        e.preventDefault();
+                        pagamentoPix.checked = true;
+                        if (trocoSection) trocoSection.classList.remove('active');
+                        break;
+                    case 'F9':
+                        e.preventDefault();
+                        finalizarVenda();
+                        break;
+                    case 'F10':
+                        e.preventDefault();
+                        cancelarVenda();
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        if (confirmModal.style.display === 'flex') {
+                            confirmModal.style.display = 'none';
+                        } else if (shortcutsModal.style.display === 'flex') {
+                            shortcutsModal.style.display = 'none';
+                        } else if (barcodeScanner.style.display === 'flex') {
+                            pararScanner();
+                        } else if (produtoEmEdicao) {
+                            cancelarEdicao();
+                        }
+                        break;
+                }
+            });
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('input', renderizarProdutos);
+
+        // Busca por código de barras ao pressionar Enter
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const codigo = this.value;
+                if (codigo.length >= 8) { // Códigos de barras geralmente têm 8+ dígitos
+                    if (adicionarPorCodigo(codigo)) {
+                        this.value = '';
+                    } else {
+                        alert('Produto não encontrado com este código de barras!');
+                    }
+                }
+            }
+        });
+
+        categoriaBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoriaBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                categoriaAtual = btn.dataset.categoria;
+                renderizarProdutos();
+            });
+        });
+
+        finalizarVendaBtn.addEventListener('click', finalizarVenda);
+        cancelarVendaBtn.addEventListener('click', cancelarVenda);
+        modalConfirmBtn.addEventListener('click', confirmarVenda);
+        modalCancelBtn.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+        });
+
+        // Atualiza a seção de troco quando a forma de pagamento mudar
+        pagamentoOptions.forEach(option => {
+            option.addEventListener('change', function() {
+                trocoSection.classList.toggle('active', this.value === 'dinheiro');
+                if (this.value === 'dinheiro' && valorRecebido) {
+                    valorRecebido.focus();
+                }
+            });
+        });
+
+        // Atualiza o troco quando o valor recebido mudar
+        valorRecebido.addEventListener('input', atualizarTroco);
+
+        formProduto.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nome = document.getElementById('produtoNome').value;
+            const preco = parseFloat(document.getElementById('produtoPreco').value);
+            const categoria = document.getElementById('produtoCategoria').value;
+            const estoque = parseInt(document.getElementById('produtoEstoque').value);
+            const codigo = document.getElementById('produtoCodigo').value;
+            const imagem = document.getElementById('produtoImagem').value;
+            
+            if (produtoEmEdicao) {
+                // Atualizar produto existente
+                produtoEmEdicao.nome = nome;
+                produtoEmEdicao.preco = preco;
+                produtoEmEdicao.categoria = categoria;
+                produtoEmEdicao.estoque = estoque;
+                produtoEmEdicao.codigo = codigo || undefined;
+                produtoEmEdicao.imagem = imagem || undefined;
+                
+                salvarProdutos();
+                renderizarProdutosCadastrados();
+                cancelarEdicao();
+                
+                alert('Produto atualizado com sucesso!');
+            } else {
+                // Criar novo produto
+                const novoProduto = {
+                    id: gerarId(),
+                    nome,
+                    preco,
+                    categoria,
+                    estoque,
+                    codigo: codigo || undefined,
+                    imagem: imagem || undefined
+                };
+                
+                produtos.push(novoProduto);
+                salvarProdutos();
+                renderizarProdutosCadastrados();
+                
+                // Limpa o formulário
+                formProduto.reset();
+                document.getElementById('produtoEstoque').value = '0';
+                
+                alert('Produto cadastrado com sucesso!');
+            }
+        });
+
+        generateBarcodeBtn.addEventListener('click', function() {
+            produtoCodigoInput.value = gerarCodigoBarras();
+        });
+
+        // Event listeners para importação de Excel
+        excelFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (!file.name.match(/\.(xlsx|xls|csv)$/)) {
+                alert('Por favor, selecione um arquivo Excel (.xlsx, .xls) ou CSV!');
+                return;
+            }
+            
+            fileInputInfo.textContent = `Processando arquivo: ${file.name}...`;
+            importarProdutosBtn.style.display = 'none';
+            
+            processarArquivoExcel(file);
+        });
+
+        scanBarcodeBtn.addEventListener('click', iniciarScanner);
+        closeBarcodeScanner.addEventListener('click', pararScanner);
+        helpShortcuts.addEventListener('click', () => {
+            shortcutsModal.style.display = 'flex';
+        });
+        closeShortcutsBtn.addEventListener('click', () => {
+            shortcutsModal.style.display = 'none';
+        });
+        cancelarEdicaoBtn.addEventListener('click', cancelarEdicao);
+
+        // Event listener para o botão de pagar histórico
+        pagarHistoricoBtn.addEventListener('click', function() {
+            if (historicoVendas.length === 0) {
+                alert('Nenhuma venda no histórico para pagar!');
+                return;
+            }
+            
+            if (confirm(`Deseja marcar todas as ${historicoVendas.length} vendas como pagas?`)) {
+                // Aqui você pode adicionar lógica para processar o pagamento
+                alert(`${historicoVendas.length} vendas marcadas como pagas com sucesso!`);
+                // Atualizar a interface se necessário
+            }
+        });
+
+        // Focar no campo de busca quando a página carregar
+        window.addEventListener('load', function() {
+            if (document.getElementById('pdv-tab').classList.contains('active')) {
+                searchInput.focus();
+            }
+            
+            // Carregar todos os dados iniciais
+            carregarProdutos();
+            carregarCarrinho();
+            carregarHistorico();
+            renderizarProdutos();
+            renderizarProdutosCadastrados();
+            configurarAtalhosTeclado();
+        });
+
+        // Funções globais para os botões
+        window.alterarQuantidade = alterarQuantidade;
+        window.removerItem = removerItem;
+        window.removerProduto = removerProduto;
+        window.editarProduto = editarProduto;
+    </script>
+</body>
+</html>
