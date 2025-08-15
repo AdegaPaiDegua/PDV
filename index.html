@@ -969,6 +969,49 @@
                 width: 100%;
             }
         }
+
+        /* Estilos para o scanner de código de barras */
+        .barcode-scanner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .barcode-scanner video {
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+
+        .barcode-scanner button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Estilos para a seção de backup */
+        .backup-section {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+        }
     </style>
     <!-- Incluindo a biblioteca QuaggaJS para leitura de código de barras -->
     <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
@@ -1175,6 +1218,31 @@
                         Cancelar Edição
                     </button>
                 </form>
+
+                <!-- Seção de Backup do Banco de Dados -->
+                <div class="backup-section">
+                    <h3 style="margin-top: 0; margin-bottom: 1rem;">Backup do Banco de Dados</h3>
+                    <button class="btn btn-accent" id="exportDatabaseBtn" style="margin-bottom: 0.75rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Exportar Banco de Dados
+                    </button>
+                    <div class="file-input-container">
+                        <button class="file-input-button" id="importDatabaseBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            Importar Banco de Dados
+                        </button>
+                        <input type="file" id="databaseFileInput" class="file-input" accept=".json">
+                    </div>
+                    <div class="file-input-info" id="databaseFileInfo">Nenhum arquivo selecionado</div>
+                </div>
             </section>
             
             <section style="margin-top: 1.5rem;">
@@ -1300,6 +1368,173 @@
     </div>
 
     <script>
+        // Configuração do IndexedDB
+        const dbName = "PDVAdegaDB";
+        const dbVersion = 1;
+        let db;
+
+        // Função para abrir ou criar o banco de dados
+        function openDatabase() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(dbName, dbVersion);
+                
+                request.onerror = (event) => {
+                    console.error("Erro ao abrir o banco de dados:", event.target.error);
+                    reject(event.target.error);
+                };
+                
+                request.onsuccess = (event) => {
+                    db = event.target.result;
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    
+                    // Cria a loja de produtos se não existir
+                    if (!db.objectStoreNames.contains('produtos')) {
+                        const produtosStore = db.createObjectStore('produtos', { keyPath: 'id' });
+                        produtosStore.createIndex('categoria', 'categoria', { unique: false });
+                        produtosStore.createIndex('codigo', 'codigo', { unique: true });
+                    }
+                    
+                    // Cria a loja de vendas se não existir
+                    if (!db.objectStoreNames.contains('vendas')) {
+                        const vendasStore = db.createObjectStore('vendas', { keyPath: 'id' });
+                        vendasStore.createIndex('data', 'data', { unique: false });
+                    }
+                    
+                    // Cria a loja de carrinho se não existir
+                    if (!db.objectStoreNames.contains('carrinho')) {
+                        db.createObjectStore('carrinho', { keyPath: 'id' });
+                    }
+                };
+            });
+        }
+
+        // Função para exportar o banco de dados para um arquivo
+        async function exportDatabase() {
+            if (!db) await openDatabase();
+            
+            const transaction = db.transaction(['produtos', 'vendas', 'carrinho'], 'readonly');
+            const produtosStore = transaction.objectStore('produtos');
+            const vendasStore = transaction.objectStore('vendas');
+            const carrinhoStore = transaction.objectStore('carrinho');
+            
+            const produtos = await getAll(produtosStore);
+            const vendas = await getAll(vendasStore);
+            const carrinho = await getAll(carrinhoStore);
+            
+            const data = {
+                produtos,
+                vendas,
+                carrinho,
+                exportDate: new Date().toISOString()
+            };
+            
+            return data;
+        }
+
+        // Função para importar dados para o banco de dados
+        async function importDatabase(data) {
+            if (!db) await openDatabase();
+            
+            const transaction = db.transaction(['produtos', 'vendas', 'carrinho'], 'readwrite');
+            const produtosStore = transaction.objectStore('produtos');
+            const vendasStore = transaction.objectStore('vendas');
+            const carrinhoStore = transaction.objectStore('carrinho');
+            
+            // Limpa as lojas existentes
+            await clearStore(produtosStore);
+            await clearStore(vendasStore);
+            await clearStore(carrinhoStore);
+            
+            // Adiciona os novos dados
+            for (const produto of data.produtos) {
+                produtosStore.add(produto);
+            }
+            
+            for (const venda of data.vendas) {
+                vendasStore.add(venda);
+            }
+            
+            for (const item of data.carrinho) {
+                carrinhoStore.add(item);
+            }
+            
+            return new Promise((resolve, reject) => {
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = (event) => reject(event.target.error);
+            });
+        }
+
+        // Funções auxiliares para operações no IndexedDB
+        function getAll(store) {
+            return new Promise((resolve, reject) => {
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = (event) => reject(event.target.error);
+            });
+        }
+
+        function clearStore(store) {
+            return new Promise((resolve, reject) => {
+                const request = store.clear();
+                request.onsuccess = () => resolve();
+                request.onerror = (event) => reject(event.target.error);
+            });
+        }
+
+        // Função para salvar o banco de dados em um arquivo
+        async function saveDatabaseToFile() {
+            try {
+                const data = await exportDatabase();
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `pdv-adega-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                alert('Banco de dados exportado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao exportar banco de dados:', error);
+                alert('Erro ao exportar banco de dados: ' + error.message);
+            }
+        }
+
+        // Função para carregar o banco de dados de um arquivo
+        async function loadDatabaseFromFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                
+                reader.onload = async (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        await importDatabase(data);
+                        alert('Banco de dados importado com sucesso!');
+                        resolve();
+                    } catch (error) {
+                        console.error('Erro ao importar banco de dados:', error);
+                        alert('Erro ao importar banco de dados: ' + error.message);
+                        reject(error);
+                    }
+                };
+                
+                reader.onerror = (error) => {
+                    console.error('Erro ao ler arquivo:', error);
+                    alert('Erro ao ler arquivo: ' + error.message);
+                    reject(error);
+                };
+                
+                reader.readAsText(file);
+            });
+        }
+
         // Funções auxiliares
         function formatarMoeda(valor) {
             return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -1458,45 +1693,102 @@
         const shortcutsModal = document.getElementById('shortcutsModal');
         const closeShortcutsBtn = document.getElementById('closeShortcutsBtn');
 
-        // Carregar dados do LocalStorage
-        function carregarProdutos() {
-            const produtosSalvos = localStorage.getItem('produtosAdega');
-            if (produtosSalvos) {
-                produtos = JSON.parse(produtosSalvos);
-            } else {
-                // Dados iniciais caso não haja nada salvo
-                produtos = [
-                    { id: gerarId(), nome: "Amstel", preco: 3.50, categoria: "cervejas", estoque: 50, codigo: gerarCodigoBarras(), imagem: "https://a.imagem.app/B5wpfV.png" },
-                ];
-                salvarProdutos();
+        // Elementos do DOM - Backup
+        const exportDatabaseBtn = document.getElementById('exportDatabaseBtn');
+        const importDatabaseBtn = document.getElementById('importDatabaseBtn');
+        const databaseFileInput = document.getElementById('databaseFileInput');
+        const databaseFileInfo = document.getElementById('databaseFileInfo');
+
+        // Modificar as funções existentes para usar o IndexedDB
+
+        // Substituir a função carregarProdutos
+        async function carregarProdutos() {
+            if (!db) await openDatabase();
+            const transaction = db.transaction(['produtos'], 'readonly');
+            const store = transaction.objectStore('produtos');
+            
+            return new Promise((resolve, reject) => {
+                const request = store.getAll();
+                request.onsuccess = () => {
+                    produtos = request.result;
+                    resolve(produtos);
+                };
+                request.onerror = (event) => reject(event.target.error);
+            });
+        }
+
+        // Substituir a função carregarCarrinho
+        async function carregarCarrinho() {
+            if (!db) await openDatabase();
+            const transaction = db.transaction(['carrinho'], 'readonly');
+            const store = transaction.objectStore('carrinho');
+            
+            return new Promise((resolve, reject) => {
+                const request = store.getAll();
+                request.onsuccess = () => {
+                    carrinho = request.result;
+                    resolve(carrinho);
+                };
+                request.onerror = (event) => reject(event.target.error);
+            });
+        }
+
+        // Substituir a função carregarHistorico
+        async function carregarHistorico() {
+            if (!db) await openDatabase();
+            const transaction = db.transaction(['vendas'], 'readonly');
+            const store = transaction.objectStore('vendas');
+            
+            return new Promise((resolve, reject) => {
+                const request = store.getAll();
+                request.onsuccess = () => {
+                    historicoVendas = request.result.sort((a, b) => new Date(b.data) - new Date(a.data));
+                    resolve(historicoVendas);
+                };
+                request.onerror = (event) => reject(event.target.error);
+            });
+        }
+
+        // Substituir a função salvarProdutos
+        async function salvarProdutos() {
+            if (!db) await openDatabase();
+            const transaction = db.transaction(['produtos'], 'readwrite');
+            const store = transaction.objectStore('produtos');
+            
+            // Limpa a loja e adiciona os produtos atualizados
+            await clearStore(store);
+            
+            for (const produto of produtos) {
+                store.add(produto);
             }
         }
 
-        function carregarCarrinho() {
-            const carrinhoSalvo = localStorage.getItem('carrinhoAdega');
-            if (carrinhoSalvo) {
-                carrinho = JSON.parse(carrinhoSalvo);
-                atualizarCarrinho();
+        // Substituir a função salvarCarrinho
+        async function salvarCarrinho() {
+            if (!db) await openDatabase();
+            const transaction = db.transaction(['carrinho'], 'readwrite');
+            const store = transaction.objectStore('carrinho');
+            
+            // Limpa a loja e adiciona os itens do carrinho
+            await clearStore(store);
+            
+            for (const item of carrinho) {
+                store.add(item);
             }
         }
 
-        function carregarHistorico() {
-            const historicoSalvo = localStorage.getItem('historicoAdega');
-            if (historicoSalvo) {
-                historicoVendas = JSON.parse(historicoSalvo);
+        // Substituir a função salvarHistorico
+        async function salvarHistorico() {
+            if (!db) await openDatabase();
+            const transaction = db.transaction(['vendas'], 'readwrite');
+            const store = transaction.objectStore('vendas');
+            
+            // Limpa a loja e adiciona as vendas atualizadas
+            await clearStore(store);
+            
+            for (const venda of historicoVendas) {
+                store.add(venda);
             }
-        }
-
-        function salvarProdutos() {
-            localStorage.setItem('produtosAdega', JSON.stringify(produtos));
-        }
-
-        function salvarCarrinho() {
-            localStorage.setItem('carrinhoAdega', JSON.stringify(carrinho));
-        }
-
-        function salvarHistorico() {
-            localStorage.setItem('historicoAdega', JSON.stringify(historicoVendas));
         }
 
         // Funções do PDV
@@ -2236,6 +2528,7 @@
                     imagem: imagem || undefined
                 };
                 
+                
                 produtos.push(novoProduto);
                 salvarProdutos();
                 renderizarProdutosCadastrados();
@@ -2292,19 +2585,62 @@
             }
         });
 
-        // Focar no campo de busca quando a página carregar
-        window.addEventListener('load', function() {
-            if (document.getElementById('pdv-tab').classList.contains('active')) {
-                searchInput.focus();
-            }
+        // Event listeners para backup do banco de dados
+        exportDatabaseBtn.addEventListener('click', saveDatabaseToFile);
+        
+        databaseFileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
             
-            // Carregar todos os dados iniciais
-            carregarProdutos();
-            carregarCarrinho();
-            carregarHistorico();
-            renderizarProdutos();
-            renderizarProdutosCadastrados();
-            configurarAtalhosTeclado();
+            databaseFileInfo.textContent = `Arquivo selecionado: ${file.name}`;
+            
+            try {
+                await loadDatabaseFromFile(file);
+                
+                // Recarregar todos os dados
+                await carregarProdutos();
+                await carregarCarrinho();
+                await carregarHistorico();
+                
+                // Atualizar as interfaces
+                renderizarProdutos();
+                renderizarProdutosCadastrados();
+                atualizarCarrinho();
+                
+                if (document.getElementById('historico-tab').classList.contains('active')) {
+                    renderizarHistorico();
+                }
+                
+                databaseFileInfo.textContent = 'Banco de dados importado com sucesso!';
+                databaseFileInput.value = '';
+            } catch (error) {
+                databaseFileInfo.textContent = 'Erro ao importar banco de dados: ' + error.message;
+            }
+        });
+
+        // Inicialização do aplicativo
+        window.addEventListener('load', async function() {
+            try {
+                // Inicializar o banco de dados
+                await openDatabase();
+                
+                // Carregar todos os dados
+                await carregarProdutos();
+                await carregarCarrinho();
+                await carregarHistorico();
+                
+                // Inicializar a interface
+                if (document.getElementById('pdv-tab').classList.contains('active')) {
+                    searchInput.focus();
+                }
+                
+                renderizarProdutos();
+                renderizarProdutosCadastrados();
+                configurarAtalhosTeclado();
+            } catch (error) {
+                console.error('Erro ao inicializar o aplicativo:', error);
+                alert('Erro ao inicializar o aplicativo: ' + error.message);
+            }
         });
 
         // Funções globais para os botões
@@ -2314,5 +2650,4 @@
         window.editarProduto = editarProduto;
     </script>
 </body>
-
 </html>
