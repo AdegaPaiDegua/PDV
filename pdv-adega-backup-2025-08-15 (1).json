@@ -1,0 +1,184 @@
+{
+  "produtos": [
+    {
+      "id": 39989,
+      "nome": "Amstel",
+      "preco": 3.5,
+      "categoria": "cervejas",
+      "estoque": 28,
+      "imagem": "https://a.imagem.app/B5wpfV.png"
+    },
+    {
+      "id": 73936,
+      "nome": "Red Label",
+      "preco": 110,
+      "categoria": "destilados",
+      "estoque": 3,
+      "codigo": "5000267013602",
+      "imagem": "https://a.imagem.app/B5C5He.png"
+    },
+    {
+      "id": 83804,
+      "nome": "Brahma Duplo Malte",
+      "preco": 3.5,
+      "categoria": "cervejas",
+      "estoque": 0,
+      "imagem": "https://a.imagem.app/B5wWLk.png"
+    },
+    {
+      "id": 114641,
+      "nome": "Skol",
+      "preco": 3.5,
+      "categoria": "cervejas",
+      "estoque": 8,
+      "imagem": "https://a.imagem.app/B5waBN.png"
+    },
+    {
+      "id": 144287,
+      "nome": "51",
+      "preco": 16,
+      "categoria": "destilados",
+      "estoque": 1,
+      "imagem": "https://a.imagem.app/B5LaOa.png"
+    },
+    {
+      "id": 190122,
+      "nome": "Dreher",
+      "preco": 37,
+      "categoria": "destilados",
+      "estoque": 0,
+      "imagem": "https://a.imagem.app/B5LDwk.png"
+    },
+    {
+      "id": 213608,
+      "nome": "Chanceler 1l",
+      "preco": 25,
+      "categoria": "destilados",
+      "estoque": 2,
+      "imagem": "https://a.imagem.app/B5LT6Q.png"
+    },
+    {
+      "id": 224244,
+      "nome": "Heineken Long",
+      "preco": 8.5,
+      "categoria": "cervejas",
+      "estoque": 30,
+      "imagem": "https://a.imagem.app/B5Cb5G.png"
+    },
+    {
+      "id": 503160,
+      "nome": "Colorado Ribeirão Lager",
+      "preco": 8.5,
+      "categoria": "cervejas",
+      "estoque": 16,
+      "imagem": "https://a.imagem.app/B5wDpa.png"
+    },
+    {
+      "id": 627524,
+      "nome": "Jack Daniel s 1l",
+      "preco": 170,
+      "categoria": "destilados",
+      "estoque": 1,
+      "imagem": "https://a.imagem.app/B5Ci8v.png"
+    },
+    {
+      "id": 638638,
+      "nome": "Kariri",
+      "preco": 21,
+      "categoria": "destilados",
+      "estoque": 1,
+      "imagem": "https://a.imagem.app/B5LUIY.png"
+    },
+    {
+      "id": 664947,
+      "nome": "Original",
+      "preco": 3.5,
+      "categoria": "cervejas",
+      "estoque": 16,
+      "imagem": "https://a.imagem.app/B5wfXC.png"
+    },
+    {
+      "id": 677011,
+      "nome": "Corona Long",
+      "preco": 8.5,
+      "categoria": "cervejas",
+      "estoque": 0,
+      "imagem": "https://a.imagem.app/B5CoMm.png"
+    },
+    {
+      "id": 828618,
+      "nome": "Heineken",
+      "preco": 4.5,
+      "categoria": "cervejas",
+      "estoque": 0,
+      "imagem": "https://a.imagem.app/B5wme3.jpeg"
+    },
+    {
+      "id": 878937,
+      "nome": "Pitu",
+      "preco": 7,
+      "categoria": "destilados",
+      "estoque": 2,
+      "imagem": "https://a.imagem.app/B5Ly09.png"
+    },
+    {
+      "id": 881904,
+      "nome": "Império",
+      "preco": 3.5,
+      "categoria": "cervejas",
+      "estoque": 0,
+      "imagem": "https://a.imagem.app/B5wOe9.png"
+    },
+    {
+      "id": 899969,
+      "nome": "itaipava",
+      "preco": 3.5,
+      "categoria": "cervejas",
+      "estoque": 0,
+      "imagem": "https://a.imagem.app/B5wyRY.png"
+    },
+    {
+      "id": 974894,
+      "nome": "Cavalo Branco 1l",
+      "preco": 28,
+      "categoria": "destilados",
+      "estoque": 2,
+      "imagem": "https://a.imagem.app/B5LqE1.png"
+    }
+  ],
+  "vendas": [
+    {
+      "id": 455419,
+      "data": "2025-08-15T19:17:00.172Z",
+      "itens": [
+        {
+          "id": 73936,
+          "nome": "Red Label",
+          "preco": 110,
+          "categoria": "destilados",
+          "estoque": 3,
+          "codigo": "5000267013602",
+          "imagem": "https://a.imagem.app/B5C5He.png",
+          "quantidade": 1
+        }
+      ],
+      "total": 110,
+      "formaPagamento": "debito",
+      "valorRecebido": null,
+      "troco": null
+    }
+  ],
+  "carrinho": [
+    {
+      "id": 73936,
+      "nome": "Red Label",
+      "preco": 110,
+      "categoria": "destilados",
+      "estoque": 3,
+      "codigo": "5000267013602",
+      "imagem": "https://a.imagem.app/B5C5He.png",
+      "quantidade": 1
+    }
+  ],
+  "exportDate": "2025-08-15T20:05:00.685Z"
+}
