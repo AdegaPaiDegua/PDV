@@ -1050,10 +1050,11 @@
                 
                 <div class="categorias">
                     <button class="categoria-btn active" data-categoria="todos">Todos</button>
-                    <button class="categoria-btn" data-categoria="tabacaria">Tabacaria</button>
-                    <button class="categoria-btn" data-categoria="refrigerantes">Refrigerantes</button>
-                    <button class="categoria-btn" data-categoria="cervejas">Cervejas</button>
                     <button class="categoria-btn" data-categoria="destilados">Destilados</button>
+                    <button class="categoria-btn" data-categoria="gins">Gins</button>
+                    <button class="categoria-btn" data-categoria="cervejas">Cervejas</button>
+                    <button class="categoria-btn" data-categoria="refrigerantes">Refrigerantes</button>
+                    <button class="categoria-btn" data-categoria="tabacaria">Tabacaria</button>
                     <button class="categoria-btn" data-categoria="salgadinhos">Salgadinhos</button>
                 </div>
                 
@@ -1080,12 +1081,12 @@
                         <h3 style="margin-top: 0; margin-bottom: 0.75rem;">Forma de Pagamento</h3>
                         
                         <div class="pagamento-option">
-                            <input type="radio" id="pagamentoDinheiro" name="pagamento" value="dinheiro" checked>
-                            <label for="pagamentoDinheiro">Dinheiro</label>
+                            <input type="radio" id="pagamentoDebito" name="pagamento" value="debito"checked>
+                            <label for="pagamentoDebito">Cartão de Débito</label>
                         </div>
                         <div class="pagamento-option">
-                            <input type="radio" id="pagamentoDebito" name="pagamento" value="debito">
-                            <label for="pagamentoDebito">Cartão de Débito</label>
+                            <input type="radio" id="pagamentoDinheiro" name="pagamento" value="dinheiro">
+                            <label for="pagamentoDinheiro">Dinheiro</label>
                         </div>
                         <div class="pagamento-option">
                             <input type="radio" id="pagamentoCredito" name="pagamento" value="credito">
@@ -1179,6 +1180,7 @@
                         <select id="produtoCategoria" class="form-select" required>
                             <option value="">Selecione uma categoria</option>
                             <option value="tabacaria">Tabacaria</option>
+                            <option value="gins">Gins</option>
                             <option value="refrigerantes">Refrigerantes</option>
                             <option value="cervejas">Cervejas</option>
                             <option value="destilados">Destilados</option>
