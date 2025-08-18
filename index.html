@@ -1016,6 +1016,8 @@
             border-radius: 0.5rem;
             border: 1px solid #e2e8f0;
         }
+
+        
     </style>
 </head>
 <body>
@@ -1267,6 +1269,14 @@
                         </svg>
                         Apagar Histórico
                     </button>
+                        <button class="btn btn-accent" id="exportarHistoricoBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Exportar para Excel
+    </button>
                 </div>
                 <div id="historicoVendas">
                     <div class="loader"></div>
@@ -1407,6 +1417,7 @@
         const cancelarEdicaoBtn = document.getElementById('cancelarEdicaoBtn');
         const historicoVendasContainer = document.getElementById('historicoVendas');
         const pagarHistoricoBtn = document.getElementById('pagarHistoricoBtn');
+        const exportarHistoricoBtn = document.getElementById('exportarHistoricoBtn');
         const barcodeScanner = document.getElementById('barcodeScanner');
         const barcodeScannerVideo = document.getElementById('barcodeScannerVideo');
         const closeBarcodeScanner = document.getElementById('closeBarcodeScanner');
@@ -2437,6 +2448,118 @@
             }
         }
 
+// Adicione isso na seção de funções auxiliares
+async function exportarHistoricoParaExcel() {
+    try {
+        const historico = await getHistorico();
+        if (historico.length === 0) {
+            alert('Nenhuma venda no histórico para exportar!');
+            return;
+        }
+
+        // Preparar os dados para a planilha
+        const dados = [];
+        
+        // Cabeçalho
+        dados.push([
+            'Data', 'ID Venda', 'Total', 'Forma de Pagamento', 
+            'Valor Recebido', 'Troco', 'Quantidade de Itens', 
+            'Itens (Nome x Quantidade)', 'Valor dos Itens'
+        ]);
+
+        // Linhas de dados
+        historico.forEach(venda => {
+            const itensTexto = venda.itens.map(item => 
+                `${item.nome} x${item.quantidade}`).join(', ');
+            const valoresItens = venda.itens.map(item => 
+                `${formatarMoeda(item.preco * item.quantidade)}`).join(', ');
+            
+            dados.push([
+                formatarData(venda.data),
+                venda.id,
+                venda.total,
+                formatarFormaPagamento(venda.formaPagamento),
+                venda.formaPagamento === 'dinheiro' ? venda.valorRecebido : 'N/A',
+                venda.formaPagamento === 'dinheiro' ? (venda.troco || 0) : 'N/A',
+                venda.itens.reduce((sum, item) => sum + item.quantidade, 0),
+                itensTexto,
+                valoresItens
+            ]);
+        });
+
+        // Criar a planilha
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(dados);
+        
+        // Estilizar a planilha
+        // Definir largura das colunas
+        const wscols = [
+            {wch: 20}, // Data
+            {wch: 10}, // ID Venda
+            {wch: 12}, // Total
+            {wch: 18}, // Forma de Pagamento
+            {wch: 15}, // Valor Recebido
+            {wch: 12}, // Troco
+            {wch: 18}, // Quantidade de Itens
+            {wch: 40}, // Itens
+            {wch: 30}  // Valor dos Itens
+        ];
+        ws['!cols'] = wscols;
+
+        // Adicionar cabeçalho estilizado
+        for (let i = 0; i < dados[0].length; i++) {
+            const cellRef = XLSX.utils.encode_cell({r: 0, c: i});
+            if (!ws[cellRef]) continue;
+            
+            ws[cellRef].s = {
+                font: { bold: true, color: { rgb: "FFFFFF" } },
+                fill: { fgColor: { rgb: "4f46e5" } },
+                alignment: { horizontal: "center" }
+            };
+        }
+
+        // Alternar cores das linhas
+        for (let r = 1; r < dados.length; r++) {
+            for (let c = 0; c < dados[r].length; c++) {
+                const cellRef = XLSX.utils.encode_cell({r: r, c: c});
+                if (!ws[cellRef]) continue;
+                
+                ws[cellRef].s = {
+                    fill: { fgColor: { rgb: r % 2 === 0 ? "f3f4f6" : "ffffff" } },
+                    border: {
+                        top: { style: "thin", color: { rgb: "e5e7eb" } },
+                        bottom: { style: "thin", color: { rgb: "e5e7eb" } },
+                        left: { style: "thin", color: { rgb: "e5e7eb" } },
+                        right: { style: "thin", color: { rgb: "e5e7eb" } }
+                    }
+                };
+            }
+        }
+
+        // Formatar células de valores monetários
+        const formatMoeda = '"R$"#,##0.00';
+        [2, 4, 5].forEach(col => { // Colunas Total, Valor Recebido, Troco
+            for (let r = 1; r < dados.length; r++) {
+                const cellRef = XLSX.utils.encode_cell({r: r, c: col});
+                if (ws[cellRef]) {
+                    ws[cellRef].t = 'n';
+                    ws[cellRef].z = formatMoeda;
+                }
+            }
+        });
+
+        XLSX.utils.book_append_sheet(wb, ws, "Historico_Vendas");
+
+        // Gerar o arquivo Excel
+        const dataAtual = new Date().toISOString().split('T')[0];
+        XLSX.writeFile(wb, `Historico_Vendas_${dataAtual}.xlsx`);
+
+    } catch (error) {
+        console.error("Erro ao exportar histórico:", error);
+        alert("Erro ao exportar histórico: " + error.message);
+    }
+}
+
         // Configura atalhos do teclado
         function configurarAtalhosTeclado() {
             document.addEventListener('keydown', function(e) {
@@ -2736,6 +2859,9 @@
                 alert("Erro ao carregar o aplicativo. Por favor, recarregue a página.");
             }
         }
+
+        // Adicione isso na função init(), na seção de configuração de eventos
+document.getElementById('exportarHistoricoBtn').addEventListener('click', exportarHistoricoParaExcel);
 
         // Inicia o aplicativo quando o DOM estiver carregado
         document.addEventListener('DOMContentLoaded', init);
