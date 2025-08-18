@@ -1265,7 +1265,7 @@
                             <line x1="12" y1="19" x2="12" y2="5"></line>
                             <polyline points="5 12 12 5 19 12"></polyline>
                         </svg>
-                        Pagar Histórico
+                        Apagar Histórico
                     </button>
                 </div>
                 <div id="historicoVendas">
@@ -1539,6 +1539,25 @@
             } catch (error) {
                 console.error("Erro ao carregar histórico:", error);
                 return [];
+            }
+        }
+
+        // Função para limpar o histórico de vendas
+        async function limparHistorico() {
+            try {
+                // Garante que o banco de dados está aberto
+                if (!db) await openDatabase();
+                
+                // Limpa o banco de dados
+                await dbOperation('vendas', 'clear');
+                
+                // Limpa o cache
+                historicoCache = [];
+                
+                return true;
+            } catch (error) {
+                console.error("Erro ao limpar histórico:", error);
+                throw error;
             }
         }
 
@@ -2618,14 +2637,21 @@
                 cancelarEdicaoBtn.addEventListener('click', cancelarEdicao);
 
                 pagarHistoricoBtn.addEventListener('click', async function() {
-                    const historico = await getHistorico();
-                    if (historico.length === 0) {
-                        alert('Nenhuma venda no histórico para pagar!');
-                        return;
-                    }
-                    
-                    if (confirm(`Deseja marcar todas as ${historico.length} vendas como pagas?`)) {
-                        alert(`${historico.length} vendas marcadas como pagas com sucesso!`);
+                    try {
+                        const historico = await getHistorico();
+                        if (historico.length === 0) {
+                            alert('Nenhuma venda no histórico para apagar!');
+                            return;
+                        }
+                        
+                        if (confirm(`Deseja apagar TODAS as ${historico.length} vendas do histórico? Esta ação não pode ser desfeita.`)) {
+                            await limparHistorico();
+                            alert('Histórico de vendas apagado com sucesso!');
+                            renderHistorico();
+                        }
+                    } catch (error) {
+                        console.error("Erro ao apagar histórico:", error);
+                        alert("Erro ao apagar histórico: " + error.message);
                     }
                 });
 
