@@ -1,184 +1,3687 @@
-{
-  "produtos": [
-    {
-      "id": 39989,
-      "nome": "Amstel",
-      "preco": 3.5,
-      "categoria": "cervejas",
-      "estoque": 28,
-      "imagem": "https://a.imagem.app/B5wpfV.png"
-    },
-    {
-      "id": 73936,
-      "nome": "Red Label",
-      "preco": 110,
-      "categoria": "destilados",
-      "estoque": 3,
-      "codigo": "5000267013602",
-      "imagem": "https://a.imagem.app/B5C5He.png"
-    },
-    {
-      "id": 83804,
-      "nome": "Brahma Duplo Malte",
-      "preco": 3.5,
-      "categoria": "cervejas",
-      "estoque": 0,
-      "imagem": "https://a.imagem.app/B5wWLk.png"
-    },
-    {
-      "id": 114641,
-      "nome": "Skol",
-      "preco": 3.5,
-      "categoria": "cervejas",
-      "estoque": 8,
-      "imagem": "https://a.imagem.app/B5waBN.png"
-    },
-    {
-      "id": 144287,
-      "nome": "51",
-      "preco": 16,
-      "categoria": "destilados",
-      "estoque": 1,
-      "imagem": "https://a.imagem.app/B5LaOa.png"
-    },
-    {
-      "id": 190122,
-      "nome": "Dreher",
-      "preco": 37,
-      "categoria": "destilados",
-      "estoque": 0,
-      "imagem": "https://a.imagem.app/B5LDwk.png"
-    },
-    {
-      "id": 213608,
-      "nome": "Chanceler 1l",
-      "preco": 25,
-      "categoria": "destilados",
-      "estoque": 2,
-      "imagem": "https://a.imagem.app/B5LT6Q.png"
-    },
-    {
-      "id": 224244,
-      "nome": "Heineken Long",
-      "preco": 8.5,
-      "categoria": "cervejas",
-      "estoque": 30,
-      "imagem": "https://a.imagem.app/B5Cb5G.png"
-    },
-    {
-      "id": 503160,
-      "nome": "Colorado Ribeirão Lager",
-      "preco": 8.5,
-      "categoria": "cervejas",
-      "estoque": 16,
-      "imagem": "https://a.imagem.app/B5wDpa.png"
-    },
-    {
-      "id": 627524,
-      "nome": "Jack Daniel s 1l",
-      "preco": 170,
-      "categoria": "destilados",
-      "estoque": 1,
-      "imagem": "https://a.imagem.app/B5Ci8v.png"
-    },
-    {
-      "id": 638638,
-      "nome": "Kariri",
-      "preco": 21,
-      "categoria": "destilados",
-      "estoque": 1,
-      "imagem": "https://a.imagem.app/B5LUIY.png"
-    },
-    {
-      "id": 664947,
-      "nome": "Original",
-      "preco": 3.5,
-      "categoria": "cervejas",
-      "estoque": 16,
-      "imagem": "https://a.imagem.app/B5wfXC.png"
-    },
-    {
-      "id": 677011,
-      "nome": "Corona Long",
-      "preco": 8.5,
-      "categoria": "cervejas",
-      "estoque": 0,
-      "imagem": "https://a.imagem.app/B5CoMm.png"
-    },
-    {
-      "id": 828618,
-      "nome": "Heineken",
-      "preco": 4.5,
-      "categoria": "cervejas",
-      "estoque": 0,
-      "imagem": "https://a.imagem.app/B5wme3.jpeg"
-    },
-    {
-      "id": 878937,
-      "nome": "Pitu",
-      "preco": 7,
-      "categoria": "destilados",
-      "estoque": 2,
-      "imagem": "https://a.imagem.app/B5Ly09.png"
-    },
-    {
-      "id": 881904,
-      "nome": "Império",
-      "preco": 3.5,
-      "categoria": "cervejas",
-      "estoque": 0,
-      "imagem": "https://a.imagem.app/B5wOe9.png"
-    },
-    {
-      "id": 899969,
-      "nome": "itaipava",
-      "preco": 3.5,
-      "categoria": "cervejas",
-      "estoque": 0,
-      "imagem": "https://a.imagem.app/B5wyRY.png"
-    },
-    {
-      "id": 974894,
-      "nome": "Cavalo Branco 1l",
-      "preco": 28,
-      "categoria": "destilados",
-      "estoque": 2,
-      "imagem": "https://a.imagem.app/B5LqE1.png"
-    }
-  ],
-  "vendas": [
-    {
-      "id": 455419,
-      "data": "2025-08-15T19:17:00.172Z",
-      "itens": [
-        {
-          "id": 73936,
-          "nome": "Red Label",
-          "preco": 110,
-          "categoria": "destilados",
-          "estoque": 3,
-          "codigo": "5000267013602",
-          "imagem": "https://a.imagem.app/B5C5He.png",
-          "quantidade": 1
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDV Adega</title>
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="logo.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bibliotecas externas -->
+    <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        /* Estilos otimizados */
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #333;
+            --accent-color: #4f46e5;
+            --light-color: #f8fafc;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
         }
-      ],
-      "total": 110,
-      "formaPagamento": "debito",
-      "valorRecebido": null,
-      "troco": null
-    }
-  ],
-  "carrinho": [
-    {
-      "id": 73936,
-      "nome": "Red Label",
-      "preco": 110,
-      "categoria": "destilados",
-      "estoque": 3,
-      "codigo": "5000267013602",
-      "imagem": "https://a.imagem.app/B5C5He.png",
-      "quantidade": 1
-    }
-  ],
-  "exportDate": "2025-08-15T20:05:00.685Z"
-}
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            color: white;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 2px;
+        }
+        
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 0.375rem;
+            color: white;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .tab-btn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .tab-btn.active {
+            background-color: white;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tab-content {
+            display: none;
+            flex: 1;
+        }
+        
+        .tab-content.active {
+            display: flex;
+            gap: 1.5rem;
+            height: 100%;
+        }
+        
+        .produtos-section {
+            flex: 2;
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .venda-section {
+            flex: 1;
+            min-width: 350px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        h1, h2, h3 {
+            margin: 0;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .venda-section h2, .historico-section h2 {
+            color: white;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .venda-section .section-title {
+            border-bottom-color: #475569;
+        }
+        
+        .produtos-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex: 1;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+        }
+
+        .produtos-grid::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .produtos-grid::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .produtos-grid::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .produto-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 180px;
+            max-width: 180px;
+        }
+        
+        .produto-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        .produto-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 0.375rem;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 0.75rem;
+        }
+        
+        .produto-info {
+            margin-top: auto;
+        }
+        
+        .produto-nome {
+            font-weight: 500;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .produto-preco {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+        
+        .produto-codigo {
+            font-size: 0.6875rem;
+            color: #64748b;
+            margin-top: 0.125rem;
+        }
+        
+        .produto-estoque {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.75rem;
+            font-size: 0.6875rem;
+            font-weight: 500;
+        }
+        
+        .estoque-baixo {
+            background-color: rgba(239, 68, 68, 0.9);
+        }
+        
+        .estoque-bom {
+            background-color: rgba(16, 185, 129, 0.9);
+        }
+        
+        .itens-venda {
+            margin: 1rem 0;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+        
+        .itens-venda::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .itens-venda::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .itens-venda::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        
+        .item-venda {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+        }
+        
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .item-nome {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .item-details {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            margin-top: 0.125rem;
+        }
+        
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .item-subtotal {
+            font-weight: 500;
+            min-width: 70px;
+            text-align: right;
+        }
+        
+        .total-section {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .total-value {
+            font-weight: 600;
+        }
+        
+        .btn {
+            padding: 0.625rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+        }
+        
+        .btn-primary {
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+            color: white;
+            border: 1px solid var(--accent-color);
+        }
+        
+        .btn-accent:hover {
+            background-color: #4338ca;
+            border-color: #4338ca;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+            border: 1px solid var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #dc2626;
+            border-color: #dc2626;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .search-bar {
+            flex: 1;
+            padding: 0.625rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+        
+        .search-barcode-btn {
+            padding: 0.625rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: 1px solid #334155;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .search-barcode-btn:hover {
+            background-color: #262626;
+        }
+        
+        .categorias {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+        }
+        
+        .categorias::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .categorias::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        .categorias::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+        
+        .categoria-btn {
+            padding: 0.375rem 0.75rem;
+            background-color: #f1f5f9;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 0.8125rem;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .categoria-btn:hover {
+            background-color: #e2e8f0;
+        }
+        
+        .categoria-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .cadastro-form {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.375rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #334155;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            background-color: white;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+        
+        .generate-barcode-btn {
+            margin-top: 0.25rem;
+            padding: 0.375rem;
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+        
+        .generate-barcode-btn:hover {
+            background-color: #e2e8f0;
+        }
+        
+        .pagamento-section {
+            margin-top: 1rem;
+            padding: 5;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+        }
+        
+        .pagamento-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .pagamento-option input {
+            margin-right: 0.5rem;
+            accent-color: var(--accent-color);
+        }
+        
+        .pagamento-option label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .troco-section {
+            margin-top: 0.75rem;
+            display: none;
+        }
+        
+        .troco-section.active {
+            display: block;
+        }
+        
+        .troco-info {
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .troco-value {
+            font-weight: 600;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-title {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .modal-text {
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .help-shortcuts {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.625rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 0.8125rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        
+        .help-shortcuts:hover {
+            background-color: #262626;
+        }
+        
+        .shortcuts-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .shortcuts-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .shortcuts-title {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .shortcuts-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .shortcuts-table th, .shortcuts-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .shortcuts-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #334155;
+        }
+        
+        .shortcuts-table td {
+            color: #475569;
+        }
+        
+        .shortcuts-close {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+        
+        .historico-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .historico-mes {
+            margin-bottom: 1.5rem;
+        }
+        
+        .historico-mes-title {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .historico-mes-title:hover {
+            background-color: #262626;
+        }
+        
+        .historico-mes-content {
+            margin-top: 0.75rem;
+            display: none;
+        }
+        
+        .historico-mes-content.active {
+            display: block;
+        }
+        
+        .historico-venda {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: white;
+        }
+        
+        .historico-venda-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .historico-venda-data {
+            font-weight: 500;
+        }
+        
+        .historico-venda-total {
+            font-weight: 600;
+        }
+        
+        .historico-venda-itens {
+            margin-top: 0.75rem;
+        }
+        
+        .historico-venda-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+        }
+        
+        .historico-venda-footer {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.875rem;
+        }
+        
+        .historico-venda-pagamento {
+            margin-bottom: 0.25rem;
+        }
+        
+        .importar-excel {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            border: 2px dashed #cbd5e1;
+        }
+        
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-button {
+            padding: 0.625rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            transition: background-color 0.2s;
+            font-weight: 500;
+        }
+        
+        .file-input-button:hover {
+            background-color: #262626;
+        }
+        
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-input-info {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .file-input-instructions {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: #f1f5f9;
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            color: #475569;
+        }
+        
+        .file-input-instructions strong {
+            color: #334155;
+        }
+        
+        .edit-produto-btn {
+            margin-top: 0.5rem;
+            width: 100%;
+            padding: 0.5rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .edit-produto-btn:hover {
+            background-color: #4338ca;
+        }
+        
+        .remove-produto-btn {
+            margin-top: 0.5rem;
+            width: 100%;
+            padding: 0.5rem;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .remove-produto-btn:hover {
+            background-color: #dc2626;
+        }
+        
+        /* Estilos para os novos botões */
+        #finalizarVenda, #cancelarVenda {
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        #finalizarVenda:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
+        }
+        
+        #cancelarVenda:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+        }
+        
+        #pagarHistoricoBtn {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+        
+        #pagarHistoricoBtn:hover {
+            background-color: #4338ca;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .tab-content.active {
+                flex-direction: column;
+            }
+            
+            .produtos-section, .venda-section {
+                width: 100%;
+            }
+            
+            .venda-section {
+                min-width: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+            
+            .produtos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+                padding: 0.75rem 1rem;
+            }
+            
+            .tabs {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 0.25rem;
+            }
+            
+            .cadastro-form {
+                padding: 1rem;
+            }
+            
+            .importar-excel {
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .produtos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-barcode-btn {
+                width: 100%;
+            }
+        }
+
+        /* Estilos para o scanner de código de barras */
+        .barcode-scanner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .barcode-scanner video {
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+
+        .barcode-scanner button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Estilos para a seção de backup */
+        .backup-section {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        #valorRecebido {
+            color: #000000 !important;
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1;
+            padding: 0.625rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        #valorRecebido:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+
+        #valorRecebido::placeholder {
+            color: #64748b;
+            opacity: 1;
+        }
+
+        /* Sistema de Notificações Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .toast {
+            padding: 16px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: flex-start;
+            animation: slideIn 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+            color: white;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .toast::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+        }
+        
+        .toast-success {
+            background-color: rgba(16, 185, 129, 0.95);
+        }
+        
+        .toast-success::before {
+            background-color: #059669;
+        }
+        
+        .toast-error {
+            background-color: rgba(239, 68, 68, 0.95);
+        }
+        
+        .toast-error::before {
+            background-color: #dc2626;
+        }
+        
+        .toast-warning {
+            background-color: rgba(245, 158, 11, 0.95);
+            color: #1e293b;
+        }
+        
+        .toast-warning::before {
+            background-color: #d97706;
+        }
+        
+        .toast-info {
+            background-color: rgba(59, 130, 246, 0.95);
+        }
+        
+        .toast-info::before {
+            background-color: #2563eb;
+        }
+        
+        .toast-icon {
+            margin-right: 14px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+        }
+        
+        .toast-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .toast-content {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.5;
+            padding-right: 10px;
+        }
+        
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 15px;
+            display: block;
+        }
+        
+        .toast-message {
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            color: inherit;
+            opacity: 0.7;
+            cursor: pointer;
+            margin-left: 10px;
+            padding: 4px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .toast-close:hover {
+            opacity: 1;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .toast-close svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.5);
+            width: 100%;
+            transform-origin: left;
+            animation: progressBar 5s linear forwards;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes progressBar {
+            from {
+                transform: scaleX(1);
+            }
+            to {
+                transform: scaleX(0);
+            }
+        }
+        
+        .toast.fade-out {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        /* Notificações agrupadas */
+        .toast-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .toast-group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .toast-group-clear {
+            background: none;
+            border: none;
+            color: inherit;
+            opacity: 0.7;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        
+        .toast-group-clear:hover {
+            opacity: 1;
+        }
+        
+        /* Responsividade para notificações */
+        @media (max-width: 640px) {
+            .toast-container {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+                max-width: none;
+            }
+            
+            .toast {
+                padding: 14px 16px;
+            }
+            
+            .toast-group {
+                max-height: 200px;
+            }
+        }
+        
+        /* Efeito de destaque para notificações importantes */
+        .toast-important {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes progressBar {
+            from {
+                transform: scaleX(1);
+            }
+            to {
+                transform: scaleX(0);
+            }
+        }
+        
+        
+        /* Modal de confirmação estilizado */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+            animation: modalFadeIn 0.2s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+        }
+        
+        .modal-icon {
+            margin-right: 12px;
+            font-size: 24px;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+        
+        .modal-footer {
+            padding: 16px 20px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .modal-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .modal-btn-secondary {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        .modal-btn-secondary:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .modal-btn-primary {
+            background-color: #4f46e5;
+            color: white;
+        }
+        
+        .modal-btn-primary:hover {
+            background-color: #4338ca;
+        }
+        
+        .modal-btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .modal-btn-danger:hover {
+            background-color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">PDV Adega</div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="pdv">PDV</button>
+            <button class="tab-btn" data-tab="cadastro">Cadastro</button>
+            <button class="tab-btn" data-tab="historico">Histórico</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Aba do PDV -->
+        <div id="pdv-tab" class="tab-content active">
+            <section class="produtos-section">
+                <h2 class="section-title">Produtos Disponíveis</h2>
+                
+                <div class="search-container">
+                    <input type="text" class="search-bar" placeholder="Buscar produtos ou código de barras..." id="searchInput" autofocus>
+                    <button class="search-barcode-btn" id="scanBarcodeBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 5h4v14H3z"></path>
+                            <path d="M10 5h4v14h-4z"></path>
+                            <path d="M17 5h4v14h-4z"></path>
+                            <path d="M21 15h-4"></path>
+                            <path d="M21 9h-4"></path>
+                        </svg>
+                        Código
+                    </button>
+                </div>
+                
+                <div class="categorias">
+                    <button class="categoria-btn active" data-categoria="todos">Todos</button>
+                    <button class="categoria-btn" data-categoria="destilados">Destilados</button>
+                    <button class="categoria-btn" data-categoria="gins">Gins</button>
+                    <button class="categoria-btn" data-categoria="cervejas">Cervejas</button>
+                    <button class="categoria-btn" data-categoria="refrigerantes">Refrigerantes</button>
+                    <button class="categoria-btn" data-categoria="tabacaria">Tabacaria</button>
+                    <button class="categoria-btn" data-categoria="salgadinhos">Salgadinhos</button>
+                </div>
+                
+                <div class="produtos-grid" id="produtosGrid">
+                    <!-- Produtos serão carregados via JavaScript -->
+                    <div class="loader"></div>
+                </div>
+            </section>
+            
+            <section class="venda-section">
+                <h2 class="section-title">Venda em Andamento</h2>
+                
+                <div class="itens-venda" id="itensVenda">
+                    <p style="text-align: center; color: #cbd5e1;">Nenhum item adicionado</p>
+                </div>
+                
+                <div class="total-section">
+                    <div class="total-row">
+                        <span>Total:</span>
+                        <span class="total-value" id="totalVenda">R$ 0,00</span>
+                    </div>
+                    
+                    <div class="pagamento-section">
+                        <h3 style="margin-top: 0; margin-bottom: 0.75rem;">Forma de Pagamento</h3>
+                        
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoDebito" name="pagamento" value="debito"checked>
+                            <label for="pagamentoDebito">Cartão de Débito</label>
+                        </div>
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoDinheiro" name="pagamento" value="dinheiro">
+                            <label for="pagamentoDinheiro">Dinheiro</label>
+                        </div>
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoCredito" name="pagamento" value="credito">
+                            <label for="pagamentoCredito">Cartão de Crédito</label>
+                        </div>
+                        <div class="pagamento-option">
+                            <input type="radio" id="pagamentoPix" name="pagamento" value="pix">
+                            <label for="pagamentoPix">PIX</label>
+                        </div>
+                        
+                        <div class="troco-section" id="trocoSection">
+                            <div class="form-group" style="margin-top: 0.75rem;">
+                                <label for="valorRecebido">Valor Recebido</label>
+                                <input type="number" id="valorRecebido" class="form-control" step="0.01" min="0">
+                            </div>
+                            <div class="troco-info">
+                                <strong>Troco:</strong> <span class="troco-value" id="valorTroco">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-accent btn-block" id="finalizarVenda">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        FINALIZAR VENDA (F9)
+                    </button>
+                    <button class="btn btn-danger btn-block" id="cancelarVenda">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                        CANCELAR VENDA (F10)
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Aba de Cadastro de Produtos -->
+        <div id="cadastro-tab" class="tab-content">
+            <section class="cadastro-form">
+                <h2 class="section-title">Cadastro de Produtos</h2>
+                
+                <div class="importar-excel">
+                    <h3 style="margin-top: 0; margin-bottom: 1rem;">Importar Produtos via Excel</h3>
+                    <div class="file-input-container">
+                        <button class="file-input-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            Selecionar Arquivo Excel
+                        </button>
+                        <input type="file" id="excelFileInput" class="file-input" accept=".xlsx, .xls, .csv">
+                    </div>
+                    <div class="file-input-info" id="fileInputInfo">Nenhum arquivo selecionado</div>
+                    
+                    <div class="file-input-instructions">
+                        <strong>Instruções:</strong> O arquivo Excel deve conter as colunas: Nome, Preço, Categoria (tabacaria, refrigerantes, cervejas, destilados, salgadinhos). 
+                        Opcionais: Código, Imagem (URL), Estoque. A primeira linha deve ser o cabeçalho.
+                    </div>
+                    
+                    <button class="btn btn-accent" id="importarProdutosBtn" style="margin-top: 0.75rem; display: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Importar Produtos
+                    </button>
+                </div>
+                
+                <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">Cadastrar Produto Manualmente</h3>
+                <form id="formProduto">
+                    <input type="hidden" id="produtoId" value="">
+                    <div class="form-group">
+                        <label for="produtoNome">Nome do Produto</label>
+                        <input type="text" id="produtoNome" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoPreco">Preço (R$)</label>
+                        <input type="number" id="produtoPreco" class="form-control" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoCategoria">Categoria</label>
+                        <select id="produtoCategoria" class="form-select" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="tabacaria">Tabacaria</option>
+                            <option value="gins">Gins</option>
+                            <option value="refrigerantes">Refrigerantes</option>
+                            <option value="cervejas">Cervejas</option>
+                            <option value="destilados">Destilados</option>
+                            <option value="salgadinhos">Salgadinhos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoEstoque">Estoque</label>
+                        <input type="number" id="produtoEstoque" class="form-control" min="0" value="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoCodigo">Código de Barras</label>
+                        <input type="text" id="produtoCodigo" class="form-control" placeholder="Digite ou escaneie o código">
+                        <button type="button" class="generate-barcode-btn" id="generateBarcodeBtn">Gerar Código Automático</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="produtoImagem">URL da Imagem</label>
+                        <input type="text" id="produtoImagem" class="form-control" placeholder="https://...">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-accent" id="submitProdutoBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Cadastrar Produto
+                    </button>
+                    <button type="button" class="btn btn-danger" id="cancelarEdicaoBtn" style="display: none; margin-top: 0.75rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6L6 18"></path>
+                            <path d="M6 6l12 12"></path>
+                        </svg>
+                        Cancelar Edição
+                    </button>
+                </form>
+
+                <!-- Seção de Backup do Banco de Dados -->
+                <div class="backup-section">
+                    <h3 style="margin-top: 0; margin-bottom: 1rem;">Backup do Banco de Dados</h3>
+                    <button class="btn btn-accent" id="exportDatabaseBtn" style="margin-bottom: 0.75rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Exportar Banco de Dados
+                    </button>
+                    <div class="file-input-container">
+                        <button class="file-input-button" id="importDatabaseBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            Importar Banco de Dados
+                        </button>
+                        <input type="file" id="databaseFileInput" class="file-input" accept=".json">
+                    </div>
+                    <div class="file-input-info" id="databaseFileInfo">Nenhum arquivo selecionado</div>
+                </div>
+            </section>
+            
+            <section style="margin-top: 1.5rem;">
+                <h2 class="section-title">Produtos Cadastrados</h2>
+                <div class="produtos-grid" id="produtosCadastrados">
+                    <div class="loader"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Aba de Histórico de Vendas -->
+        <div id="historico-tab" class="tab-content">
+            <section class="historico-section">
+                <h2 class="section-title">Histórico de Vendas</h2>
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+                    <button class="btn btn-accent" id="pagarHistoricoBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                            <polyline points="5 12 12 5 19 12"></polyline>
+                        </svg>
+                        Apagar Histórico
+                    </button>
+                    <button class="btn btn-accent" id="exportarHistoricoBtn" style="margin-left: 10px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Exportar para Excel
+                    </button>
+                </div>
+                <div id="historicoVendas">
+                    <div class="loader"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Modal de leitura de código de barras -->
+    <div class="barcode-scanner" id="barcodeScanner">
+        <video id="barcodeScannerVideo"></video>
+        <button id="closeBarcodeScanner">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6L6 18"></path>
+                <path d="M6 6l12 12"></path>
+            </svg>
+            Fechar Scanner
+        </button>
+    </div>
+
+    <!-- Modal de confirmação de venda -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modalTitle">Confirmar Venda</h3>
+            <div class="modal-text" id="modalContent">
+                <p>Deseja finalizar esta venda?</p>
+                <div id="modalPagamentoInfo"></div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-danger" id="modalCancelBtn">Cancelar</button>
+                <button class="btn btn-accent" id="modalConfirmBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão de ajuda para atalhos -->
+    <div class="help-shortcuts" id="helpShortcuts">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        Atalhos (F1)
+    </div>
+
+    <!-- Modal de atalhos do teclado -->
+    <div class="shortcuts-modal" id="shortcutsModal">
+        <div class="shortcuts-content">
+            <h2 class="shortcuts-title">Atalhos do Teclado</h2>
+            <table class="shortcuts-table">
+                <tr>
+                    <th>Atalho</th>
+                    <th>Ação</th>
+                </tr>
+                <tr>
+                    <td><strong>F1</strong></td>
+                    <td>Abrir esta tela de ajuda</td>
+                </tr>
+                <tr>
+                    <td><strong>F12</strong></td>
+                    <td>Focar na barra de busca</td>
+                </tr>
+                <tr>
+                    <td><strong>Enter</strong> (na busca)</td>
+                    <td>Adicionar produto por código</td>
+                </tr>
+                <tr>
+                    <td><strong>F2</strong></td>
+                    <td>Selecionar pagamento em Dinheiro</td>
+                </tr>
+                <tr>
+                    <td><strong>F3</strong></td>
+                    <td>Selecionar pagamento em Débito</td>
+                </tr>
+                <tr>
+                    <td><strong>F4</strong></td>
+                    <td>Selecionar pagamento em Crédito</td>
+                </tr>
+                <tr>
+                    <td><strong>F5</strong></td>
+                    <td>Selecionar pagamento em PIX</td>
+                </tr>
+                <tr>
+                    <td><strong>F9</strong></td>
+                    <td>Finalizar venda</td>
+                </tr>
+                <tr>
+                    <td><strong>F10</strong></td>
+                    <td>Cancelar venda</td>
+                </tr>
+                <tr>
+                    <td><strong>ESC</strong></td>
+                    <td>Fechar modais/cancelar ações</td>
+                </tr>
+            </table>
+            <div class="shortcuts-close">
+                <button class="btn btn-accent" id="closeShortcutsBtn">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistema de Notificações Toast -->
+  <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Modal de confirmação personalizado -->
+    <div class="modal-overlay" id="customModal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <span class="modal-icon" id="modalIcon"></span>
+                <h3 class="modal-title" id="customModalTitle"></h3>
+            </div>
+            <div class="modal-body" id="customModalBody"></div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="customModalCancel"></button>
+                <button class="modal-btn" id="customModalConfirm"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configurações globais
+        const DB_NAME = "PDVAdegaDB";
+        const DB_VERSION = 2;
+        let db;
+        let produtosCache = [];
+        let carrinhoCache = [];
+        let historicoCache = [];
+        let produtoEmEdicao = null;
+        let scannerAtivo = false;
+        let scannerTimeout;
+        const RENDER_THROTTLE = 200; // ms entre renders
+        let lastRenderTime = 0;
+
+        // Elementos do DOM
+        const searchInput = document.getElementById('searchInput');
+        const produtosGrid = document.getElementById('produtosGrid');
+        const itensVenda = document.getElementById('itensVenda');
+        const totalVenda = document.getElementById('totalVenda');
+        const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
+        const trocoSection = document.getElementById('trocoSection');
+        const valorRecebido = document.getElementById('valorRecebido');
+        const valorTroco = document.getElementById('valorTroco');
+        const finalizarVendaBtn = document.getElementById('finalizarVenda');
+        const cancelarVendaBtn = document.getElementById('cancelarVenda');
+        const pagamentoOptions = document.querySelectorAll('input[name="pagamento"]');
+        const pagamentoDinheiro = document.getElementById('pagamentoDinheiro');
+        const formProduto = document.getElementById('formProduto');
+        const produtosCadastrados = document.getElementById('produtosCadastrados');
+        const produtoCodigoInput = document.getElementById('produtoCodigo');
+        const generateBarcodeBtn = document.getElementById('generateBarcodeBtn');
+        const excelFileInput = document.getElementById('excelFileInput');
+        const fileInputInfo = document.getElementById('fileInputInfo');
+        const importarProdutosBtn = document.getElementById('importarProdutosBtn');
+        const produtoIdInput = document.getElementById('produtoId');
+        const submitProdutoBtn = document.getElementById('submitProdutoBtn');
+        const cancelarEdicaoBtn = document.getElementById('cancelarEdicaoBtn');
+        const historicoVendasContainer = document.getElementById('historicoVendas');
+        const pagarHistoricoBtn = document.getElementById('pagarHistoricoBtn');
+        const exportarHistoricoBtn = document.getElementById('exportarHistoricoBtn');
+        const barcodeScanner = document.getElementById('barcodeScanner');
+        const barcodeScannerVideo = document.getElementById('barcodeScannerVideo');
+        const closeBarcodeScanner = document.getElementById('closeBarcodeScanner');
+        const confirmModal = document.getElementById('confirmModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const modalPagamentoInfo = document.getElementById('modalPagamentoInfo');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+        const helpShortcuts = document.getElementById('helpShortcuts');
+        const shortcutsModal = document.getElementById('shortcutsModal');
+        const closeShortcutsBtn = document.getElementById('closeShortcutsBtn');
+        const exportDatabaseBtn = document.getElementById('exportDatabaseBtn');
+        const importDatabaseBtn = document.getElementById('importDatabaseBtn');
+        const databaseFileInput = document.getElementById('databaseFileInput');
+        const databaseFileInfo = document.getElementById('databaseFileInfo');
+        const tabs = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const categoriaBtns = document.querySelectorAll('.categoria-btn');
+
+        // ===== SISTEMA DE NOTIFICAÇÕES =====
+              let toastQueue = [];
+        let toastGroupTimeout = null;
+        const MAX_VISIBLE_TOASTS = 3;
+        const TOAST_GROUP_DELAY = 3000; // 3 segundos para agrupar notificações
+        
+        // Ícones SVG para os diferentes tipos de notificação
+        const toastIcons = {
+            success: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+            </svg>`,
+            error: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clip-rule="evenodd" />
+            </svg>`,
+            warning: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+            </svg>`,
+            info: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+            </svg>`
+        };
+        
+        const closeIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+        </svg>`;
+        
+        function showToast(message, type = 'info', duration = 5000, options = {}) {
+            const {
+                title = '',
+                important = false,
+                groupWithPrevious = false
+            } = options;
+            
+            const toastData = {
+                id: Date.now() + Math.random(),
+                message,
+                type,
+                duration,
+                title,
+                important,
+                groupWithPrevious,
+                timestamp: Date.now()
+            };
+            
+            // Se for para agrupar com a anterior e houver notificações recentes
+            if (groupWithPrevious && toastQueue.length > 0) {
+                const lastToast = toastQueue[toastQueue.length - 1];
+                if (Date.now() - lastToast.timestamp < TOAST_GROUP_DELAY) {
+                    // Adiciona à fila de grupo
+                    if (!lastToast.group) {
+                        lastToast.group = [lastToast];
+                        lastToast.groupId = lastToast.id;
+                    }
+                    toastData.groupId = lastToast.groupId;
+                    lastToast.group.push(toastData);
+                    
+                    // Atualiza a notificação de grupo existente
+                    updateGroupToast(lastToast.groupId);
+                    return toastData.id;
+                }
+            }
+            
+            // Adiciona à fila
+            toastQueue.push(toastData);
+            
+            // Se já houver muitas notificações visíveis, inicia o agrupamento
+            if (toastQueue.filter(t => !t.groupId).length > MAX_VISIBLE_TOASTS) {
+                startToastGrouping();
+            } else {
+                renderToast(toastData);
+            }
+            
+            return toastData.id;
+        }
+        
+        function renderToast(toastData) {
+            const toastContainer = document.getElementById('toastContainer');
+            
+            // Se for uma notificação de grupo, renderiza o grupo
+            if (toastData.group && toastData.group.length > 1) {
+                renderToastGroup(toastData.group);
+                return;
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${toastData.type} ${toastData.important ? 'toast-important' : ''}`;
+            toast.id = `toast-${toastData.id}`;
+            toast.dataset.toastId = toastData.id;
+            
+            // Construir o conteúdo com título se fornecido
+            let contentHtml = '';
+            if (toastData.title) {
+                contentHtml = `
+                    <span class="toast-title">${toastData.title}</span>
+                    <span class="toast-message">${toastData.message}</span>
+                `;
+            } else {
+                contentHtml = `<span class="toast-message">${toastData.message}</span>`;
+            }
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${toastIcons[toastData.type]}</span>
+                <div class="toast-content">${contentHtml}</div>
+                <button class="toast-close">${closeIcon}</button>
+                ${toastData.duration > 0 ? `<div class="toast-progress"></div>` : ''}
+            `;
+            
+            // Fechar ao clicar no botão
+            const closeBtn = toast.querySelector('.toast-close');
+            closeBtn.addEventListener('click', () => removeToast(toastData.id));
+            
+            // Adicionar à interface
+            toastContainer.appendChild(toast);
+            
+            // Remover automaticamente após a duração especificada
+            if (toastData.duration > 0) {
+                setTimeout(() => {
+                    if (document.getElementById(`toast-${toastData.id}`)) {
+                        removeToast(toastData.id);
+                    }
+                }, toastData.duration);
+            }
+            
+            // Limitar o número de notificações visíveis
+            const allToasts = toastContainer.querySelectorAll('.toast:not(.group-toast)');
+            if (allToasts.length > MAX_VISIBLE_TOASTS) {
+                startToastGrouping();
+            }
+        }
+        
+        function renderToastGroup(toasts) {
+            const toastContainer = document.getElementById('toastContainer');
+            const groupId = toasts[0].groupId;
+            
+            // Remove toasts individuais que estão neste grupo
+            toasts.forEach(t => {
+                const individualToast = document.getElementById(`toast-${t.id}`);
+                if (individualToast) {
+                    individualToast.remove();
+                }
+            });
+            
+            // Cria o container do grupo
+            const groupToast = document.createElement('div');
+            groupToast.className = `toast-group`;
+            groupToast.id = `toast-group-${groupId}`;
+            
+            // Cabeçalho do grupo
+            const groupHeader = document.createElement('div');
+            groupHeader.className = 'toast-group-header';
+            groupHeader.innerHTML = `
+                <span>${toasts.length} notificaçõe(s)</span>
+                <button class="toast-group-clear">Limpar todas</button>
+            `;
+            
+            groupToast.appendChild(groupHeader);
+            
+            // Adiciona cada notificação ao grupo
+            toasts.forEach(t => {
+                const toastElement = document.createElement('div');
+                toastElement.className = `toast toast-${t.type}`;
+                
+                let contentHtml = '';
+                if (t.title) {
+                    contentHtml = `
+                        <span class="toast-title">${t.title}</span>
+                        <span class="toast-message">${t.message}</span>
+                    `;
+                } else {
+                    contentHtml = `<span class="toast-message">${t.message}</span>`;
+                }
+                
+                toastElement.innerHTML = `
+                    <span class="toast-icon">${toastIcons[t.type]}</span>
+                    <div class="toast-content">${contentHtml}</div>
+                `;
+                
+                groupToast.appendChild(toastElement);
+            });
+            
+            // Evento para limpar o grupo
+            const clearBtn = groupToast.querySelector('.toast-group-clear');
+            clearBtn.addEventListener('click', () => {
+                toasts.forEach(t => {
+                    removeToastFromQueue(t.id);
+                });
+                groupToast.remove();
+            });
+            
+            // Adiciona o grupo à interface
+            toastContainer.appendChild(groupToast);
+            
+            // Remove o grupo após um tempo
+            setTimeout(() => {
+                if (document.getElementById(`toast-group-${groupId}`)) {
+                    toasts.forEach(t => removeToastFromQueue(t.id));
+                    groupToast.remove();
+                }
+            }, toasts[0].duration);
+        }
+        
+        function startToastGrouping() {
+            if (toastGroupTimeout) clearTimeout(toastGroupTimeout);
+            
+            toastGroupTimeout = setTimeout(() => {
+                const recentToasts = toastQueue.filter(t => 
+                    !t.groupId && Date.now() - t.timestamp < TOAST_GROUP_DELAY
+                );
+                
+                if (recentToasts.length > 1) {
+                    // Cria um grupo com as notificações recentes
+                    const groupId = 'group-' + Date.now();
+                    recentToasts.forEach(t => {
+                        t.groupId = groupId;
+                    });
+                    
+                    const groupToast = {
+                        id: groupId,
+                        group: recentToasts,
+                        groupId: groupId,
+                        timestamp: Date.now(),
+                        type: recentToasts[0].type // Usa o tipo da primeira notificação
+                    };
+                    
+                    // Remove as notificações individuais
+                    recentToasts.forEach(t => {
+                        const individualToast = document.getElementById(`toast-${t.id}`);
+                        if (individualToast) {
+                            individualToast.remove();
+                        }
+                    });
+                    
+                    // Renderiza o grupo
+                    renderToastGroup(recentToasts);
+                }
+            }, TOAST_GROUP_DELAY);
+        }
+        
+        function updateGroupToast(groupId) {
+            const groupToasts = toastQueue.filter(t => t.groupId === groupId);
+            const groupContainer = document.getElementById(`toast-group-${groupId}`);
+            
+            if (groupContainer && groupToasts.length > 0) {
+                // Atualiza o cabeçalho com a nova contagem
+                const header = groupContainer.querySelector('.toast-group-header span');
+                if (header) {
+                    header.textContent = `${groupToasts.length} notificaçõe(s)`;
+                }
+                
+                // Adiciona a nova notificação ao grupo
+                const newToast = groupToasts[groupToasts.length - 1];
+                const toastElement = document.createElement('div');
+                toastElement.className = `toast toast-${newToast.type}`;
+                
+                let contentHtml = '';
+                if (newToast.title) {
+                    contentHtml = `
+                        <span class="toast-title">${newToast.title}</span>
+                        <span class="toast-message">${newToast.message}</span>
+                    `;
+                } else {
+                    contentHtml = `<span class="toast-message">${newToast.message}</span>`;
+                }
+                
+                toastElement.innerHTML = `
+                    <span class="toast-icon">${toastIcons[newToast.type]}</span>
+                    <div class="toast-content">${contentHtml}</div>
+                `;
+                
+                groupContainer.appendChild(toastElement);
+            }
+        }
+        
+        function removeToast(id) {
+            const toast = document.getElementById(`toast-${id}`);
+            if (toast) {
+                toast.classList.add('fade-out');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                    removeToastFromQueue(id);
+                }, 300);
+            }
+            
+            // Também remove do grupo se existir
+            const toastData = toastQueue.find(t => t.id === id);
+            if (toastData && toastData.groupId) {
+                removeToastFromQueue(id);
+                
+                // Atualiza o grupo se ainda existir
+                const groupToasts = toastQueue.filter(t => t.groupId === toastData.groupId);
+                if (groupToasts.length > 0) {
+                    updateGroupToast(toastData.groupId);
+                } else {
+                    // Remove o container do grupo se estiver vazio
+                    const groupContainer = document.getElementById(`toast-group-${toastData.groupId}`);
+                    if (groupContainer) {
+                        groupContainer.remove();
+                    }
+                }
+            }
+        }
+        
+        function removeToastFromQueue(id) {
+            toastQueue = toastQueue.filter(t => t.id !== id);
+        }
+        
+        // Função para demonstrar o novo sistema de notificações (para teste)
+        function demoNotificationSystem() {
+            // Notificação simples
+            showToast('Operação concluída com sucesso!', 'success');
+            
+            // Notificação com título
+            setTimeout(() => {
+                showToast('Dados salvos no banco de dados', 'info', 5000, {
+                    title: 'Backup realizado'
+                });
+            }, 800);
+            
+            // Notificação de erro importante
+            setTimeout(() => {
+                showToast('Falha na conexão com o servidor', 'error', 7000, {
+                    title: 'Erro de rede',
+                    important: true
+                });
+            }, 1600);
+            
+            // Notificações agrupadas
+            setTimeout(() => {
+                showToast('Produto #001 adicionado ao carrinho', 'info', 4000, { 
+                    groupWithPrevious: true 
+                });
+            }, 2500);
+            
+            setTimeout(() => {
+                showToast('Produto #002 adicionado ao carrinho', 'info', 4000, { 
+                    groupWithPrevious: true 
+                });
+            }, 2800);
+            
+            setTimeout(() => {
+                showToast('Produto #003 adicionado ao carrinho', 'info', 4000, { 
+                    groupWithPrevious: true 
+                });
+            }, 3100);
+        }
+        
+        // [O resto do código JavaScript anterior permanece igual]
+        
+        // Adicione esta linha no final da função init() para testar as notificações:
+        // demoNotificationSystem();
+        // Função para abrir o banco de dados
+        async function openDatabase() {
+            return new Promise((resolve, reject) => {
+                if (db) return resolve(db);
+                
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onerror = (event) => {
+                    console.error("Database error:", event.target.error);
+                    reject(new Error("Falha ao abrir o banco de dados"));
+                };
+                
+                request.onsuccess = (event) => {
+                    db = event.target.result;
+                    db.onerror = (event) => {
+                        console.error("Database error:", event.target.error);
+                    };
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    
+                    if (!db.objectStoreNames.contains('produtos')) {
+                        const store = db.createObjectStore('produtos', { keyPath: 'id' });
+                        store.createIndex('categoria', 'categoria', { unique: false });
+                        store.createIndex('codigo', 'codigo', { unique: true });
+                    }
+                    
+                    if (!db.objectStoreNames.contains('vendas')) {
+                        const store = db.createObjectStore('vendas', { keyPath: 'id' });
+                        store.createIndex('data', 'data', { unique: false });
+                    }
+                    
+                    if (!db.objectStoreNames.contains('carrinho')) {
+                        db.createObjectStore('carrinho', { keyPath: 'id' });
+                    }
+                };
+            });
+        }
+
+        // Função genérica para operações no banco de dados
+        async function dbOperation(storeName, operation, data = null) {
+            if (!db) await openDatabase();
+            
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], operation === 'getAll' ? 'readonly' : 'readwrite');
+                const store = transaction.objectStore(storeName);
+                
+                let request;
+                switch (operation) {
+                    case 'getAll':
+                        request = store.getAll();
+                        break;
+                    case 'add':
+                        request = store.add(data);
+                        break;
+                    case 'put':
+                        request = store.put(data);
+                        break;
+                    case 'delete':
+                        request = store.delete(data);
+                        break;
+                    case 'clear':
+                        request = store.clear();
+                        break;
+                    default:
+                        reject(new Error('Operação não suportada'));
+                }
+                
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = (event) => reject(event.target.error);
+            });
+        }
+
+        // Cache de produtos com invalidação
+        async function getProdutos() {
+            if (produtosCache.length) return produtosCache;
+            
+            try {
+                produtosCache = await dbOperation('produtos', 'getAll');
+                return produtosCache;
+            } catch (error) {
+                console.error("Erro ao carregar produtos:", error);
+                return [];
+            }
+        }
+
+        // Cache de carrinho
+        async function getCarrinho() {
+            if (carrinhoCache.length) return carrinhoCache;
+            
+            try {
+                carrinhoCache = await dbOperation('carrinho', 'getAll');
+                return carrinhoCache;
+            } catch (error) {
+                console.error("Erro ao carregar carrinho:", error);
+                return [];
+            }
+        }
+
+        // Cache de histórico
+        async function getHistorico() {
+            if (historicoCache.length) return historicoCache;
+            
+            try {
+                const historico = await dbOperation('vendas', 'getAll');
+                historicoCache = historico.sort((a, b) => new Date(b.data) - new Date(a.data));
+                return historicoCache;
+            } catch (error) {
+                console.error("Erro ao carregar histórico:", error);
+                return [];
+            }
+        }
+
+        // Função para limpar o histórico de vendas
+        async function limparHistorico() {
+            try {
+                // Garante que o banco de dados está aberto
+                if (!db) await openDatabase();
+                
+                // Limpa o banco de dados
+                await dbOperation('vendas', 'clear');
+                
+                // Limpa o cache
+                historicoCache = [];
+                
+                return true;
+            } catch (error) {
+                console.error("Erro ao limpar histórico:", error);
+                throw error;
+            }
+        }
+
+        // Função debounce para melhorar performance
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        // Renderização otimizada de produtos
+        const renderProdutos = debounce(async function() {
+            const now = Date.now();
+            if (now - lastRenderTime < RENDER_THROTTLE) return;
+            lastRenderTime = now;
+            
+            const produtos = await getProdutos();
+            const termoBusca = searchInput.value.toLowerCase();
+            const categoriaAtual = document.querySelector('.categoria-btn.active')?.dataset.categoria || 'todos';
+            
+            // Filtra os produtos
+            const produtosFiltrados = produtos.filter(produto => {
+                const correspondeBusca = produto.nome.toLowerCase().includes(termoBusca) || 
+                                      (produto.codigo && produto.codigo.includes(termoBusca));
+                const correspondeCategoria = categoriaAtual === 'todos' || produto.categoria === categoriaAtual;
+                return correspondeBusca && correspondeCategoria;
+            });
+            
+            // Virtualização básica - renderiza apenas os visíveis
+            const container = document.getElementById('produtosGrid');
+            container.innerHTML = '';
+            
+            // Adiciona um indicador de carregamento para listas grandes
+            if (produtosFiltrados.length > 50) {
+                const loading = document.createElement('div');
+                loading.className = 'loader';
+                container.appendChild(loading);
+                
+                // Usa requestAnimationFrame para renderização não-bloqueante
+                requestAnimationFrame(() => {
+                    renderProdutosChunk(produtosFiltrados, container, 0);
+                });
+            } else {
+                renderProdutosChunk(produtosFiltrados, container, 0);
+            }
+        }, 100);
+
+        // Renderiza produtos em chunks para não bloquear a UI
+        function renderProdutosChunk(produtos, container, index) {
+            const CHUNK_SIZE = 20;
+            const end = Math.min(index + CHUNK_SIZE, produtos.length);
+            
+            for (let i = index; i < end; i++) {
+                const produto = produtos[i];
+                const estoqueEsgotado = produto.estoque <= 0;
+                
+                const produtoCard = document.createElement('div');
+                produtoCard.className = 'produto-card';
+                produtoCard.innerHTML = `
+                    <img src="${produto.imagem || 'https://via.placeholder.com/150?text=Sem+Imagem'}" alt="${produto.nome}">
+                    <div class="produto-estoque ${produto.estoque < 5 ? 'estoque-baixo' : ''}">
+                        ${produto.estoque} ${estoqueEsgotado ? 'ESGOTADO' : 'disponíveis'}
+                    </div>
+                    <div class="produto-info">
+                        <div class="produto-nome">${produto.nome}</div>
+                        <div class="produto-preco">${formatarMoeda(produto.preco)}</div>
+                        ${produto.codigo ? `<div class="produto-codigo">Cód: ${produto.codigo}</div>` : ''}
+                    </div>
+                `;
+                
+                if (!estoqueEsgotado) {
+                    produtoCard.addEventListener('click', () => adicionarAoCarrinho(produto));
+                } else {
+                    produtoCard.style.opacity = '0.7';
+                    produtoCard.style.cursor = 'not-allowed';
+                }
+                
+                container.appendChild(produtoCard);
+            }
+            
+            if (end < produtos.length) {
+                requestAnimationFrame(() => {
+                    renderProdutosChunk(produtos, container, end);
+                });
+            }
+        }
+
+        // Adiciona produto ao carrinho
+        async function adicionarAoCarrinho(produto) {
+            // Verifica se há estoque disponível
+            if (produto.estoque <= 0) {
+                showToast('Este produto está esgotado!', 'error');
+                return;
+            }
+            
+            const carrinho = await getCarrinho();
+            const itemExistente = carrinho.find(item => item.id === produto.id);
+            
+            if (itemExistente) {
+                if (itemExistente.quantidade >= produto.estoque) {
+                    showToast(`Não há estoque suficiente! Restam apenas ${produto.estoque} unidades.`, 'warning');
+                    return;
+                }
+                itemExistente.quantidade += 1;
+            } else {
+                carrinho.push({
+                    ...produto,
+                    quantidade: 1
+                });
+            }
+            
+            // Atualiza o cache e o banco de dados
+            carrinhoCache = carrinho;
+            await dbOperation('carrinho', 'clear');
+            for (const item of carrinho) {
+                await dbOperation('carrinho', 'add', item);
+            }
+            
+            atualizarCarrinho();
+            searchInput.value = '';
+            searchInput.focus();
+            
+            showToast(`${produto.nome} adicionado ao carrinho`, 'success');
+        }
+
+        // Atualiza a exibição do carrinho
+        async function atualizarCarrinho() {
+            const carrinho = await getCarrinho();
+            
+            if (carrinho.length === 0) {
+                itensVenda.innerHTML = '<p style="text-align: center; color: #cbd5e1;">Nenhum item adicionado</p>';
+                totalVenda.textContent = formatarMoeda(0);
+                return;
+            }
+            
+            itensVenda.innerHTML = '';
+            let total = 0;
+            
+            for (const item of carrinho) {
+                const subtotal = item.preco * item.quantidade;
+                total += subtotal;
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item-venda';
+                itemElement.innerHTML = `
+                    <div>
+                        <div>${item.nome}</div>
+                        <div style="font-size: 12px;">${formatarMoeda(item.preco)} x ${item.quantidade}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span>${formatarMoeda(subtotal)}</span>
+                        <div class="quantidade-controller">
+                            <button onclick="alterarQuantidade(${item.id}, -1)">-</button>
+                            <span>${item.quantidade}</span>
+                            <button onclick="alterarQuantidade(${item.id}, 1)">+</button>
+                        </div>
+                        <button style="background: none; border: none; color: white; cursor: pointer;" onclick="removerItem(${item.id})">×</button>
+                    </div>
+                `;
+                itensVenda.appendChild(itemElement);
+            }
+            
+            totalVenda.textContent = formatarMoeda(total);
+            atualizarTroco();
+        }
+
+        // Adiciona produto por código de barras
+        async function adicionarPorCodigo(codigo) {
+            const produtos = await getProdutos();
+            const produto = produtos.find(p => p.codigo === codigo);
+            if (produto) {
+                await adicionarAoCarrinho(produto);
+                return true;
+            }
+            
+            showToast('Produto não encontrado com este código de barras!', 'error');
+            return false;
+        }
+
+        // Altera quantidade de um item no carrinho
+        async function alterarQuantidade(id, mudanca) {
+            const carrinho = await getCarrinho();
+            const item = carrinho.find(item => item.id === id);
+            
+            if (item) {
+                const produtos = await getProdutos();
+                const produtoOriginal = produtos.find(p => p.id === id);
+                
+                if (mudanca > 0 && (item.quantidade + mudanca) > produtoOriginal.estoque) {
+                    showToast(`Não há estoque suficiente! Restam apenas ${produtoOriginal.estoque} unidades.`, 'warning');
+                    return;
+                }
+                
+                item.quantidade += mudanca;
+                
+                if (item.quantidade <= 0) {
+                    carrinhoCache = carrinho.filter(item => item.id !== id);
+                } else {
+                    carrinhoCache = [...carrinho];
+                }
+                
+                await dbOperation('carrinho', 'clear');
+                for (const item of carrinhoCache) {
+                    await dbOperation('carrinho', 'add', item);
+                }
+                
+                atualizarCarrinho();
+            }
+        }
+
+        // Remove item do carrinho
+        async function removerItem(id) {
+            const carrinho = await getCarrinho();
+            carrinhoCache = carrinho.filter(item => item.id !== id);
+            
+            await dbOperation('carrinho', 'clear');
+            for (const item of carrinhoCache) {
+                await dbOperation('carrinho', 'add', item);
+            }
+            
+            atualizarCarrinho();
+            showToast('Item removido do carrinho', 'info');
+        }
+
+        // Atualiza o valor do troco
+        function atualizarTroco() {
+            const total = calcularTotal();
+            const recebido = parseFloat(valorRecebido.value) || 0;
+            const troco = recebido - total;
+            
+            valorTroco.textContent = formatarMoeda(troco > 0 ? troco : 0);
+        }
+
+        // Calcula o total da venda
+        async function calcularTotal() {
+            const carrinho = await getCarrinho();
+            return carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+        }
+
+        // Mostra modal de confirmação de venda
+        async function mostrarModalConfirmacao() {
+            const total = await calcularTotal();
+            const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
+            let pagamentoText = '';
+            let recebido = 0;
+            let troco = 0;
+            
+            if (formaPagamento === 'dinheiro') {
+                recebido = parseFloat(valorRecebido.value) || 0;
+                troco = recebido - total;
+                pagamentoText = `
+                    <p><strong>Forma de Pagamento:</strong> Dinheiro</p>
+                    <p><strong>Valor Recebido:</strong> ${formatarMoeda(recebido)}</p>
+                    <p><strong>Troco:</strong> ${formatarMoeda(troco > 0 ? troco : 0)}</p>
+                `;
+            } else {
+                let formaText = '';
+                switch(formaPagamento) {
+                    case 'debito': formaText = 'Cartão de Débito'; break;
+                    case 'credito': formaText = 'Cartão de Crédito'; break;
+                    case 'pix': formaText = 'PIX'; break;
+                }
+                pagamentoText = `<p><strong>Forma de Pagamento:</strong> ${formaText}</p>`;
+            }
+            
+            modalTitle.textContent = 'Confirmar Venda';
+            modalContent.innerHTML = `<p>Deseja finalizar esta venda?</p><p><strong>Total:</strong> ${formatarMoeda(total)}</p>`;
+            modalPagamentoInfo.innerHTML = pagamentoText;
+            
+            confirmModal.style.display = 'flex';
+        }
+
+        // Finaliza a venda
+        async function finalizarVenda() {
+            const carrinho = await getCarrinho();
+            if (carrinho.length === 0) {
+                showToast('Adicione itens à venda antes de finalizar!', 'warning');
+                return;
+            }
+            
+            const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
+            
+            if (formaPagamento === 'dinheiro') {
+                const total = await calcularTotal();
+                const recebido = parseFloat(valorRecebido.value) || 0;
+                
+                if (recebido < total) {
+                    showToast('O valor recebido é menor que o total da venda!', 'error');
+                    return;
+                }
+            }
+            
+            mostrarModalConfirmacao();
+        }
+
+        // Confirma a venda
+        async function confirmarVenda() {
+            const carrinho = await getCarrinho();
+            const total = await calcularTotal();
+            const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
+            
+            // Atualizar estoque dos produtos vendidos
+            const produtos = await getProdutos();
+            for (const itemVenda of carrinho) {
+                const produto = produtos.find(p => p.id === itemVenda.id);
+                if (produto) {
+                    produto.estoque -= itemVenda.quantidade;
+                    if (produto.estoque < 0) produto.estoque = 0;
+                    await dbOperation('produtos', 'put', produto);
+                }
+            }
+            
+            // Atualiza o cache de produtos
+            produtosCache = produtos;
+            
+            // Criar objeto de venda para o histórico
+            const novaVenda = {
+                id: gerarId(),
+                data: new Date().toISOString(),
+                itens: [...carrinho],
+                total: total,
+                formaPagamento: formaPagamento,
+                valorRecebido: formaPagamento === 'dinheiro' ? parseFloat(valorRecebido.value) || 0 : null,
+                troco: formaPagamento === 'dinheiro' ? (parseFloat(valorRecebido.value) || 0) - total : null
+            };
+            
+            // Adicionar ao histórico
+            await dbOperation('vendas', 'add', novaVenda);
+            historicoCache.unshift(novaVenda);
+            
+            // Mensagem de sucesso personalizada
+            let mensagem = `Venda finalizada com sucesso!<br><strong>Total: ${formatarMoeda(total)}</strong><br>Forma de Pagamento: `;
+            
+            switch(formaPagamento) {
+                case 'dinheiro':
+                    const recebido = parseFloat(valorRecebido.value) || 0;
+                    const troco = recebido - total;
+                    mensagem += `Dinheiro<br>Valor Recebido: ${formatarMoeda(recebido)}<br>Troco: ${formatarMoeda(troco > 0 ? troco : 0)}`;
+                    break;
+                case 'debito': mensagem += 'Cartão de Débito'; break;
+                case 'credito': mensagem += 'Cartão de Crédito'; break;
+                case 'pix': mensagem += 'PIX'; break;
+            }
+            
+            showToast(mensagem, 'success', 7000);
+            
+            // Limpar carrinho
+            carrinhoCache = [];
+            await dbOperation('carrinho', 'clear');
+            atualizarCarrinho();
+            
+            // Resetar formulário
+            pagamentoDinheiro.checked = true;
+            valorRecebido.value = '';
+            confirmModal.style.display = 'none';
+            searchInput.focus();
+            
+            // Atualizar histórico se estiver visível
+            if (document.getElementById('historico-tab').classList.contains('active')) {
+                renderHistorico();
+            }
+            
+            // Atualizar lista de produtos se estiver na aba de cadastro
+            if (document.getElementById('cadastro-tab').classList.contains('active')) {
+                renderProdutosCadastrados();
+            }
+        }
+
+        // Cancela a venda
+        async function cancelarVenda() {
+            const carrinho = await getCarrinho();
+            
+            if (carrinho.length === 0) {
+                showToast('O carrinho já está vazio', 'info');
+                return;
+            }
+            
+            const confirmed = await showModal({
+                title: 'Cancelar Venda',
+                message: 'Tem certeza que deseja cancelar esta venda?',
+                type: 'warning',
+                confirmText: 'Sim, Cancelar',
+                cancelText: 'Manter Venda'
+            });
+            
+            if (confirmed) {
+                // Restaurar estoque dos produtos no carrinho
+                const produtos = await getProdutos();
+                for (const item of carrinho) {
+                    const produto = produtos.find(p => p.id === item.id);
+                    if (produto) {
+                        produto.estoque += item.quantidade;
+                        await dbOperation('produtos', 'put', produto);
+                    }
+                }
+                
+                // Atualizar cache
+                produtosCache = produtos;
+                
+                // Limpar carrinho
+                carrinhoCache = [];
+                await dbOperation('carrinho', 'clear');
+                atualizarCarrinho();
+                
+                // Resetar formulário
+                pagamentoDinheiro.checked = true;
+                valorRecebido.value = '';
+                searchInput.focus();
+                
+                showToast('Venda cancelada com sucesso', 'success');
+            }
+        }
+
+        // Renderiza produtos cadastrados
+        async function renderProdutosCadastrados() {
+            const produtos = await getProdutos();
+            const container = document.getElementById('produtosCadastrados');
+            container.innerHTML = '';
+            
+            if (produtos.length === 0) {
+                container.innerHTML = '<p>Nenhum produto cadastrado ainda.</p>';
+                return;
+            }
+            
+            // Renderiza em chunks para não bloquear a UI
+            renderProdutosCadastradosChunk(produtos, container, 0);
+        }
+
+        // Renderiza produtos cadastrados em chunks
+        function renderProdutosCadastradosChunk(produtos, container, index) {
+            const CHUNK_SIZE = 20;
+            const end = Math.min(index + CHUNK_SIZE, produtos.length);
+            
+            for (let i = index; i < end; i++) {
+                const produto = produtos[i];
+                const produtoCard = document.createElement('div');
+                produtoCard.className = 'produto-card';
+                produtoCard.innerHTML = `
+                    <img src="${produto.imagem || 'https://via.placeholder.com/150?text=Sem+Imagem'}" alt="${produto.nome}">
+                    <div class="produto-estoque ${produto.estoque < 5 ? 'estoque-baixo' : ''}">
+                        ${produto.estoque} disponíveis
+                    </div>
+                    <div class="produto-info">
+                        <div class="produto-nome">${produto.nome}</div>
+                        <div class="produto-preco">${formatarMoeda(produto.preco)}</div>
+                        <div style="font-size: 12px; margin-top: 5px;">${produto.categoria}</div>
+                        ${produto.codigo ? `<div style="font-size: 10px; color: #777;">Código: ${produto.codigo}</div>` : ''}
+                        <button class="edit-produto-btn" onclick="editarProduto(${produto.id})">Editar</button>
+                        <button onclick="removerProduto(${produto.id})" style="margin-top: 8px; width: 100%; padding: 5px; background-color: #ff3333; color: white; border: none; border-radius: 3px; cursor: pointer;">Remover</button>
+                    </div>
+                `;
+                container.appendChild(produtoCard);
+            }
+            
+            if (end < produtos.length) {
+                requestAnimationFrame(() => {
+                    renderProdutosCadastradosChunk(produtos, container, end);
+                });
+            }
+        }
+
+        // Edita um produto
+        async function editarProduto(id) {
+            const produtos = await getProdutos();
+            const produto = produtos.find(p => p.id === id);
+            if (!produto) return;
+            
+            produtoEmEdicao = produto;
+            
+            // Preenche o formulário
+            produtoIdInput.value = produto.id;
+            document.getElementById('produtoNome').value = produto.nome;
+            document.getElementById('produtoPreco').value = produto.preco;
+            document.getElementById('produtoCategoria').value = produto.categoria;
+            document.getElementById('produtoEstoque').value = produto.estoque;
+            document.getElementById('produtoCodigo').value = produto.codigo || '';
+            document.getElementById('produtoImagem').value = produto.imagem || '';
+            
+            submitProdutoBtn.textContent = 'Atualizar Produto';
+            cancelarEdicaoBtn.style.display = 'block';
+            
+            document.querySelector('.cadastro-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Cancela a edição de produto
+        function cancelarEdicao() {
+            produtoEmEdicao = null;
+            formProduto.reset();
+            produtoIdInput.value = '';
+            document.getElementById('produtoEstoque').value = '0';
+            submitProdutoBtn.textContent = 'Cadastrar Produto';
+            cancelarEdicaoBtn.style.display = 'none';
+        }
+
+        // Remove um produto
+        async function removerProduto(id) {
+            const confirmed = await showModal({
+                title: 'Remover Produto',
+                message: 'Tem certeza que deseja remover este produto?',
+                type: 'warning',
+                confirmText: 'Sim, Remover',
+                cancelText: 'Manter Produto'
+            });
+            
+            if (confirmed) {
+                await dbOperation('produtos', 'delete', id);
+                produtosCache = produtosCache.filter(produto => produto.id !== id);
+                
+                // Remove do carrinho se estiver lá
+                const carrinho = await getCarrinho();
+                if (carrinho.some(item => item.id === id)) {
+                    carrinhoCache = carrinho.filter(item => item.id !== id);
+                    await dbOperation('carrinho', 'clear');
+                    for (const item of carrinhoCache) {
+                        await dbOperation('carrinho', 'add', item);
+                    }
+                    atualizarCarrinho();
+                }
+                
+                renderProdutosCadastrados();
+                
+                if (produtoEmEdicao && produtoEmEdicao.id === id) {
+                    cancelarEdicao();
+                }
+                
+                showToast('Produto removido com sucesso', 'success');
+            }
+        }
+
+        // Processa arquivo Excel
+        function processarArquivoExcel(file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                
+                if (jsonData.length === 0) {
+                    showToast('O arquivo Excel está vazio ou não está no formato correto!', 'error');
+                    return;
+                }
+                
+                const primeiraLinha = jsonData[0];
+                if (!('Nome' in primeiraLinha) || !('Preço' in primeiraLinha) || !('Categoria' in primeiraLinha)) {
+                    showToast('O arquivo Excel deve conter as colunas: Nome, Preço e Categoria!', 'error');
+                    return;
+                }
+                
+                const produtosParaImportar = jsonData.map(linha => {
+                    const estoque = parseInt(linha['Estoque']) || 0;
+                    if (estoque < 0) {
+                        showToast(`Estoque negativo não permitido para o produto ${linha['Nome']}. Definido como 0.`, 'warning');
+                    }
+                    
+                    return {
+                        id: gerarId(),
+                        nome: linha['Nome'] || '',
+                        preco: parseFloat(linha['Preço']) || 0,
+                        categoria: (linha['Categoria'] || '').toLowerCase() || 'outros',
+                        estoque: estoque < 0 ? 0 : estoque,
+                        codigo: linha['Código'] || linha['Codigo'] || gerarCodigoBarras(),
+                        imagem: linha['Imagem'] || linha['URL'] || ''
+                    };
+                }).filter(produto => produto.nome && produto.preco > 0);
+                
+                if (produtosParaImportar.length === 0) {
+                    showToast('Nenhum produto válido encontrado no arquivo!', 'error');
+                    return;
+                }
+                
+                fileInputInfo.innerHTML = `Pronto para importar ${produtosParaImportar.length} produtos do arquivo: ${file.name}`;
+                importarProdutosBtn.style.display = 'block';
+                
+                importarProdutosBtn.onclick = async function() {
+                    try {
+                        for (const produto of produtosParaImportar) {
+                            await dbOperation('produtos', 'add', produto);
+                        }
+                        
+                        produtosCache = [...produtosCache, ...produtosParaImportar];
+                        renderProdutosCadastrados();
+                        showToast(`${produtosParaImportar.length} produtos importados com sucesso!`, 'success');
+                        
+                        fileInputInfo.textContent = 'Nenhum arquivo selecionado';
+                        importarProdutosBtn.style.display = 'none';
+                        excelFileInput.value = '';
+                    } catch (error) {
+                        console.error("Erro ao importar produtos:", error);
+                        showToast("Erro ao importar produtos. Verifique se há códigos de barras duplicados.", 'error');
+                    }
+                };
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Renderiza o histórico de vendas
+        async function renderHistorico() {
+            const historico = await getHistorico();
+            const container = document.getElementById('historicoVendas');
+            container.innerHTML = '';
+            
+            if (historico.length === 0) {
+                container.innerHTML = '<p style="text-align: center;">Nenhuma venda registrada ainda</p>';
+                return;
+            }
+            
+            const meses = agruparPorMes(historico);
+            
+            for (const mesAno in meses) {
+                const mes = meses[mesAno];
+                
+                const mesContainer = document.createElement('div');
+                mesContainer.className = 'historico-mes';
+                
+                const mesTitle = document.createElement('div');
+                mesTitle.className = 'historico-mes-title';
+                mesTitle.innerHTML = `
+                    <span>${mes.nome}</span>
+                    <span>${mes.vendas.length} venda(s)</span>
+                `;
+                
+                const mesContent = document.createElement('div');
+                mesContent.className = 'historico-mes-content';
+                
+                mes.vendas.forEach(venda => {
+                    const vendaElement = document.createElement('div');
+                    vendaElement.className = 'historico-venda';
+                    
+                    const vendaHeader = document.createElement('div');
+                    vendaHeader.className = 'historico-venda-header';
+                    vendaHeader.innerHTML = `
+                        <span>${formatarData(venda.data)}</span>
+                        <span>${formatarMoeda(venda.total)}</span>
+                    `;
+                    
+                    const vendaItens = document.createElement('div');
+                    vendaItens.className = 'historico-venda-itens';
+                    
+                    venda.itens.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'historico-venda-item';
+                        itemElement.innerHTML = `
+                            <span>${item.nome} x${item.quantidade}</span>
+                            <span>${formatarMoeda(item.preco * item.quantidade)}</span>
+                        `;
+                        vendaItens.appendChild(itemElement);
+                    });
+                    
+                    const vendaFooter = document.createElement('div');
+                    vendaFooter.className = 'historico-venda-footer';
+                    vendaFooter.innerHTML = `
+                        <div><strong>Pagamento:</strong> ${formatarFormaPagamento(venda.formaPagamento)}</div>
+                        ${venda.formaPagamento === 'dinheiro' ? `
+                            <div><strong>Recebido:</strong> ${formatarMoeda(venda.valorRecebido)}</div>
+                            <div><strong>Troco:</strong> ${formatarMoeda(venda.troco)}</div>
+                        ` : ''}
+                    `;
+                    
+                    vendaElement.appendChild(vendaHeader);
+                    vendaElement.appendChild(vendaItens);
+                    vendaElement.appendChild(vendaFooter);
+                    mesContent.appendChild(vendaElement);
+                });
+                
+                mesTitle.addEventListener('click', () => {
+                    mesContent.classList.toggle('active');
+                });
+                
+                mesContainer.appendChild(mesTitle);
+                mesContainer.appendChild(mesContent);
+                container.appendChild(mesContainer);
+            }
+        }
+
+        // Scanner de código de barras
+        async function iniciarScanner() {
+            if (scannerAtivo) return;
+            
+            barcodeScanner.style.display = 'flex';
+            scannerAtivo = true;
+            
+            scannerTimeout = setTimeout(() => {
+                if (scannerAtivo) {
+                    pararScanner();
+                    showToast('Scanner atingiu o tempo limite. Por favor, tente novamente.', 'error');
+                }
+            }, 30000);
+            
+            try {
+                await Quagga.init({
+                    inputStream: {
+                        name: "Live",
+                        type: "LiveStream",
+                        target: barcodeScannerVideo,
+                        constraints: {
+                            width: 480,
+                            height: 320,
+                            facingMode: "environment"
+                        },
+                    },
+                    decoder: {
+                        readers: ["ean_reader", "ean_8_reader", "code_128_reader"]
+                    },
+                    locate: true,
+                    debug: false
+                });
+                
+                Quagga.start();
+                
+                Quagga.onDetected(result => {
+                    const codigo = result.codeResult.code;
+                    pararScanner();
+                    
+                    const abaAtiva = document.querySelector('.tab-btn.active').dataset.tab;
+                    
+                    if (abaAtiva === 'pdv') {
+                        if (!adicionarPorCodigo(codigo)) {
+                            showToast('Produto não encontrado com este código de barras!', 'error');
+                        }
+                    } else if (abaAtiva === 'cadastro') {
+                        produtoCodigoInput.value = codigo;
+                    }
+                });
+                
+            } catch (error) {
+                console.error("Erro no scanner:", error);
+                pararScanner();
+                showToast("Erro ao iniciar o scanner. Verifique as permissões da câmera.", 'error');
+            }
+        }
+        
+        function pararScanner() {
+            if (!scannerAtivo) return;
+            
+            clearTimeout(scannerTimeout);
+            scannerAtivo = false;
+            
+            try {
+                Quagga.stop();
+                if (Quagga.offDetected) {
+                    Quagga.offDetected();
+                }
+            } catch (e) {
+                console.warn("Erro ao parar scanner:", e);
+            }
+            
+            barcodeScanner.style.display = 'none';
+        }
+
+        // Exporta banco de dados
+        async function exportDatabase() {
+            try {
+                const produtos = await dbOperation('produtos', 'getAll');
+                const vendas = await dbOperation('vendas', 'getAll');
+                const carrinho = await dbOperation('carrinho', 'getAll');
+                
+                const data = {
+                    produtos,
+                    vendas,
+                    carrinho,
+                    exportDate: new Date().toISOString()
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `pdv-adega-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showToast('Banco de dados exportado com sucesso!', 'success');
+            } catch (error) {
+                console.error('Erro ao exportar banco de dados:', error);
+                showToast('Erro ao exportar banco de dados: ' + error.message, 'error');
+            }
+        }
+
+        // Importa banco de dados
+        async function importDatabase(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                
+                reader.onload = async (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        
+                        // Limpa os dados existentes
+                        await dbOperation('produtos', 'clear');
+                        await dbOperation('vendas', 'clear');
+                        await dbOperation('carrinho', 'clear');
+                        
+                        // Adiciona os novos dados
+                        for (const produto of data.produtos) {
+                            await dbOperation('produtos', 'add', produto);
+                        }
+                        
+                        for (const venda of data.vendas) {
+                            await dbOperation('vendas', 'add', venda);
+                        }
+                        
+                        for (const item of data.carrinho) {
+                            await dbOperation('carrinho', 'add', item);
+                        }
+                        
+                        // Atualiza os caches
+                        produtosCache = data.produtos || [];
+                        historicoCache = data.vendas || [];
+                        carrinhoCache = data.carrinho || [];
+                        
+                        showToast('Banco de dados importado com sucesso!', 'success');
+                        resolve();
+                    } catch (error) {
+                        console.error('Erro ao importar banco de dados:', error);
+                        showToast('Erro ao importar banco de dados: ' + error.message, 'error');
+                        reject(error);
+                    }
+                };
+                
+                reader.onerror = (error) => {
+                    console.error('Erro ao ler arquivo:', error);
+                    showToast('Erro ao ler arquivo: ' + error.message, 'error');
+                    reject(error);
+                };
+                
+                reader.readAsText(file);
+            });
+        }
+
+        // Função para limpar o histórico de vendas
+        async function limparHistorico() {
+            try {
+                const historico = await getHistorico();
+                if (historico.length === 0) {
+                    showToast('Nenhuma venda no histórico para apagar!', 'info');
+                    return true;
+                }
+                
+                const confirmed = await showModal({
+                    title: 'Apagar Histórico',
+                    message: `Deseja apagar TODAS as ${historico.length} vendas do histórico?<br><strong>Esta ação não pode ser desfeita.</strong>`,
+                    type: 'danger',
+                    confirmText: 'Sim, Apagar Tudo',
+                    cancelText: 'Manter Histórico'
+                });
+                
+                if (confirmed) {
+                    await dbOperation('vendas', 'clear');
+                    historicoCache = [];
+                    showToast('Histórico de vendas apagado com sucesso!', 'success');
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error("Erro ao apagar histórico:", error);
+                showToast("Erro ao apagar histórico: " + error.message, 'error');
+                throw error;
+            }
+        }
+
+        // Exporta histórico para Excel
+        async function exportarHistoricoParaExcel() {
+            try {
+                const historico = await getHistorico();
+                if (historico.length === 0) {
+                    showToast('Nenhuma venda no histórico para exportar!', 'info');
+                    return;
+                }
+
+                // Preparar os dados para a planilha
+                const dados = [];
+                
+                // Cabeçalho
+                dados.push([
+                    'Data', 'ID Venda', 'Total', 'Forma de Pagamento', 
+                    'Valor Recebido', 'Troco', 'Quantidade de Itens', 
+                    'Itens (Nome x Quantidade)', 'Valor dos Itens'
+                ]);
+
+                // Linhas de dados
+                historico.forEach(venda => {
+                    const itensTexto = venda.itens.map(item => 
+                        `${item.nome} x${item.quantidade}`).join(', ');
+                    const valoresItens = venda.itens.map(item => 
+                        `${formatarMoeda(item.preco * item.quantidade)}`).join(', ');
+                    
+                    dados.push([
+                        formatarData(venda.data),
+                        venda.id,
+                        venda.total,
+                        formatarFormaPagamento(venda.formaPagamento),
+                        venda.formaPagamento === 'dinheiro' ? venda.valorRecebido : 'N/A',
+                        venda.formaPagamento === 'dinheiro' ? (venda.troco || 0) : 'N/A',
+                        venda.itens.reduce((sum, item) => sum + item.quantidade, 0),
+                        itensTexto,
+                        valoresItens
+                    ]);
+                });
+
+                // Criar a planilha
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(dados);
+                
+                // Estilizar a planilha
+                // Definir largura das colunas
+                const wscols = [
+                    {wch: 20}, // Data
+                    {wch: 10}, // ID Venda
+                    {wch: 12}, // Total
+                    {wch: 18}, // Forma de Pagamento
+                    {wch: 15}, // Valor Recebido
+                    {wch: 12}, // Troco
+                    {wch: 18}, // Quantidade de Itens
+                    {wch: 40}, // Itens
+                    {wch: 30}  // Valor dos Itens
+                ];
+                ws['!cols'] = wscols;
+
+                // Adicionar cabeçalho estilizado
+                for (let i = 0; i < dados[0].length; i++) {
+                    const cellRef = XLSX.utils.encode_cell({r: 0, c: i});
+                    if (!ws[cellRef]) continue;
+                    
+                    ws[cellRef].s = {
+                        font: { bold: true, color: { rgb: "FFFFFF" } },
+                        fill: { fgColor: { rgb: "4f46e5" } },
+                        alignment: { horizontal: "center" }
+                    };
+                }
+
+                // Alternar cores das linhas
+                for (let r = 1; r < dados.length; r++) {
+                    for (let c = 0; c < dados[r].length; c++) {
+                        const cellRef = XLSX.utils.encode_cell({r: r, c: c});
+                        if (!ws[cellRef]) continue;
+                        
+                        ws[cellRef].s = {
+                            fill: { fgColor: { rgb: r % 2 === 0 ? "f3f4f6" : "ffffff" } },
+                            border: {
+                                top: { style: "thin", color: { rgb: "e5e7eb" } },
+                                bottom: { style: "thin", color: { rgb: "e5e7eb" } },
+                                left: { style: "thin", color: { rgb: "e5e7eb" } },
+                                right: { style: "thin", color: { rgb: "e5e7eb" } }
+                            }
+                        };
+                    }
+                }
+
+                // Formatar células de valores monetários
+                const formatMoeda = '"R$"#,##0.00';
+                [2, 4, 5].forEach(col => { // Colunas Total, Valor Recebido, Troco
+                    for (let r = 1; r < dados.length; r++) {
+                        const cellRef = XLSX.utils.encode_cell({r: r, c: col});
+                        if (ws[cellRef]) {
+                            ws[cellRef].t = 'n';
+                            ws[cellRef].z = formatMoeda;
+                        }
+                    }
+                });
+
+                XLSX.utils.book_append_sheet(wb, ws, "Historico_Vendas");
+
+                // Gerar o arquivo Excel
+                const dataAtual = new Date().toISOString().split('T')[0];
+                XLSX.writeFile(wb, `Historico_Vendas_${dataAtual}.xlsx`);
+                showToast('Histórico exportado com sucesso!', 'success');
+
+            } catch (error) {
+                console.error("Erro ao exportar histórico:", error);
+                showToast("Erro ao exportar histórico: " + error.message, 'error');
+            }
+        }
+
+        // Funções auxiliares
+        function formatarMoeda(valor) {
+            return Number(valor).toLocaleString('pt-BR', { 
+                style: 'currency', 
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function formatarData(data) {
+            const options = { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(data).toLocaleDateString('pt-BR', options);
+        }
+
+        function gerarId() {
+            return Math.floor(Math.random() * 1000000);
+        }
+
+        function gerarCodigoBarras() {
+            const pais = '789';
+            const empresa = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            const produto = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            
+            const codigoSemDigito = pais + empresa + produto;
+            let soma = 0;
+            
+            for (let i = 0; i < codigoSemDigito.length; i++) {
+                const digito = parseInt(codigoSemDigito[i]);
+                soma += (i % 2 === 0) ? digito * 1 : digito * 3;
+            }
+            
+            const digitoVerificador = (10 - (soma % 10)) % 10;
+            
+            return codigoSemDigito + digitoVerificador;
+        }
+
+        function agruparPorMes(vendas) {
+            const meses = {};
+            
+            vendas.forEach(venda => {
+                const data = new Date(venda.data);
+                const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+                const mesAno = `${mes}/${data.getFullYear()}`;
+                const nomeMes = data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+                
+                if (!meses[mesAno]) {
+                    meses[mesAno] = {
+                        nome: nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1),
+                        vendas: []
+                    };
+                }
+                
+                meses[mesAno].vendas.push(venda);
+            });
+            
+            return meses;
+        }
+
+        function formatarFormaPagamento(forma) {
+            switch(forma) {
+                case 'dinheiro': return 'Dinheiro';
+                case 'debito': return 'Cartão de Débito';
+                case 'credito': return 'Cartão de Crédito';
+                case 'pix': return 'PIX';
+                default: return forma;
+            }
+        }
+
+        // Configura atalhos do teclado
+        function configurarAtalhosTeclado() {
+            document.addEventListener('keydown', function(e) {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                switch(e.key) {
+                    case 'F1':
+                        e.preventDefault();
+                        shortcutsModal.style.display = 'flex';
+                        break;
+                    case 'F12':
+                        e.preventDefault();
+                        if (document.getElementById('pdv-tab').classList.contains('active')) {
+                            searchInput.focus();
+                        }
+                        break;
+                    case 'F2':
+                        e.preventDefault();
+                        pagamentoDinheiro.checked = true;
+                        trocoSection.classList.add('active');
+                        valorRecebido.focus();
+                        break;
+                    case 'F3':
+                        e.preventDefault();
+                        pagamentoDebito.checked = true;
+                        trocoSection.classList.remove('active');
+                        break;
+                    case 'F4':
+                        e.preventDefault();
+                        pagamentoCredito.checked = true;
+                        trocoSection.classList.remove('active');
+                        break;
+                    case 'F5':
+                        e.preventDefault();
+                        pagamentoPix.checked = true;
+                        trocoSection.classList.remove('active');
+                        break;
+                    case 'F9':
+                        e.preventDefault();
+                        finalizarVenda();
+                        break;
+                    case 'F10':
+                        e.preventDefault();
+                        cancelarVenda();
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        if (confirmModal.style.display === 'flex') {
+                            confirmModal.style.display = 'none';
+                        } else if (shortcutsModal.style.display === 'flex') {
+                            shortcutsModal.style.display = 'none';
+                        } else if (barcodeScanner.style.display === 'flex') {
+                            pararScanner();
+                        } else if (produtoEmEdicao) {
+                            cancelarEdicao();
+                        }
+                        break;
+                }
+            });
+        }
+
+        // Inicialização do aplicativo
+        async function init() {
+            try {
+                await openDatabase();
+                
+                // Carrega dados iniciais
+                await Promise.all([
+                    getProdutos(),
+                    getCarrinho(),
+                    getHistorico()
+                ]);
+                
+                // Configura eventos
+                searchInput.addEventListener('input', renderProdutos);
+                
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const codigo = this.value;
+                        if (codigo.length >= 8) {
+                            adicionarPorCodigo(codigo);
+                            this.value = '';
+                        }
+                    }
+                });
+
+                categoriaBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        categoriaBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        renderProdutos();
+                    });
+                });
+
+                finalizarVendaBtn.addEventListener('click', finalizarVenda);
+                cancelarVendaBtn.addEventListener('click', cancelarVenda);
+                modalConfirmBtn.addEventListener('click', confirmarVenda);
+                modalCancelBtn.addEventListener('click', () => {
+                    confirmModal.style.display = 'none';
+                });
+
+                pagamentoOptions.forEach(option => {
+                    option.addEventListener('change', function() {
+                        trocoSection.classList.toggle('active', this.value === 'dinheiro');
+                        if (this.value === 'dinheiro') {
+                            valorRecebido.focus();
+                        }
+                    });
+                });
+
+                valorRecebido.addEventListener('input', atualizarTroco);
+
+                formProduto.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const nome = document.getElementById('produtoNome').value;
+                    const preco = parseFloat(document.getElementById('produtoPreco').value);
+                    const categoria = document.getElementById('produtoCategoria').value;
+                    const estoque = parseInt(document.getElementById('produtoEstoque').value);
+                    const codigo = document.getElementById('produtoCodigo').value;
+                    const imagem = document.getElementById('produtoImagem').value;
+                    
+                    if (produtoEmEdicao) {
+                        // Atualizar produto existente
+                        produtoEmEdicao.nome = nome;
+                        produtoEmEdicao.preco = preco;
+                        produtoEmEdicao.categoria = categoria;
+                        produtoEmEdicao.estoque = estoque;
+                        produtoEmEdicao.codigo = codigo || undefined;
+                        produtoEmEdicao.imagem = imagem || undefined;
+                        
+                        await dbOperation('produtos', 'put', produtoEmEdicao);
+                        
+                        // Atualiza o cache
+                        produtosCache = produtosCache.map(p => 
+                            p.id === produtoEmEdicao.id ? produtoEmEdicao : p
+                        );
+                        
+                        renderProdutosCadastrados();
+                        cancelarEdicao();
+                        
+                        showToast('Produto atualizado com sucesso!', 'success');
+                    } else {
+                        // Criar novo produto
+                        const novoProduto = {
+                            id: gerarId(),
+                            nome,
+                            preco,
+                            categoria,
+                            estoque,
+                            codigo: codigo || undefined,
+                            imagem: imagem || undefined
+                        };
+                        
+                        await dbOperation('produtos', 'add', novoProduto);
+                        produtosCache.push(novoProduto);
+                        renderProdutosCadastrados();
+                        
+                        formProduto.reset();
+                        document.getElementById('produtoEstoque').value = '0';
+                        
+                        showToast('Produto cadastrado com sucesso!', 'success');
+                    }
+                });
+
+                generateBarcodeBtn.addEventListener('click', function() {
+                    produtoCodigoInput.value = gerarCodigoBarras();
+                });
+
+                excelFileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    if (!file.name.match(/\.(xlsx|xls|csv)$/)) {
+                        showToast('Por favor, selecione um arquivo Excel (.xlsx, .xls) ou CSV!', 'error');
+                        return;
+                    }
+                    
+                    fileInputInfo.textContent = `Processando arquivo: ${file.name}...`;
+                    importarProdutosBtn.style.display = 'none';
+                    
+                    processarArquivoExcel(file);
+                });
+
+                scanBarcodeBtn.addEventListener('click', iniciarScanner);
+                closeBarcodeScanner.addEventListener('click', pararScanner);
+                helpShortcuts.addEventListener('click', () => {
+                    shortcutsModal.style.display = 'flex';
+                });
+                closeShortcutsBtn.addEventListener('click', () => {
+                    shortcutsModal.style.display = 'none';
+                });
+                cancelarEdicaoBtn.addEventListener('click', cancelarEdicao);
+
+                pagarHistoricoBtn.addEventListener('click', async function() {
+                    try {
+                        const success = await limparHistorico();
+                        if (success) {
+                            renderHistorico();
+                        }
+                    } catch (error) {
+                        console.error("Erro ao apagar histórico:", error);
+                    }
+                });
+
+                exportarHistoricoBtn.addEventListener('click', exportarHistoricoParaExcel);
+                
+                exportDatabaseBtn.addEventListener('click', exportDatabase);
+                
+                databaseFileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    databaseFileInfo.textContent = `Arquivo selecionado: ${file.name}`;
+                    
+                    try {
+                        await importDatabase(file);
+                        
+                        // Recarrega todos os dados
+                        await getProdutos();
+                        await getCarrinho();
+                        await getHistorico();
+                        
+                        // Atualiza as interfaces
+                        renderProdutos();
+                        renderProdutosCadastrados();
+                        atualizarCarrinho();
+                        
+                        if (document.getElementById('historico-tab').classList.contains('active')) {
+                            renderHistorico();
+                        }
+                        
+                        databaseFileInfo.textContent = 'Banco de dados importado com sucesso!';
+                        databaseFileInput.value = '';
+                    } catch (error) {
+                        databaseFileInfo.textContent = 'Erro ao importar banco de dados: ' + error.message;
+                    }
+                });
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const tabId = tab.dataset.tab;
+                        
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        
+                        tab.classList.add('active');
+                        document.getElementById(`${tabId}-tab`).classList.add('active');
+                        
+                        if (tabId === 'pdv') {
+                            searchInput.focus();
+                            renderProdutos();
+                        }
+                        
+                        if (tabId === 'cadastro') {
+                            renderProdutosCadastrados();
+                        }
+                        
+                        if (tabId === 'historico') {
+                            renderHistorico();
+                        }
+                    });
+                });
+
+                configurarAtalhosTeclado();
+                
+                // Foca no campo de busca se estiver na aba PDV
+                if (document.getElementById('pdv-tab').classList.contains('active')) {
+                    searchInput.focus();
+                    renderProdutos();
+                }
+                
+                // Renderiza a interface inicial
+                if (document.getElementById('cadastro-tab').classList.contains('active')) {
+                    renderProdutosCadastrados();
+                }
+                
+                if (document.getElementById('historico-tab').classList.contains('active')) {
+                    renderHistorico();
+                }
+                
+                atualizarCarrinho();
+                
+            } catch (error) {
+                console.error("Erro na inicialização:", error);
+                showToast("Erro ao carregar o aplicativo. Por favor, recarregue a página.", 'error');
+            }
+        }
+
+        // Inicia o aplicativo quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Funções globais para os botões
+        window.alterarQuantidade = alterarQuantidade;
+        window.removerItem = removerItem;
+        window.removerProduto = removerProduto;
+        window.editarProduto = editarProduto;
+    </script>
+</body>
+</html>
