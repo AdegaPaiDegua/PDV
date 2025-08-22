@@ -3165,36 +3165,68 @@
         }
 
         // Função para limpar o histórico de vendas
-        async function limparHistorico() {
-            try {
-                const historico = await getHistorico();
-                if (historico.length === 0) {
-                    showToast('Nenhuma venda no histórico para apagar!', 'info');
-                    return true;
-                }
-                
-                const confirmed = await showModal({
-                    title: 'Apagar Histórico',
-                    message: `Deseja apagar TODAS as ${historico.length} vendas do histórico?<br><strong>Esta ação não pode ser desfeita.</strong>`,
-                    type: 'danger',
-                    confirmText: 'Sim, Apagar Tudo',
-                    cancelText: 'Manter Histórico'
-                });
-                
-                if (confirmed) {
-                    await dbOperation('vendas', 'clear');
-                    historicoCache = [];
-                    showToast('Histórico de vendas apagado com sucesso!', 'success');
-                    return true;
-                }
-                return false;
-            } catch (error) {
-                console.error("Erro ao apagar histórico:", error);
-                showToast("Erro ao apagar histórico: " + error.message, 'error');
-                throw error;
-            }
+    // Função para limpar o histórico de vendas
+// Função para limpar o histórico de vendas
+async function limparHistorico() {
+    try {
+        const historico = await getHistorico();
+        if (historico.length === 0) {
+            showToast('Nenhuma venda no histórico para apagar!', 'info');
+            return true;
         }
-
+        
+        // Usando o modal personalizado diretamente
+        const modal = document.getElementById('customModal');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalTitle = document.getElementById('customModalTitle');
+        const modalBody = document.getElementById('customModalBody');
+        const modalCancel = document.getElementById('customModalCancel');
+        const modalConfirm = document.getElementById('customModalConfirm');
+        
+        // Configurar o modal
+        modalIcon.textContent = '❌';
+        modalTitle.textContent = 'Apagar Histórico';
+        modalBody.innerHTML = `Deseja apagar TODAS as ${historico.length} vendas do histórico?<br><strong>Esta ação não pode ser desfeita.</strong>`;
+        modalCancel.textContent = 'Manter Histórico';
+        modalConfirm.textContent = 'Sim, Apagar Tudo';
+        modalConfirm.className = 'modal-btn modal-btn-danger';
+        
+        // Exibir o modal
+        modal.style.display = 'flex';
+        
+        // Retornar uma Promise para aguardar a resposta do usuário
+        return new Promise((resolve) => {
+            const cleanUp = () => {
+                modal.style.display = 'none';
+                modalCancel.onclick = null;
+                modalConfirm.onclick = null;
+            };
+            
+            modalCancel.onclick = () => {
+                cleanUp();
+                resolve(false);
+            };
+            
+            modalConfirm.onclick = () => {
+                cleanUp();
+                resolve(true);
+            };
+        }).then(async (confirmed) => {
+            if (confirmed) {
+                await dbOperation('vendas', 'clear');
+                historicoCache = [];
+                showToast('Histórico de vendas apagado com sucesso!', 'success');
+                return true;
+            }
+            return false;
+        });
+        
+    } catch (error) {
+        console.error("Erro ao apagar histórico:", error);
+        showToast("Erro ao apagar histórico: " + error.message, 'error');
+        throw error;
+    }
+}
         // Exporta histórico para Excel
         async function exportarHistoricoParaExcel() {
             try {
