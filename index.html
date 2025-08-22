@@ -1017,7 +1017,395 @@
             border: 1px solid #e2e8f0;
         }
 
+        #valorRecebido {
+            color: #000000 !important;
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1;
+            padding: 0.625rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        #valorRecebido:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+
+        #valorRecebido::placeholder {
+            color: #64748b;
+            opacity: 1;
+        }
+
+        /* Sistema de Notificações Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            width: 90%;
+        }
         
+        .toast {
+            padding: 16px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: flex-start;
+            animation: slideIn 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+            color: white;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .toast::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+        }
+        
+        .toast-success {
+            background-color: rgba(16, 185, 129, 0.95);
+        }
+        
+        .toast-success::before {
+            background-color: #059669;
+        }
+        
+        .toast-error {
+            background-color: rgba(239, 68, 68, 0.95);
+        }
+        
+        .toast-error::before {
+            background-color: #dc2626;
+        }
+        
+        .toast-warning {
+            background-color: rgba(245, 158, 11, 0.95);
+            color: #1e293b;
+        }
+        
+        .toast-warning::before {
+            background-color: #d97706;
+        }
+        
+        .toast-info {
+            background-color: rgba(59, 130, 246, 0.95);
+        }
+        
+        .toast-info::before {
+            background-color: #2563eb;
+        }
+        
+        .toast-icon {
+            margin-right: 14px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+        }
+        
+        .toast-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .toast-content {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.5;
+            padding-right: 10px;
+        }
+        
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 15px;
+            display: block;
+        }
+        
+        .toast-message {
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            color: inherit;
+            opacity: 0.7;
+            cursor: pointer;
+            margin-left: 10px;
+            padding: 4px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .toast-close:hover {
+            opacity: 1;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .toast-close svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.5);
+            width: 100%;
+            transform-origin: left;
+            animation: progressBar 5s linear forwards;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes progressBar {
+            from {
+                transform: scaleX(1);
+            }
+            to {
+                transform: scaleX(0);
+            }
+        }
+        
+        .toast.fade-out {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        /* Notificações agrupadas */
+        .toast-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .toast-group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .toast-group-clear {
+            background: none;
+            border: none;
+            color: inherit;
+            opacity: 0.7;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        
+        .toast-group-clear:hover {
+            opacity: 1;
+        }
+        
+        /* Responsividade para notificações */
+        @media (max-width: 640px) {
+            .toast-container {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+                max-width: none;
+            }
+            
+            .toast {
+                padding: 14px 16px;
+            }
+            
+            .toast-group {
+                max-height: 200px;
+            }
+        }
+        
+        /* Efeito de destaque para notificações importantes */
+        .toast-important {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes progressBar {
+            from {
+                transform: scaleX(1);
+            }
+            to {
+                transform: scaleX(0);
+            }
+        }
+        
+        
+        /* Modal de confirmação estilizado */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+            animation: modalFadeIn 0.2s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+        }
+        
+        .modal-icon {
+            margin-right: 12px;
+            font-size: 24px;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+        
+        .modal-footer {
+            padding: 16px 20px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .modal-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .modal-btn-secondary {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        .modal-btn-secondary:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .modal-btn-primary {
+            background-color: #4f46e5;
+            color: white;
+        }
+        
+        .modal-btn-primary:hover {
+            background-color: #4338ca;
+        }
+        
+        .modal-btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .modal-btn-danger:hover {
+            background-color: #dc2626;
+        }
     </style>
 </head>
 <body>
@@ -1269,14 +1657,14 @@
                         </svg>
                         Apagar Histórico
                     </button>
-                        <button class="btn btn-accent" id="exportarHistoricoBtn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        Exportar para Excel
-    </button>
+                    <button class="btn btn-accent" id="exportarHistoricoBtn" style="margin-left: 10px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Exportar para Excel
+                    </button>
                 </div>
                 <div id="historicoVendas">
                     <div class="loader"></div>
@@ -1378,6 +1766,24 @@
         </div>
     </div>
 
+    <!-- Sistema de Notificações Toast -->
+  <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Modal de confirmação personalizado -->
+    <div class="modal-overlay" id="customModal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <span class="modal-icon" id="modalIcon"></span>
+                <h3 class="modal-title" id="customModalTitle"></h3>
+            </div>
+            <div class="modal-body" id="customModalBody"></div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="customModalCancel"></button>
+                <button class="modal-btn" id="customModalConfirm"></button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Configurações globais
         const DB_NAME = "PDVAdegaDB";
@@ -1438,6 +1844,358 @@
         const tabContents = document.querySelectorAll('.tab-content');
         const categoriaBtns = document.querySelectorAll('.categoria-btn');
 
+        // ===== SISTEMA DE NOTIFICAÇÕES =====
+              let toastQueue = [];
+        let toastGroupTimeout = null;
+        const MAX_VISIBLE_TOASTS = 3;
+        const TOAST_GROUP_DELAY = 3000; // 3 segundos para agrupar notificações
+        
+        // Ícones SVG para os diferentes tipos de notificação
+        const toastIcons = {
+            success: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+            </svg>`,
+            error: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clip-rule="evenodd" />
+            </svg>`,
+            warning: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+            </svg>`,
+            info: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+            </svg>`
+        };
+        
+        const closeIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+        </svg>`;
+        
+        function showToast(message, type = 'info', duration = 5000, options = {}) {
+            const {
+                title = '',
+                important = false,
+                groupWithPrevious = false
+            } = options;
+            
+            const toastData = {
+                id: Date.now() + Math.random(),
+                message,
+                type,
+                duration,
+                title,
+                important,
+                groupWithPrevious,
+                timestamp: Date.now()
+            };
+            
+            // Se for para agrupar com a anterior e houver notificações recentes
+            if (groupWithPrevious && toastQueue.length > 0) {
+                const lastToast = toastQueue[toastQueue.length - 1];
+                if (Date.now() - lastToast.timestamp < TOAST_GROUP_DELAY) {
+                    // Adiciona à fila de grupo
+                    if (!lastToast.group) {
+                        lastToast.group = [lastToast];
+                        lastToast.groupId = lastToast.id;
+                    }
+                    toastData.groupId = lastToast.groupId;
+                    lastToast.group.push(toastData);
+                    
+                    // Atualiza a notificação de grupo existente
+                    updateGroupToast(lastToast.groupId);
+                    return toastData.id;
+                }
+            }
+            
+            // Adiciona à fila
+            toastQueue.push(toastData);
+            
+            // Se já houver muitas notificações visíveis, inicia o agrupamento
+            if (toastQueue.filter(t => !t.groupId).length > MAX_VISIBLE_TOASTS) {
+                startToastGrouping();
+            } else {
+                renderToast(toastData);
+            }
+            
+            return toastData.id;
+        }
+        
+        function renderToast(toastData) {
+            const toastContainer = document.getElementById('toastContainer');
+            
+            // Se for uma notificação de grupo, renderiza o grupo
+            if (toastData.group && toastData.group.length > 1) {
+                renderToastGroup(toastData.group);
+                return;
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${toastData.type} ${toastData.important ? 'toast-important' : ''}`;
+            toast.id = `toast-${toastData.id}`;
+            toast.dataset.toastId = toastData.id;
+            
+            // Construir o conteúdo com título se fornecido
+            let contentHtml = '';
+            if (toastData.title) {
+                contentHtml = `
+                    <span class="toast-title">${toastData.title}</span>
+                    <span class="toast-message">${toastData.message}</span>
+                `;
+            } else {
+                contentHtml = `<span class="toast-message">${toastData.message}</span>`;
+            }
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${toastIcons[toastData.type]}</span>
+                <div class="toast-content">${contentHtml}</div>
+                <button class="toast-close">${closeIcon}</button>
+                ${toastData.duration > 0 ? `<div class="toast-progress"></div>` : ''}
+            `;
+            
+            // Fechar ao clicar no botão
+            const closeBtn = toast.querySelector('.toast-close');
+            closeBtn.addEventListener('click', () => removeToast(toastData.id));
+            
+            // Adicionar à interface
+            toastContainer.appendChild(toast);
+            
+            // Remover automaticamente após a duração especificada
+            if (toastData.duration > 0) {
+                setTimeout(() => {
+                    if (document.getElementById(`toast-${toastData.id}`)) {
+                        removeToast(toastData.id);
+                    }
+                }, toastData.duration);
+            }
+            
+            // Limitar o número de notificações visíveis
+            const allToasts = toastContainer.querySelectorAll('.toast:not(.group-toast)');
+            if (allToasts.length > MAX_VISIBLE_TOASTS) {
+                startToastGrouping();
+            }
+        }
+        
+        function renderToastGroup(toasts) {
+            const toastContainer = document.getElementById('toastContainer');
+            const groupId = toasts[0].groupId;
+            
+            // Remove toasts individuais que estão neste grupo
+            toasts.forEach(t => {
+                const individualToast = document.getElementById(`toast-${t.id}`);
+                if (individualToast) {
+                    individualToast.remove();
+                }
+            });
+            
+            // Cria o container do grupo
+            const groupToast = document.createElement('div');
+            groupToast.className = `toast-group`;
+            groupToast.id = `toast-group-${groupId}`;
+            
+            // Cabeçalho do grupo
+            const groupHeader = document.createElement('div');
+            groupHeader.className = 'toast-group-header';
+            groupHeader.innerHTML = `
+                <span>${toasts.length} notificaçõe(s)</span>
+                <button class="toast-group-clear">Limpar todas</button>
+            `;
+            
+            groupToast.appendChild(groupHeader);
+            
+            // Adiciona cada notificação ao grupo
+            toasts.forEach(t => {
+                const toastElement = document.createElement('div');
+                toastElement.className = `toast toast-${t.type}`;
+                
+                let contentHtml = '';
+                if (t.title) {
+                    contentHtml = `
+                        <span class="toast-title">${t.title}</span>
+                        <span class="toast-message">${t.message}</span>
+                    `;
+                } else {
+                    contentHtml = `<span class="toast-message">${t.message}</span>`;
+                }
+                
+                toastElement.innerHTML = `
+                    <span class="toast-icon">${toastIcons[t.type]}</span>
+                    <div class="toast-content">${contentHtml}</div>
+                `;
+                
+                groupToast.appendChild(toastElement);
+            });
+            
+            // Evento para limpar o grupo
+            const clearBtn = groupToast.querySelector('.toast-group-clear');
+            clearBtn.addEventListener('click', () => {
+                toasts.forEach(t => {
+                    removeToastFromQueue(t.id);
+                });
+                groupToast.remove();
+            });
+            
+            // Adiciona o grupo à interface
+            toastContainer.appendChild(groupToast);
+            
+            // Remove o grupo após um tempo
+            setTimeout(() => {
+                if (document.getElementById(`toast-group-${groupId}`)) {
+                    toasts.forEach(t => removeToastFromQueue(t.id));
+                    groupToast.remove();
+                }
+            }, toasts[0].duration);
+        }
+        
+        function startToastGrouping() {
+            if (toastGroupTimeout) clearTimeout(toastGroupTimeout);
+            
+            toastGroupTimeout = setTimeout(() => {
+                const recentToasts = toastQueue.filter(t => 
+                    !t.groupId && Date.now() - t.timestamp < TOAST_GROUP_DELAY
+                );
+                
+                if (recentToasts.length > 1) {
+                    // Cria um grupo com as notificações recentes
+                    const groupId = 'group-' + Date.now();
+                    recentToasts.forEach(t => {
+                        t.groupId = groupId;
+                    });
+                    
+                    const groupToast = {
+                        id: groupId,
+                        group: recentToasts,
+                        groupId: groupId,
+                        timestamp: Date.now(),
+                        type: recentToasts[0].type // Usa o tipo da primeira notificação
+                    };
+                    
+                    // Remove as notificações individuais
+                    recentToasts.forEach(t => {
+                        const individualToast = document.getElementById(`toast-${t.id}`);
+                        if (individualToast) {
+                            individualToast.remove();
+                        }
+                    });
+                    
+                    // Renderiza o grupo
+                    renderToastGroup(recentToasts);
+                }
+            }, TOAST_GROUP_DELAY);
+        }
+        
+        function updateGroupToast(groupId) {
+            const groupToasts = toastQueue.filter(t => t.groupId === groupId);
+            const groupContainer = document.getElementById(`toast-group-${groupId}`);
+            
+            if (groupContainer && groupToasts.length > 0) {
+                // Atualiza o cabeçalho com a nova contagem
+                const header = groupContainer.querySelector('.toast-group-header span');
+                if (header) {
+                    header.textContent = `${groupToasts.length} notificaçõe(s)`;
+                }
+                
+                // Adiciona a nova notificação ao grupo
+                const newToast = groupToasts[groupToasts.length - 1];
+                const toastElement = document.createElement('div');
+                toastElement.className = `toast toast-${newToast.type}`;
+                
+                let contentHtml = '';
+                if (newToast.title) {
+                    contentHtml = `
+                        <span class="toast-title">${newToast.title}</span>
+                        <span class="toast-message">${newToast.message}</span>
+                    `;
+                } else {
+                    contentHtml = `<span class="toast-message">${newToast.message}</span>`;
+                }
+                
+                toastElement.innerHTML = `
+                    <span class="toast-icon">${toastIcons[newToast.type]}</span>
+                    <div class="toast-content">${contentHtml}</div>
+                `;
+                
+                groupContainer.appendChild(toastElement);
+            }
+        }
+        
+        function removeToast(id) {
+            const toast = document.getElementById(`toast-${id}`);
+            if (toast) {
+                toast.classList.add('fade-out');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                    removeToastFromQueue(id);
+                }, 300);
+            }
+            
+            // Também remove do grupo se existir
+            const toastData = toastQueue.find(t => t.id === id);
+            if (toastData && toastData.groupId) {
+                removeToastFromQueue(id);
+                
+                // Atualiza o grupo se ainda existir
+                const groupToasts = toastQueue.filter(t => t.groupId === toastData.groupId);
+                if (groupToasts.length > 0) {
+                    updateGroupToast(toastData.groupId);
+                } else {
+                    // Remove o container do grupo se estiver vazio
+                    const groupContainer = document.getElementById(`toast-group-${toastData.groupId}`);
+                    if (groupContainer) {
+                        groupContainer.remove();
+                    }
+                }
+            }
+        }
+        
+        function removeToastFromQueue(id) {
+            toastQueue = toastQueue.filter(t => t.id !== id);
+        }
+        
+        // Função para demonstrar o novo sistema de notificações (para teste)
+        function demoNotificationSystem() {
+            // Notificação simples
+            showToast('Operação concluída com sucesso!', 'success');
+            
+            // Notificação com título
+            setTimeout(() => {
+                showToast('Dados salvos no banco de dados', 'info', 5000, {
+                    title: 'Backup realizado'
+                });
+            }, 800);
+            
+            // Notificação de erro importante
+            setTimeout(() => {
+                showToast('Falha na conexão com o servidor', 'error', 7000, {
+                    title: 'Erro de rede',
+                    important: true
+                });
+            }, 1600);
+            
+            // Notificações agrupadas
+            setTimeout(() => {
+                showToast('Produto #001 adicionado ao carrinho', 'info', 4000, { 
+                    groupWithPrevious: true 
+                });
+            }, 2500);
+            
+            setTimeout(() => {
+                showToast('Produto #002 adicionado ao carrinho', 'info', 4000, { 
+                    groupWithPrevious: true 
+                });
+            }, 2800);
+            
+            setTimeout(() => {
+                showToast('Produto #003 adicionado ao carrinho', 'info', 4000, { 
+                    groupWithPrevious: true 
+                });
+            }, 3100);
+        }
+        
+        // [O resto do código JavaScript anterior permanece igual]
+        
+        // Adicione esta linha no final da função init() para testar as notificações:
+        // demoNotificationSystem();
         // Função para abrir o banco de dados
         async function openDatabase() {
             return new Promise((resolve, reject) => {
@@ -1662,7 +2420,7 @@
         async function adicionarAoCarrinho(produto) {
             // Verifica se há estoque disponível
             if (produto.estoque <= 0) {
-                alert('Este produto está esgotado!');
+                showToast('Este produto está esgotado!', 'error');
                 return;
             }
             
@@ -1671,7 +2429,7 @@
             
             if (itemExistente) {
                 if (itemExistente.quantidade >= produto.estoque) {
-                    alert(`Não há estoque suficiente! Restam apenas ${produto.estoque} unidades.`);
+                    showToast(`Não há estoque suficiente! Restam apenas ${produto.estoque} unidades.`, 'warning');
                     return;
                 }
                 itemExistente.quantidade += 1;
@@ -1692,6 +2450,8 @@
             atualizarCarrinho();
             searchInput.value = '';
             searchInput.focus();
+            
+            showToast(`${produto.nome} adicionado ao carrinho`, 'success');
         }
 
         // Atualiza a exibição do carrinho
@@ -1743,6 +2503,8 @@
                 await adicionarAoCarrinho(produto);
                 return true;
             }
+            
+            showToast('Produto não encontrado com este código de barras!', 'error');
             return false;
         }
 
@@ -1756,7 +2518,7 @@
                 const produtoOriginal = produtos.find(p => p.id === id);
                 
                 if (mudanca > 0 && (item.quantidade + mudanca) > produtoOriginal.estoque) {
-                    alert(`Não há estoque suficiente! Restam apenas ${produtoOriginal.estoque} unidades.`);
+                    showToast(`Não há estoque suficiente! Restam apenas ${produtoOriginal.estoque} unidades.`, 'warning');
                     return;
                 }
                 
@@ -1788,6 +2550,7 @@
             }
             
             atualizarCarrinho();
+            showToast('Item removido do carrinho', 'info');
         }
 
         // Atualiza o valor do troco
@@ -1842,7 +2605,7 @@
         async function finalizarVenda() {
             const carrinho = await getCarrinho();
             if (carrinho.length === 0) {
-                alert('Adicione itens à venda antes de finalizar!');
+                showToast('Adicione itens à venda antes de finalizar!', 'warning');
                 return;
             }
             
@@ -1853,7 +2616,7 @@
                 const recebido = parseFloat(valorRecebido.value) || 0;
                 
                 if (recebido < total) {
-                    alert('O valor recebido é menor que o total da venda!');
+                    showToast('O valor recebido é menor que o total da venda!', 'error');
                     return;
                 }
             }
@@ -1866,7 +2629,6 @@
             const carrinho = await getCarrinho();
             const total = await calcularTotal();
             const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
-            let mensagem = `Venda finalizada com sucesso!\nTotal: ${formatarMoeda(total)}\nForma de Pagamento: `;
             
             // Atualizar estoque dos produtos vendidos
             const produtos = await getProdutos();
@@ -1897,18 +2659,21 @@
             await dbOperation('vendas', 'add', novaVenda);
             historicoCache.unshift(novaVenda);
             
+            // Mensagem de sucesso personalizada
+            let mensagem = `Venda finalizada com sucesso!<br><strong>Total: ${formatarMoeda(total)}</strong><br>Forma de Pagamento: `;
+            
             switch(formaPagamento) {
                 case 'dinheiro':
                     const recebido = parseFloat(valorRecebido.value) || 0;
                     const troco = recebido - total;
-                    mensagem += `Dinheiro\nValor Recebido: ${formatarMoeda(recebido)}\nTroco: ${formatarMoeda(troco > 0 ? troco : 0)}`;
+                    mensagem += `Dinheiro<br>Valor Recebido: ${formatarMoeda(recebido)}<br>Troco: ${formatarMoeda(troco > 0 ? troco : 0)}`;
                     break;
                 case 'debito': mensagem += 'Cartão de Débito'; break;
                 case 'credito': mensagem += 'Cartão de Crédito'; break;
                 case 'pix': mensagem += 'PIX'; break;
             }
             
-            alert(mensagem);
+            showToast(mensagem, 'success', 7000);
             
             // Limpar carrinho
             carrinhoCache = [];
@@ -1935,7 +2700,21 @@
         // Cancela a venda
         async function cancelarVenda() {
             const carrinho = await getCarrinho();
-            if (carrinho.length === 0 || confirm('Tem certeza que deseja cancelar esta venda?')) {
+            
+            if (carrinho.length === 0) {
+                showToast('O carrinho já está vazio', 'info');
+                return;
+            }
+            
+            const confirmed = await showModal({
+                title: 'Cancelar Venda',
+                message: 'Tem certeza que deseja cancelar esta venda?',
+                type: 'warning',
+                confirmText: 'Sim, Cancelar',
+                cancelText: 'Manter Venda'
+            });
+            
+            if (confirmed) {
                 // Restaurar estoque dos produtos no carrinho
                 const produtos = await getProdutos();
                 for (const item of carrinho) {
@@ -1958,6 +2737,8 @@
                 pagamentoDinheiro.checked = true;
                 valorRecebido.value = '';
                 searchInput.focus();
+                
+                showToast('Venda cancelada com sucesso', 'success');
             }
         }
 
@@ -2044,7 +2825,15 @@
 
         // Remove um produto
         async function removerProduto(id) {
-            if (confirm('Tem certeza que deseja remover este produto?')) {
+            const confirmed = await showModal({
+                title: 'Remover Produto',
+                message: 'Tem certeza que deseja remover este produto?',
+                type: 'warning',
+                confirmText: 'Sim, Remover',
+                cancelText: 'Manter Produto'
+            });
+            
+            if (confirmed) {
                 await dbOperation('produtos', 'delete', id);
                 produtosCache = produtosCache.filter(produto => produto.id !== id);
                 
@@ -2064,6 +2853,8 @@
                 if (produtoEmEdicao && produtoEmEdicao.id === id) {
                     cancelarEdicao();
                 }
+                
+                showToast('Produto removido com sucesso', 'success');
             }
         }
 
@@ -2078,20 +2869,20 @@
                 const jsonData = XLSX.utils.sheet_to_json(firstSheet);
                 
                 if (jsonData.length === 0) {
-                    alert('O arquivo Excel está vazio ou não está no formato correto!');
+                    showToast('O arquivo Excel está vazio ou não está no formato correto!', 'error');
                     return;
                 }
                 
                 const primeiraLinha = jsonData[0];
                 if (!('Nome' in primeiraLinha) || !('Preço' in primeiraLinha) || !('Categoria' in primeiraLinha)) {
-                    alert('O arquivo Excel deve conter as colunas: Nome, Preço e Categoria!');
+                    showToast('O arquivo Excel deve conter as colunas: Nome, Preço e Categoria!', 'error');
                     return;
                 }
                 
                 const produtosParaImportar = jsonData.map(linha => {
                     const estoque = parseInt(linha['Estoque']) || 0;
                     if (estoque < 0) {
-                        alert(`Estoque negativo não permitido para o produto ${linha['Nome']}. Definido como 0.`);
+                        showToast(`Estoque negativo não permitido para o produto ${linha['Nome']}. Definido como 0.`, 'warning');
                     }
                     
                     return {
@@ -2106,7 +2897,7 @@
                 }).filter(produto => produto.nome && produto.preco > 0);
                 
                 if (produtosParaImportar.length === 0) {
-                    alert('Nenhum produto válido encontrado no arquivo!');
+                    showToast('Nenhum produto válido encontrado no arquivo!', 'error');
                     return;
                 }
                 
@@ -2121,14 +2912,14 @@
                         
                         produtosCache = [...produtosCache, ...produtosParaImportar];
                         renderProdutosCadastrados();
-                        alert(`${produtosParaImportar.length} produtos importados com sucesso!`);
+                        showToast(`${produtosParaImportar.length} produtos importados com sucesso!`, 'success');
                         
                         fileInputInfo.textContent = 'Nenhum arquivo selecionado';
                         importarProdutosBtn.style.display = 'none';
                         excelFileInput.value = '';
                     } catch (error) {
                         console.error("Erro ao importar produtos:", error);
-                        alert("Erro ao importar produtos. Verifique se há códigos de barras duplicados.");
+                        showToast("Erro ao importar produtos. Verifique se há códigos de barras duplicados.", 'error');
                     }
                 };
             };
@@ -2225,7 +3016,7 @@
             scannerTimeout = setTimeout(() => {
                 if (scannerAtivo) {
                     pararScanner();
-                    alert('Scanner atingiu o tempo limite. Por favor, tente novamente.');
+                    showToast('Scanner atingiu o tempo limite. Por favor, tente novamente.', 'error');
                 }
             }, 30000);
             
@@ -2258,7 +3049,7 @@
                     
                     if (abaAtiva === 'pdv') {
                         if (!adicionarPorCodigo(codigo)) {
-                            alert('Produto não encontrado com este código de barras!');
+                            showToast('Produto não encontrado com este código de barras!', 'error');
                         }
                     } else if (abaAtiva === 'cadastro') {
                         produtoCodigoInput.value = codigo;
@@ -2268,7 +3059,7 @@
             } catch (error) {
                 console.error("Erro no scanner:", error);
                 pararScanner();
-                alert("Erro ao iniciar o scanner. Verifique as permissões da câmera.");
+                showToast("Erro ao iniciar o scanner. Verifique as permissões da câmera.", 'error');
             }
         }
         
@@ -2315,10 +3106,10 @@
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
                 
-                alert('Banco de dados exportado com sucesso!');
+                showToast('Banco de dados exportado com sucesso!', 'success');
             } catch (error) {
                 console.error('Erro ao exportar banco de dados:', error);
-                alert('Erro ao exportar banco de dados: ' + error.message);
+                showToast('Erro ao exportar banco de dados: ' + error.message, 'error');
             }
         }
 
@@ -2354,23 +3145,167 @@
                         historicoCache = data.vendas || [];
                         carrinhoCache = data.carrinho || [];
                         
-                        alert('Banco de dados importado com sucesso!');
+                        showToast('Banco de dados importado com sucesso!', 'success');
                         resolve();
                     } catch (error) {
                         console.error('Erro ao importar banco de dados:', error);
-                        alert('Erro ao importar banco de dados: ' + error.message);
+                        showToast('Erro ao importar banco de dados: ' + error.message, 'error');
                         reject(error);
                     }
                 };
                 
                 reader.onerror = (error) => {
                     console.error('Erro ao ler arquivo:', error);
-                    alert('Erro ao ler arquivo: ' + error.message);
+                    showToast('Erro ao ler arquivo: ' + error.message, 'error');
                     reject(error);
                 };
                 
                 reader.readAsText(file);
             });
+        }
+
+        // Função para limpar o histórico de vendas
+        async function limparHistorico() {
+            try {
+                const historico = await getHistorico();
+                if (historico.length === 0) {
+                    showToast('Nenhuma venda no histórico para apagar!', 'info');
+                    return true;
+                }
+                
+                const confirmed = await showModal({
+                    title: 'Apagar Histórico',
+                    message: `Deseja apagar TODAS as ${historico.length} vendas do histórico?<br><strong>Esta ação não pode ser desfeita.</strong>`,
+                    type: 'danger',
+                    confirmText: 'Sim, Apagar Tudo',
+                    cancelText: 'Manter Histórico'
+                });
+                
+                if (confirmed) {
+                    await dbOperation('vendas', 'clear');
+                    historicoCache = [];
+                    showToast('Histórico de vendas apagado com sucesso!', 'success');
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error("Erro ao apagar histórico:", error);
+                showToast("Erro ao apagar histórico: " + error.message, 'error');
+                throw error;
+            }
+        }
+
+        // Exporta histórico para Excel
+        async function exportarHistoricoParaExcel() {
+            try {
+                const historico = await getHistorico();
+                if (historico.length === 0) {
+                    showToast('Nenhuma venda no histórico para exportar!', 'info');
+                    return;
+                }
+
+                // Preparar os dados para a planilha
+                const dados = [];
+                
+                // Cabeçalho
+                dados.push([
+                    'Data', 'ID Venda', 'Total', 'Forma de Pagamento', 
+                    'Valor Recebido', 'Troco', 'Quantidade de Itens', 
+                    'Itens (Nome x Quantidade)', 'Valor dos Itens'
+                ]);
+
+                // Linhas de dados
+                historico.forEach(venda => {
+                    const itensTexto = venda.itens.map(item => 
+                        `${item.nome} x${item.quantidade}`).join(', ');
+                    const valoresItens = venda.itens.map(item => 
+                        `${formatarMoeda(item.preco * item.quantidade)}`).join(', ');
+                    
+                    dados.push([
+                        formatarData(venda.data),
+                        venda.id,
+                        venda.total,
+                        formatarFormaPagamento(venda.formaPagamento),
+                        venda.formaPagamento === 'dinheiro' ? venda.valorRecebido : 'N/A',
+                        venda.formaPagamento === 'dinheiro' ? (venda.troco || 0) : 'N/A',
+                        venda.itens.reduce((sum, item) => sum + item.quantidade, 0),
+                        itensTexto,
+                        valoresItens
+                    ]);
+                });
+
+                // Criar a planilha
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(dados);
+                
+                // Estilizar a planilha
+                // Definir largura das colunas
+                const wscols = [
+                    {wch: 20}, // Data
+                    {wch: 10}, // ID Venda
+                    {wch: 12}, // Total
+                    {wch: 18}, // Forma de Pagamento
+                    {wch: 15}, // Valor Recebido
+                    {wch: 12}, // Troco
+                    {wch: 18}, // Quantidade de Itens
+                    {wch: 40}, // Itens
+                    {wch: 30}  // Valor dos Itens
+                ];
+                ws['!cols'] = wscols;
+
+                // Adicionar cabeçalho estilizado
+                for (let i = 0; i < dados[0].length; i++) {
+                    const cellRef = XLSX.utils.encode_cell({r: 0, c: i});
+                    if (!ws[cellRef]) continue;
+                    
+                    ws[cellRef].s = {
+                        font: { bold: true, color: { rgb: "FFFFFF" } },
+                        fill: { fgColor: { rgb: "4f46e5" } },
+                        alignment: { horizontal: "center" }
+                    };
+                }
+
+                // Alternar cores das linhas
+                for (let r = 1; r < dados.length; r++) {
+                    for (let c = 0; c < dados[r].length; c++) {
+                        const cellRef = XLSX.utils.encode_cell({r: r, c: c});
+                        if (!ws[cellRef]) continue;
+                        
+                        ws[cellRef].s = {
+                            fill: { fgColor: { rgb: r % 2 === 0 ? "f3f4f6" : "ffffff" } },
+                            border: {
+                                top: { style: "thin", color: { rgb: "e5e7eb" } },
+                                bottom: { style: "thin", color: { rgb: "e5e7eb" } },
+                                left: { style: "thin", color: { rgb: "e5e7eb" } },
+                                right: { style: "thin", color: { rgb: "e5e7eb" } }
+                            }
+                        };
+                    }
+                }
+
+                // Formatar células de valores monetários
+                const formatMoeda = '"R$"#,##0.00';
+                [2, 4, 5].forEach(col => { // Colunas Total, Valor Recebido, Troco
+                    for (let r = 1; r < dados.length; r++) {
+                        const cellRef = XLSX.utils.encode_cell({r: r, c: col});
+                        if (ws[cellRef]) {
+                            ws[cellRef].t = 'n';
+                            ws[cellRef].z = formatMoeda;
+                        }
+                    }
+                });
+
+                XLSX.utils.book_append_sheet(wb, ws, "Historico_Vendas");
+
+                // Gerar o arquivo Excel
+                const dataAtual = new Date().toISOString().split('T')[0];
+                XLSX.writeFile(wb, `Historico_Vendas_${dataAtual}.xlsx`);
+                showToast('Histórico exportado com sucesso!', 'success');
+
+            } catch (error) {
+                console.error("Erro ao exportar histórico:", error);
+                showToast("Erro ao exportar histórico: " + error.message, 'error');
+            }
         }
 
         // Funções auxiliares
@@ -2447,118 +3382,6 @@
                 default: return forma;
             }
         }
-
-// Adicione isso na seção de funções auxiliares
-async function exportarHistoricoParaExcel() {
-    try {
-        const historico = await getHistorico();
-        if (historico.length === 0) {
-            alert('Nenhuma venda no histórico para exportar!');
-            return;
-        }
-
-        // Preparar os dados para a planilha
-        const dados = [];
-        
-        // Cabeçalho
-        dados.push([
-            'Data', 'ID Venda', 'Total', 'Forma de Pagamento', 
-            'Valor Recebido', 'Troco', 'Quantidade de Itens', 
-            'Itens (Nome x Quantidade)', 'Valor dos Itens'
-        ]);
-
-        // Linhas de dados
-        historico.forEach(venda => {
-            const itensTexto = venda.itens.map(item => 
-                `${item.nome} x${item.quantidade}`).join(', ');
-            const valoresItens = venda.itens.map(item => 
-                `${formatarMoeda(item.preco * item.quantidade)}`).join(', ');
-            
-            dados.push([
-                formatarData(venda.data),
-                venda.id,
-                venda.total,
-                formatarFormaPagamento(venda.formaPagamento),
-                venda.formaPagamento === 'dinheiro' ? venda.valorRecebido : 'N/A',
-                venda.formaPagamento === 'dinheiro' ? (venda.troco || 0) : 'N/A',
-                venda.itens.reduce((sum, item) => sum + item.quantidade, 0),
-                itensTexto,
-                valoresItens
-            ]);
-        });
-
-        // Criar a planilha
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.aoa_to_sheet(dados);
-        
-        // Estilizar a planilha
-        // Definir largura das colunas
-        const wscols = [
-            {wch: 20}, // Data
-            {wch: 10}, // ID Venda
-            {wch: 12}, // Total
-            {wch: 18}, // Forma de Pagamento
-            {wch: 15}, // Valor Recebido
-            {wch: 12}, // Troco
-            {wch: 18}, // Quantidade de Itens
-            {wch: 40}, // Itens
-            {wch: 30}  // Valor dos Itens
-        ];
-        ws['!cols'] = wscols;
-
-        // Adicionar cabeçalho estilizado
-        for (let i = 0; i < dados[0].length; i++) {
-            const cellRef = XLSX.utils.encode_cell({r: 0, c: i});
-            if (!ws[cellRef]) continue;
-            
-            ws[cellRef].s = {
-                font: { bold: true, color: { rgb: "FFFFFF" } },
-                fill: { fgColor: { rgb: "4f46e5" } },
-                alignment: { horizontal: "center" }
-            };
-        }
-
-        // Alternar cores das linhas
-        for (let r = 1; r < dados.length; r++) {
-            for (let c = 0; c < dados[r].length; c++) {
-                const cellRef = XLSX.utils.encode_cell({r: r, c: c});
-                if (!ws[cellRef]) continue;
-                
-                ws[cellRef].s = {
-                    fill: { fgColor: { rgb: r % 2 === 0 ? "f3f4f6" : "ffffff" } },
-                    border: {
-                        top: { style: "thin", color: { rgb: "e5e7eb" } },
-                        bottom: { style: "thin", color: { rgb: "e5e7eb" } },
-                        left: { style: "thin", color: { rgb: "e5e7eb" } },
-                        right: { style: "thin", color: { rgb: "e5e7eb" } }
-                    }
-                };
-            }
-        }
-
-        // Formatar células de valores monetários
-        const formatMoeda = '"R$"#,##0.00';
-        [2, 4, 5].forEach(col => { // Colunas Total, Valor Recebido, Troco
-            for (let r = 1; r < dados.length; r++) {
-                const cellRef = XLSX.utils.encode_cell({r: r, c: col});
-                if (ws[cellRef]) {
-                    ws[cellRef].t = 'n';
-                    ws[cellRef].z = formatMoeda;
-                }
-            }
-        });
-
-        XLSX.utils.book_append_sheet(wb, ws, "Historico_Vendas");
-
-        // Gerar o arquivo Excel
-        const dataAtual = new Date().toISOString().split('T')[0];
-        XLSX.writeFile(wb, `Historico_Vendas_${dataAtual}.xlsx`);
-
-    } catch (error) {
-        console.error("Erro ao exportar histórico:", error);
-        alert("Erro ao exportar histórico: " + error.message);
-    }
-}
 
         // Configura atalhos do teclado
         function configurarAtalhosTeclado() {
@@ -2642,11 +3465,8 @@ async function exportarHistoricoParaExcel() {
                     if (e.key === 'Enter') {
                         const codigo = this.value;
                         if (codigo.length >= 8) {
-                            if (adicionarPorCodigo(codigo)) {
-                                this.value = '';
-                            } else {
-                                alert('Produto não encontrado com este código de barras!');
-                            }
+                            adicionarPorCodigo(codigo);
+                            this.value = '';
                         }
                     }
                 });
@@ -2706,7 +3526,7 @@ async function exportarHistoricoParaExcel() {
                         renderProdutosCadastrados();
                         cancelarEdicao();
                         
-                        alert('Produto atualizado com sucesso!');
+                        showToast('Produto atualizado com sucesso!', 'success');
                     } else {
                         // Criar novo produto
                         const novoProduto = {
@@ -2726,7 +3546,7 @@ async function exportarHistoricoParaExcel() {
                         formProduto.reset();
                         document.getElementById('produtoEstoque').value = '0';
                         
-                        alert('Produto cadastrado com sucesso!');
+                        showToast('Produto cadastrado com sucesso!', 'success');
                     }
                 });
 
@@ -2739,7 +3559,7 @@ async function exportarHistoricoParaExcel() {
                     if (!file) return;
                     
                     if (!file.name.match(/\.(xlsx|xls|csv)$/)) {
-                        alert('Por favor, selecione um arquivo Excel (.xlsx, .xls) ou CSV!');
+                        showToast('Por favor, selecione um arquivo Excel (.xlsx, .xls) ou CSV!', 'error');
                         return;
                     }
                     
@@ -2761,23 +3581,17 @@ async function exportarHistoricoParaExcel() {
 
                 pagarHistoricoBtn.addEventListener('click', async function() {
                     try {
-                        const historico = await getHistorico();
-                        if (historico.length === 0) {
-                            alert('Nenhuma venda no histórico para apagar!');
-                            return;
-                        }
-                        
-                        if (confirm(`Deseja apagar TODAS as ${historico.length} vendas do histórico? Esta ação não pode ser desfeita.`)) {
-                            await limparHistorico();
-                            alert('Histórico de vendas apagado com sucesso!');
+                        const success = await limparHistorico();
+                        if (success) {
                             renderHistorico();
                         }
                     } catch (error) {
                         console.error("Erro ao apagar histórico:", error);
-                        alert("Erro ao apagar histórico: " + error.message);
                     }
                 });
 
+                exportarHistoricoBtn.addEventListener('click', exportarHistoricoParaExcel);
+                
                 exportDatabaseBtn.addEventListener('click', exportDatabase);
                 
                 databaseFileInput.addEventListener('change', async (e) => {
@@ -2856,12 +3670,9 @@ async function exportarHistoricoParaExcel() {
                 
             } catch (error) {
                 console.error("Erro na inicialização:", error);
-                alert("Erro ao carregar o aplicativo. Por favor, recarregue a página.");
+                showToast("Erro ao carregar o aplicativo. Por favor, recarregue a página.", 'error');
             }
         }
-
-        // Adicione isso na função init(), na seção de configuração de eventos
-document.getElementById('exportarHistoricoBtn').addEventListener('click', exportarHistoricoParaExcel);
 
         // Inicia o aplicativo quando o DOM estiver carregado
         document.addEventListener('DOMContentLoaded', init);
