@@ -948,7 +948,6 @@
             .tabs {
                 width: 100%;
                 overflow-x: auto;
-                padding-bottom: 0.25rem;
             }
             
             .cadastro-form {
@@ -2054,7 +2053,7 @@
                 );
                 
                 if (recentToasts.length > 1) {
-                    // Cria um grupo com as notificações recentes
+                    // Cria um grupo avec as notificações recentes
                     const groupId = 'group-' + Date.now();
                     recentToasts.forEach(t => {
                         t.groupId = groupId;
@@ -2562,7 +2561,7 @@
             valorTroco.textContent = formatarMoeda(troco > 0 ? troco : 0);
         }
 
-        // Calcula o total da venda
+        // Calcula the total da venda
         async function calcularTotal() {
             const carrinho = await getCarrinho();
             return carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
@@ -2938,32 +2937,32 @@
                 return;
             }
             
-            const meses = agruparPorMes(historico);
+            // Agrupa as vendas por dia
+            const vendasPorDia = agruparVendasPorDia(historico);
             
-            for (const mesAno in meses) {
-                const mes = meses[mesAno];
+            // Cria uma seção para cada dia
+            for (const [data, vendas] of Object.entries(vendasPorDia)) {
+                const diaContainer = document.createElement('div');
+                diaContainer.className = 'historico-mes';
                 
-                const mesContainer = document.createElement('div');
-                mesContainer.className = 'historico-mes';
-                
-                const mesTitle = document.createElement('div');
-                mesTitle.className = 'historico-mes-title';
-                mesTitle.innerHTML = `
-                    <span>${mes.nome}</span>
-                    <span>${mes.vendas.length} venda(s)</span>
+                const diaTitle = document.createElement('div');
+                diaTitle.className = 'historico-mes-title';
+                diaTitle.innerHTML = `
+                    <span>${formatarDataParaExibicao(data)}</span>
+                    <span>${vendas.length} venda(s) - Total: ${formatarMoeda(vendas.reduce((sum, v) => sum + v.total, 0))}</span>
                 `;
                 
-                const mesContent = document.createElement('div');
-                mesContent.className = 'historico-mes-content';
+                const diaContent = document.createElement('div');
+                diaContent.className = 'historico-mes-content';
                 
-                mes.vendas.forEach(venda => {
+                vendas.forEach(venda => {
                     const vendaElement = document.createElement('div');
                     vendaElement.className = 'historico-venda';
                     
                     const vendaHeader = document.createElement('div');
                     vendaHeader.className = 'historico-venda-header';
                     vendaHeader.innerHTML = `
-                        <span>${formatarData(venda.data)}</span>
+                        <span>${formatarHora(venda.data)}</span>
                         <span>${formatarMoeda(venda.total)}</span>
                     `;
                     
@@ -2993,17 +2992,60 @@
                     vendaElement.appendChild(vendaHeader);
                     vendaElement.appendChild(vendaItens);
                     vendaElement.appendChild(vendaFooter);
-                    mesContent.appendChild(vendaElement);
+                    diaContent.appendChild(vendaElement);
                 });
                 
-                mesTitle.addEventListener('click', () => {
-                    mesContent.classList.toggle('active');
+                diaTitle.addEventListener('click', () => {
+                    diaContent.classList.toggle('active');
                 });
                 
-                mesContainer.appendChild(mesTitle);
-                mesContainer.appendChild(mesContent);
-                container.appendChild(mesContainer);
+                diaContainer.appendChild(diaTitle);
+                diaContainer.appendChild(diaContent);
+                container.appendChild(diaContainer);
             }
+        }
+
+        // Agrupa vendas por dia
+        function agruparVendasPorDia(vendas) {
+            const vendasPorDia = {};
+            
+            vendas.forEach(venda => {
+                const data = new Date(venda.data);
+                const dataFormatada = data.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+                
+                if (!vendasPorDia[dataFormatada]) {
+                    vendasPorDia[dataFormatada] = [];
+                }
+                
+                vendasPorDia[dataFormatada].push(venda);
+            });
+            
+            return vendasPorDia;
+        }
+
+        // Formata a data para exibição (ex: "Segunda-feira, 01/01/2023")
+        function formatarDataParaExibicao(dataString) {
+            const data = new Date(dataString);
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit',
+                timeZone: 'UTC'
+            };
+            
+            const dataFormatada = data.toLocaleDateString('pt-BR', options);
+            return dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
+        }
+
+        // Formata apenas a hora para exibição (ex: "14:30")
+        function formatarHora(dataString) {
+            const data = new Date(dataString);
+            return data.toLocaleTimeString('pt-BR', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                timeZone: 'UTC'
+            });
         }
 
         // Scanner de código de barras
@@ -3381,28 +3423,6 @@ async function limparHistorico() {
             const digitoVerificador = (10 - (soma % 10)) % 10;
             
             return codigoSemDigito + digitoVerificador;
-        }
-
-        function agruparPorMes(vendas) {
-            const meses = {};
-            
-            vendas.forEach(venda => {
-                const data = new Date(venda.data);
-                const mes = (data.getMonth() + 1).toString().padStart(2, '0');
-                const mesAno = `${mes}/${data.getFullYear()}`;
-                const nomeMes = data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-                
-                if (!meses[mesAno]) {
-                    meses[mesAno] = {
-                        nome: nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1),
-                        vendas: []
-                    };
-                }
-                
-                meses[mesAno].vendas.push(venda);
-            });
-            
-            return meses;
         }
 
         function formatarFormaPagamento(forma) {
