@@ -1656,6 +1656,14 @@
                         </svg>
                         Apagar Histórico
                     </button>
+                    <button class="btn btn-accent" id="fecharMesBtn" style="margin-left: 10px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                            <polyline points="5 12 12 5 19 12"></polyline>
+                        </svg>
+                       Fechar Mês
+                    </button>
+                    </button>
                     <button class="btn btn-accent" id="exportarHistoricoBtn" style="margin-left: 10px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -1823,6 +1831,7 @@
         const historicoVendasContainer = document.getElementById('historicoVendas');
         const pagarHistoricoBtn = document.getElementById('pagarHistoricoBtn');
         const exportarHistoricoBtn = document.getElementById('exportarHistoricoBtn');
+        const fecharMesBtn = document.getElementById('fecharMesBtn');
         const barcodeScanner = document.getElementById('barcodeScanner');
         const barcodeScannerVideo = document.getElementById('barcodeScannerVideo');
         const closeBarcodeScanner = document.getElementById('closeBarcodeScanner');
@@ -3434,6 +3443,194 @@ async function limparHistorico() {
                 default: return forma;
             }
         }
+  
+// Função para fechar o mês - calcula totais e abre relatório
+async function fecharMes() {
+    try {
+        const historico = await getHistorico();
+        
+        // Obter primeiro e último dia do mês atual
+        const hoje = new Date();
+        const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+        const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+        
+        // Filtrar vendas do mês atual
+        const vendasDoMes = historico.filter(venda => {
+            const dataVenda = new Date(venda.data);
+            return dataVenda >= primeiroDiaMes && dataVenda <= ultimoDiaMes;
+        });
+        
+        if (vendasDoMes.length === 0) {
+            showToast('Nenhuma venda encontrada para o mês atual!', 'info');
+            return;
+        }
+        
+        // Calcular totais e estatísticas
+        const totalVendas = vendasDoMes.reduce((sum, venda) => sum + venda.total, 0);
+        const totalItensVendidos = vendasDoMes.reduce((sum, venda) => 
+            sum + venda.itens.reduce((itemSum, item) => itemSum + item.quantidade, 0), 0);
+        
+        // Calcular ticket médio
+        const ticketMedio = totalVendas / vendasDoMes.length;
+        
+        // Calcular totais por forma de pagamento
+        const totaisPorPagamento = {};
+        vendasDoMes.forEach(venda => {
+            const forma = venda.formaPagamento;
+            if (!totaisPorPagamento[forma]) {
+                totaisPorPagamento[forma] = 0;
+            }
+            totaisPorPagamento[forma] += venda.total;
+        });
+        
+        // Calcular produtos mais vendidos
+        const produtosVendidos = {};
+        vendasDoMes.forEach(venda => {
+            venda.itens.forEach(item => {
+                if (!produtosVendidos[item.id]) {
+                    produtosVendidos[item.id] = {
+                        nome: item.nome,
+                        quantidade: 0,
+                        total: 0
+                    };
+                }
+                produtosVendidos[item.id].quantidade += item.quantidade;
+                produtosVendidos[item.id].total += item.preco * item.quantidade;
+            });
+        });
+        
+        // Ordenar produtos por quantidade vendida
+        const produtosMaisVendidos = Object.values(produtosVendidos)
+            .sort((a, b) => b.quantidade - a.quantidade)
+            .slice(0, 10); // Top 10 produtos
+        
+        // Criar relatório
+        const relatorio = {
+            periodo: {
+                inicio: primeiroDiaMes.toISOString().split('T')[0],
+                fim: ultimoDiaMes.toISOString().split('T')[0],
+                mes: hoje.toLocaleString('pt-BR', { month: 'long', year: 'numeric' })
+            },
+            resumo: {
+                totalVendas,
+                totalVendasFormatado: formatarMoeda(totalVendas),
+                quantidadeVendas: vendasDoMes.length,
+                totalItensVendidos,
+                mediaPorVenda: totalVendas / vendasDoMes.length,
+                ticketMedio: ticketMedio,
+                ticketMedioFormatado: formatarMoeda(ticketMedio)
+            },
+            formasPagamento: totaisPorPagamento,
+            produtosMaisVendidos
+        };
+        
+        // Abrir nova aba com o relatório
+        abrirRelatorioMensal(relatorio);
+        
+    } catch (error) {
+        console.error("Erro ao fechar o mês:", error);
+        showToast("Erro ao gerar relatório mensal: " + error.message, 'error');
+    }
+}
+
+// Função para abrir o relatório mensal em uma nova aba
+function abrirRelatorioMensal(relatorio) {
+    // Criar nova aba
+    const novaAba = document.createElement('div');
+    novaAba.id = 'relatorio-mensal-tab';
+    novaAba.className = 'tab-content';
+    novaAba.style.display = 'block';
+    novaAba.innerHTML = `
+        <section class="historico-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 class="section-title">Relatório Mensal - ${relatorio.periodo.mes}</h2>
+                <button class="btn btn-accent" onclick="voltarParaHistorico()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Voltar para Histórico
+                </button>
+            </div>
+            
+            <div style="background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="margin-top: 0; color: #4f46e5;">Resumo do Mês</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div style="background: #f8fafc; padding: 1rem; border-radius: 6px;">
+                        <div style="font-size: 0.875rem; color: #64748b;">Total em Vendas</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #4f46e5;">${relatorio.resumo.totalVendasFormatado}</div>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1rem; border-radius: 6px;">
+                        <div style="font-size: 0.875rem; color: #64748b;">Quantidade de Vendas</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #4f46e5;">${relatorio.resumo.quantidadeVendas}</div>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1rem; border-radius: 6px;">
+                        <div style="font-size: 0.875rem; color: #64748b;">Itens Vendidos</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #4f46e5;">${relatorio.resumo.totalItensVendidos}</div>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1rem; border-radius: 6px;">
+                        <div style="font-size: 0.875rem; color: #64748b;">Ticket Médio</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #4f46e5;">${relatorio.resumo.ticketMedioFormatado}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div style="background: white; border-radius: 8px; padding: 1.5rem;">
+                    <h3 style="margin-top: 0; color: #4f46e5;">Formas de Pagamento</h3>
+                    <div style="margin-top: 1rem;">
+                        ${Object.entries(relatorio.formasPagamento).map(([forma, total]) => `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f1f5f9;">
+                                <span>${formatarFormaPagamento(forma)}</span>
+                                <span style="font-weight: 500;">${formatarMoeda(total)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="background: white; border-radius: 8px; padding: 1.5rem;">
+                    <h3 style="margin-top: 0; color: #4f46e5;">Produtos Mais Vendidos</h3>
+                    <div style="margin-top: 1rem;">
+                        ${relatorio.produtosMaisVendidos.map((produto, index) => `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f1f5f9;">
+                                <div>
+                                    <span style="font-weight: 500;">${index + 1}. ${produto.nome}</span>
+                                    <div style="font-size: 0.75rem; color: #64748b;">${produto.quantidade} unidades</div>
+                                </div>
+                                <span style="font-weight: 500;">${formatarMoeda(produto.total)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 1.5rem; text-align: center;">
+                <button class="btn btn-accent" onclick="exportarRelatorioMensal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Exportar Relatório
+                </button>
+            </div>
+        </section>
+    `;
+    
+    // Esconder a aba atual e mostrar a nova aba
+    document.getElementById('historico-tab').style.display = 'none';
+    document.querySelector('.container').appendChild(novaAba);
+}
+// Função para voltar para a aba de histórico
+function voltarParaHistorico() {
+    document.getElementById('relatorio-mensal-tab').remove();
+    document.getElementById('historico-tab').style.display = 'block';
+}
+
+// Função para exportar o relatório mensal
+function exportarRelatorioMensal() {
+    // Esta função pode ser implementada para exportar o relatório para Excel ou PDF
+    showToast('Funcionalidade de exportação em desenvolvimento!', 'info');
+}
 
         // Configura atalhos do teclado
         function configurarAtalhosTeclado() {
@@ -3643,6 +3840,8 @@ async function limparHistorico() {
                 });
 
                 exportarHistoricoBtn.addEventListener('click', exportarHistoricoParaExcel);
+
+                fecharMesBtn.addEventListener('click', fecharMes);
                 
                 exportDatabaseBtn.addEventListener('click', exportDatabase);
                 
