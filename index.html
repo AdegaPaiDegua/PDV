@@ -1322,6 +1322,7 @@
             border-bottom: 1px solid #e5e7eb;
             display: flex;
             align-items: center;
+            margin-bottom: 0;
         }
         
         .modal-icon {
@@ -1385,6 +1386,138 @@
         .modal-btn-danger:hover {
             background-color: #dc2626;
         }
+
+        /* Estilos para o Notepad Adega */
+        .notepad-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .notepad-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .notepad-form {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .notepad-notes {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            min-height: 200px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: #f8fafc;
+        }
+        
+        .notepad-note {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notepad-note:last-child {
+            border-bottom: none;
+        }
+        
+        .notepad-note-info {
+            flex: 1;
+        }
+        
+        .notepad-note-client {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .notepad-note-product {
+            color: #475569;
+        }
+        
+        .notepad-note-details {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        .notepad-note-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .notepad-summary {
+            background-color: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .notepad-summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+        
+        .notepad-total {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 2px solid #cbd5e1;
+        }
+        
+        .notepad-empty {
+            text-align: center;
+            color: #94a3b8;
+            padding: 2rem;
+            font-style: italic;
+        }
+        
+        .notepad-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .notepad-actions button {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .notepad-import {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .notepad-file-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            align-items: center;
+        }
+        
+        .notepad-file-name {
+            color: #64748b;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -1394,12 +1527,14 @@
             <button class="tab-btn active" data-tab="pdv">PDV</button>
             <button class="tab-btn" data-tab="historico">Histórico</button>
             <button class="tab-btn" data-tab="cadastro">Cadastro</button>
+            <button class="tab-btn" data-tab="notepad">Notepad Adega</button>
         </div>
     </header>
 
     <div class="container">
         <!-- Aba do PDV -->
         <div id="pdv-tab" class="tab-content active">
+            <!-- Conteúdo do PDV (mantido do código original) -->
             <section class="produtos-section">
                 <h2 class="section-title">Produtos Disponíveis</h2>
                 
@@ -1500,6 +1635,7 @@
 
         <!-- Aba de Cadastro de Produtos -->
         <div id="cadastro-tab" class="tab-content">
+            <!-- Conteúdo de Cadastro (mantido do código original) -->
             <section class="cadastro-form">
                 <h2 class="section-title">Cadastro de Produtos</h2>
                 
@@ -1630,6 +1766,7 @@
 
         <!-- Aba de Histórico de Vendas -->
         <div id="historico-tab" class="tab-content">
+            <!-- Conteúdo do Histórico (mantido do código original) -->
             <section class="historico-section">
                 <h2 class="section-title">Histórico de Vendas</h2>
                 <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
@@ -1658,6 +1795,103 @@
                 </div>
                 <div id="historicoVendas">
                     <div class="loader"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Aba do Notepad Adega -->
+        <div id="notepad-tab" class="tab-content">
+            <section class="notepad-section">
+                <h2 class="section-title">Notepad Adega</h2>
+                <p class="description">Controle o consumo de bebidas dos clientes e calcule o valor a ser cobrado</p>
+                
+                <div class="notepad-form">
+                    <div class="form-group">
+                        <label for="notepadClientName">Nome do Cliente:</label>
+                        <input type="text" id="notepadClientName" class="form-control" placeholder="Digite o nome do cliente">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notepadBeverage">Bebida/Produto:</label>
+                        <input type="text" id="notepadBeverage" class="form-control" placeholder="Digite o nome da bebida ou produto">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notepadQuantity">Quantidade:</label>
+                        <input type="number" id="notepadQuantity" class="form-control" min="1" value="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notepadPrice">Preço Unitário (R$):</label>
+                        <input type="number" id="notepadPrice" class="form-control" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                </div>
+                
+                <button class="btn btn-accent" id="notepadAddButton" style="width: 100%; margin-bottom: 1.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Adicionar à Lista
+                </button>
+                
+                <h3 class="section-title">Consumo</h3>
+                <div class="notepad-notes" id="notepadNotesList">
+                    <div class="notepad-empty">Nenhum item adicionado ainda. Adicione itens acima.</div>
+                </div>
+                
+                <div class="notepad-summary">
+                    <h3 class="section-title">Resumo para Cobrança</h3>
+                    <div id="notepadSummary"></div>
+                    <div class="notepad-total" id="notepadTotalAmount">Total: R$ 0,00</div>
+                </div>
+                
+                <div class="notepad-actions">
+                    <button class="btn btn-accent" id="notepadSaveButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Salvar em Arquivo
+                    </button>
+                    <button class="btn btn-secondary" id="notepadClearButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6h18"></path>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        Limpar Tudo
+                    </button>
+                    <button class="btn btn-accent" id="notepadExportButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        Exportar JSON
+                    </button>
+                </div>
+                
+                <div class="notepad-import">
+                    <h3 class="section-title">Importar Registro</h3>
+                    <p>Selecione um arquivo JSON previamente salvo para importar os dados:</p>
+                    
+                    <div class="notepad-file-input">
+                        <label for="notepadImportFile" class="file-input-button">Selecionar Arquivo</label>
+                        <input type="file" id="notepadImportFile" accept=".json" class="hidden">
+                        <span class="notepad-file-name" id="notepadFileName">Nenhum arquivo selecionado</span>
+                    </div>
+                    
+                    <button class="btn btn-accent" id="notepadImportButton" style="width: 100%; margin-top: 1rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Importar Dados
+                    </button>
                 </div>
             </section>
         </div>
@@ -1835,6 +2069,25 @@
         const tabs = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
         const categoriaBtns = document.querySelectorAll('.categoria-btn');
+
+        // Elementos do Notepad Adega
+        const notepadClientName = document.getElementById('notepadClientName');
+        const notepadBeverage = document.getElementById('notepadBeverage');
+        const notepadQuantity = document.getElementById('notepadQuantity');
+        const notepadPrice = document.getElementById('notepadPrice');
+        const notepadAddButton = document.getElementById('notepadAddButton');
+        const notepadNotesList = document.getElementById('notepadNotesList');
+        const notepadSummary = document.getElementById('notepadSummary');
+        const notepadTotalAmount = document.getElementById('notepadTotalAmount');
+        const notepadSaveButton = document.getElementById('notepadSaveButton');
+        const notepadClearButton = document.getElementById('notepadClearButton');
+        const notepadExportButton = document.getElementById('notepadExportButton');
+        const notepadImportFile = document.getElementById('notepadImportFile');
+        const notepadFileName = document.getElementById('notepadFileName');
+        const notepadImportButton = document.getElementById('notepadImportButton');
+
+        // Variáveis do Notepad Adega
+        let notepadNotes = [];
 
         // ===== SISTEMA DE NOTIFICAÇÕES =====
         let toastQueue = [];
@@ -2144,33 +2397,292 @@
             toastQueue = toastQueue.filter(t => t.id !== id);
         }
         
-async function checkDatabaseStatus() {
-    try {
-        const db = await openDatabase();
-        const produtos = await dbOperation('produtos', 'getAll');
-        const vendas = await dbOperation('vendas', 'getAll');
+        // ===== FUNÇÕES DO NOTEPAD ADEGA =====
         
-        console.log('Produtos no DB:', produtos.length);
-        console.log('Vendas no DB:', vendas.length);
+        // Carregar dados do Notepad do localStorage
+        function loadNotepadFromLocalStorage() {
+            const savedData = localStorage.getItem('adegaNotepad');
+            if (savedData) {
+                try {
+                    notepadNotes = JSON.parse(savedData);
+                    updateNotepadNotesList();
+                    updateNotepadSummary();
+                } catch (e) {
+                    console.error('Erro ao carregar dados do Notepad:', e);
+                    notepadNotes = [];
+                }
+            }
+        }
         
-        showToast(`DB: ${produtos.length} produtos, ${vendas.length} vendas`, 'info');
-    } catch (error) {
-        console.error('Erro ao verificar DB:', error);
-        showToast('Erro ao acessar banco local', 'error');
-    }
-}
-
-// Chame esta função durante a inicialização
-
-// Função para resetar completamente o DB (use com cuidado!)
-async function resetDatabase() {
-    if (confirm('Tem certeza que deseja resetar TODOS os dados?')) {
-        indexedDB.deleteDatabase(DB_NAME);
-        localStorage.clear();
-        location.reload();
-    }
-}
-
+        // Salvar dados do Notepad no localStorage
+        function saveNotepadToLocalStorage() {
+            localStorage.setItem('adegaNotepad', JSON.stringify(notepadNotes));
+            showToast('Dados do Notepad salvos com sucesso!', 'success');
+        }
+        
+        // Atualizar a lista de notas do Notepad
+        function updateNotepadNotesList() {
+            if (notepadNotes.length === 0) {
+                notepadNotesList.innerHTML = '<div class="notepad-empty">Nenhum item adicionado ainda. Adicione itens acima.</div>';
+                return;
+            }
+            
+            notepadNotesList.innerHTML = '';
+            notepadNotes.forEach((note, index) => {
+                const noteElement = document.createElement('div');
+                noteElement.className = 'notepad-note';
+                noteElement.innerHTML = `
+                    <div class="notepad-note-info">
+                        <div class="notepad-note-client">${note.clientName}</div>
+                        <div class="notepad-note-product">${note.quantity}x ${note.beverage}</div>
+                        <div class="notepad-note-details">
+                            R$ ${note.price.toFixed(2)} cada - Total: R$ ${note.total.toFixed(2)}
+                            <span class="timestamp">${note.timestamp}</span>
+                        </div>
+                    </div>
+                    <div class="notepad-note-actions">
+                        <button class="delete-btn" data-index="${index}">Excluir</button>
+                    </div>
+                `;
+                notepadNotesList.appendChild(noteElement);
+            });
+            
+            // Adicionar event listeners aos botões de exclusão
+            document.querySelectorAll('.notepad-note-actions .delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    notepadNotes.splice(index, 1);
+                    updateNotepadNotesList();
+                    updateNotepadSummary();
+                    saveNotepadToLocalStorage();
+                });
+            });
+        }
+        
+        // Atualizar o resumo do Notepad
+        function updateNotepadSummary() {
+            if (notepadNotes.length === 0) {
+                notepadSummary.innerHTML = '';
+                notepadTotalAmount.textContent = 'Total: R$ 0,00';
+                return;
+            }
+            
+            // Agrupar por cliente
+            const clients = {};
+            notepadNotes.forEach(note => {
+                if (!clients[note.clientName]) {
+                    clients[note.clientName] = {
+                        total: 0,
+                        items: []
+                    };
+                }
+                clients[note.clientName].total += note.total;
+                clients[note.clientName].items.push(note);
+            });
+            
+            notepadSummary.innerHTML = '';
+            let grandTotal = 0;
+            
+            for (const clientName in clients) {
+                const client = clients[clientName];
+                grandTotal += client.total;
+                
+                const clientElement = document.createElement('div');
+                clientElement.className = 'notepad-summary-item';
+                clientElement.innerHTML = `
+                    <span><strong>${clientName}</strong></span>
+                    <span class="client-total">R$ ${client.total.toFixed(2)}</span>
+                `;
+                notepadSummary.appendChild(clientElement);
+            }
+            
+            notepadTotalAmount.textContent = `Total: R$ ${grandTotal.toFixed(2)}`;
+        }
+        
+        // Adicionar item ao Notepad
+        function addNotepadItem() {
+            const clientName = notepadClientName.value.trim();
+            const beverage = notepadBeverage.value.trim();
+            const quantity = parseInt(notepadQuantity.value);
+            const price = parseFloat(notepadPrice.value);
+            
+            if (!clientName) {
+                showToast('Por favor, informe o nome do cliente.', 'error');
+                return;
+            }
+            
+            if (!beverage) {
+                showToast('Por favor, informe a bebida ou produto.', 'error');
+                return;
+            }
+            
+            if (isNaN(quantity) || quantity <= 0) {
+                showToast('Por favor, informe uma quantidade válida.', 'error');
+                return;
+            }
+            
+            if (isNaN(price) || price <= 0) {
+                showToast('Por favor, informe um preço válido.', 'error');
+                return;
+            }
+            
+            const total = quantity * price;
+            const note = {
+                clientName,
+                beverage,
+                quantity,
+                price,
+                total,
+                timestamp: new Date().toLocaleString('pt-BR')
+            };
+            
+            notepadNotes.push(note);
+            updateNotepadNotesList();
+            updateNotepadSummary();
+            saveNotepadToLocalStorage();
+            
+            // Limpar campos
+            notepadBeverage.value = '';
+            notepadQuantity.value = '1';
+            notepadPrice.value = '';
+            notepadBeverage.focus();
+        }
+        
+        // Salvar registro do Notepad em arquivo
+        function saveNotepadToFile() {
+            if (notepadNotes.length === 0) {
+                showToast('Não há itens para salvar.', 'warning');
+                return;
+            }
+            
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(notepadNotes, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            const date = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+            downloadAnchorNode.setAttribute("download", `notepad_adega_${date}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            
+            showToast('Registro salvo com sucesso!', 'success');
+        }
+        
+        // Exportar JSON do Notepad para visualização
+        function exportNotepadJSON() {
+            if (notepadNotes.length === 0) {
+                showToast('Não há dados para exportar.', 'warning');
+                return;
+            }
+            
+            const jsonStr = JSON.stringify(notepadNotes, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        }
+        
+        // Limpar dados do Notepad
+        function clearNotepad() {
+            if (notepadNotes.length === 0) {
+                showToast('O Notepad já está vazio.', 'info');
+                return;
+            }
+            
+            showModal({
+                title: 'Limpar Notepad',
+                message: 'Tem certeza que deseja limpar todos os dados do Notepad? Esta ação não pode ser desfeita.',
+                type: 'warning',
+                confirmText: 'Sim, Limpar Tudo',
+                cancelText: 'Manter Dados'
+            }).then(confirmed => {
+                if (confirmed) {
+                    notepadNotes = [];
+                    notepadClientName.value = '';
+                    notepadBeverage.value = '';
+                    notepadQuantity.value = '1';
+                    notepadPrice.value = '';
+                    updateNotepadNotesList();
+                    updateNotepadSummary();
+                    saveNotepadToLocalStorage();
+                    notepadClientName.focus();
+                    
+                    showToast('Notepad limpo com sucesso!', 'success');
+                }
+            });
+        }
+        
+        // Importar dados para o Notepad
+        function importNotepadData() {
+            if (!notepadImportFile.files.length) {
+                showToast('Por favor, selecione um arquivo para importar.', 'error');
+                return;
+            }
+            
+            const file = notepadImportFile.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    // Validar os dados importados
+                    if (!Array.isArray(importedData)) {
+                        throw new Error("Formato de arquivo inválido");
+                    }
+                    
+                    // Verificar se há dados atuais e perguntar se quer substituir ou adicionar
+                    if (notepadNotes.length > 0) {
+                        showModal({
+                            title: 'Importar Dados',
+                            message: 'Deseja substituir os dados atuais pelos importados? Clique em "Cancelar" para adicionar os dados importados aos atuais.',
+                            type: 'info',
+                            confirmText: 'Substituir',
+                            cancelText: 'Adicionar'
+                        }).then(replace => {
+                            if (replace) {
+                                // Substituir dados existentes
+                                notepadNotes = importedData;
+                            } else {
+                                // Adicionar aos dados existentes
+                                notepadNotes = notepadNotes.concat(importedData);
+                            }
+                            
+                            updateNotepadNotesList();
+                            updateNotepadSummary();
+                            saveNotepadToLocalStorage();
+                            
+                            // Limpar seleção de arquivo
+                            notepadImportFile.value = '';
+                            notepadFileName.textContent = 'Nenhum arquivo selecionado';
+                            
+                            showToast(`Dados importados com sucesso! ${importedData.length} itens carregados.`, 'success');
+                        });
+                    } else {
+                        notepadNotes = importedData;
+                        updateNotepadNotesList();
+                        updateNotepadSummary();
+                        saveNotepadToLocalStorage();
+                        
+                        // Limpar seleção de arquivo
+                        notepadImportFile.value = '';
+                        notepadFileName.textContent = 'Nenhum arquivo selecionado';
+                        
+                        showToast(`Dados importados com sucesso! ${importedData.length} itens carregados.`, 'success');
+                    }
+                } catch (error) {
+                    showToast('Erro ao importar o arquivo. Certifique-se de que é um arquivo JSON válido exportado por este sistema.', 'error');
+                    console.error(error);
+                }
+            };
+            
+            reader.onerror = function() {
+                showToast('Erro ao ler o arquivo. Tente novamente.', 'error');
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        // ===== FUNÇÕES DO SISTEMA PRINCIPAL =====
+        
         // Função para abrir o banco de dados
         async function openDatabase() {
             return new Promise((resolve, reject) => {
@@ -2214,38 +2726,39 @@ async function resetDatabase() {
 
         // Função genérica para operações no banco de dados
         async function dbOperation(storeName, operation, data = null) {
-    if (!db) await openDatabase();
-    
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction([storeName], operation === 'getAll' ? 'readonly' : 'readwrite');
-        const store = transaction.objectStore(storeName);
-        
-        let request;
-        switch (operation) {
-            case 'getAll':
-                request = store.getAll();
-                break;
-            case 'add':
-                request = store.add(data);
-                break;
-            case 'put':
-                request = store.put(data);
-                break;
-            case 'delete':
-                request = store.delete(data);
-                break;
-            case 'clear':
-                request = store.clear();
-                break;
-            default:
-                reject(new Error('Operação não suportada'));
-                return; // Adicionar return para evitar execução adicional
+            if (!db) await openDatabase();
+            
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], operation === 'getAll' ? 'readonly' : 'readwrite');
+                const store = transaction.objectStore(storeName);
+                
+                let request;
+                switch (operation) {
+                    case 'getAll':
+                        request = store.getAll();
+                        break;
+                    case 'add':
+                        request = store.add(data);
+                        break;
+                    case 'put':
+                        request = store.put(data);
+                        break;
+                    case 'delete':
+                        request = store.delete(data);
+                        break;
+                    case 'clear':
+                        request = store.clear();
+                        break;
+                    default:
+                        reject(new Error('Operação não suportada'));
+                        return;
+                }
+                
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = (event) => reject(event.target.error);
+            });
         }
-        
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = (event) => reject(event.target.error);
-    });
-}
+
         // Cache de produtos com invalidação
         async function getProdutos() {
             if (produtosCache.length) return produtosCache;
@@ -2393,7 +2906,7 @@ async function resetDatabase() {
 
         // Adiciona produto ao carrinho
         async function adicionarAoCarrinho(produto) {
-            // Verifica se há estoque disponível
+            // Verifica si há estoque disponível
             if (produto.estoque <= 0) {
                 showToast('Este produto está esgotado!', 'error');
                 return;
@@ -2681,40 +3194,40 @@ async function resetDatabase() {
                 return;
             }
             
-            const confirmed = await showModal({
+            showModal({
                 title: 'Cancelar Venda',
                 message: 'Tem certeza que deseja cancelar esta venda?',
                 type: 'warning',
                 confirmText: 'Sim, Cancelar',
                 cancelText: 'Manter Venda'
-            });
-            
-            if (confirmed) {
-                // Restaurar estoque dos produtos no carrinho
-                const produtos = await getProdutos();
-                for (const item of carrinho) {
-                    const produto = produtos.find(p => p.id === item.id);
-                    if (produto) {
-                        produto.estoque += item.quantidade;
-                        await dbOperation('produtos', 'put', produto);
+            }).then(confirmed => {
+                if (confirmed) {
+                    // Restaurar estoque dos produtos no carrinho
+                    const produtos = getProdutos();
+                    for (const item of carrinho) {
+                        const produto = produtos.find(p => p.id === item.id);
+                        if (produto) {
+                            produto.estoque += item.quantidade;
+                             dbOperation('produtos', 'put', produto);
+                        }
                     }
+                    
+                    // Atualizar cache
+                    produtosCache = produtos;
+                    
+                    // Limpar carrinho
+                    carrinhoCache = [];
+                     dbOperation('carrinho', 'clear');
+                    atualizarCarrinho();
+                    
+                    // Resetar formulário
+                    pagamentoDinheiro.checked = true;
+                    valorRecebido.value = '';
+                    searchInput.focus();
+                    
+                    showToast('Venda cancelada com sucesso', 'success');
                 }
-                
-                // Atualizar cache
-                produtosCache = produtos;
-                
-                // Limpar carrinho
-                carrinhoCache = [];
-                await dbOperation('carrinho', 'clear');
-                atualizarCarrinho();
-                
-                // Resetar formulário
-                pagamentoDinheiro.checked = true;
-                valorRecebido.value = '';
-                searchInput.focus();
-                
-                showToast('Venda cancelada com sucesso', 'success');
-            }
+            });
         }
 
         // Renderiza produtos cadastrados
@@ -2800,37 +3313,37 @@ async function resetDatabase() {
 
         // Remove um produto
         async function removerProduto(id) {
-            const confirmed = await showModal({
+            showModal({
                 title: 'Remover Produto',
                 message: 'Tem certeza que deseja remover este produto?',
                 type: 'warning',
                 confirmText: 'Sim, Remover',
                 cancelText: 'Manter Produto'
-            });
-            
-            if (confirmed) {
-                await dbOperation('produtos', 'delete', id);
-                produtosCache = produtosCache.filter(produto => produto.id !== id);
-                
-                // Remove do carrinho se estiver lá
-                const carrinho = await getCarrinho();
-                if (carrinho.some(item => item.id === id)) {
-                    carrinhoCache = carrinho.filter(item => item.id !== id);
-                    await dbOperation('carrinho', 'clear');
-                    for (const item of carrinhoCache) {
-                        await dbOperation('carrinho', 'add', item);
+            }).then(confirmed => {
+                if (confirmed) {
+                    dbOperation('produtos', 'delete', id);
+                    produtosCache = produtosCache.filter(produto => produto.id !== id);
+                    
+                    // Remove do carrinho se estiver lá
+                    const carrinho = getCarrinho();
+                    if (carrinho.some(item => item.id === id)) {
+                        carrinhoCache = carrinho.filter(item => item.id !== id);
+                        dbOperation('carrinho', 'clear');
+                        for (const item of carrinhoCache) {
+                            dbOperation('carrinho', 'add', item);
+                        }
+                        atualizarCarrinho();
                     }
-                    atualizarCarrinho();
+                    
+                    renderProdutosCadastrados();
+                    
+                    if (produtoEmEdicao && produtoEmEdicao.id === id) {
+                        cancelarEdicao();
+                    }
+                    
+                    showToast('Produto removido com sucesso', 'success');
                 }
-                
-                renderProdutosCadastrados();
-                
-                if (produtoEmEdicao && produtoEmEdicao.id === id) {
-                    cancelarEdicao();
-                }
-                
-                showToast('Produto removido com sucesso', 'success');
-            }
+            });
         }
 
         // Processa arquivo Excel
@@ -2916,7 +3429,7 @@ async function resetDatabase() {
             // Agrupa as vendas por dia
             const vendasPorDia = agruparVendasPorDia(historico);
             
-            // Cria uma seção para cada dia
+            // Crea uma seção para cada dia
             for (const [data, vendas] of Object.entries(vendasPorDia)) {
                 const diaContainer = document.createElement('div');
                 diaContainer.className = 'historico-mes';
@@ -3191,45 +3704,16 @@ async function resetDatabase() {
                     return true;
                 }
                 
-                // Usando o modal personalizado diretamente
-                const modal = document.getElementById('customModal');
-                const modalIcon = document.getElementById('modalIcon');
-                const modalTitle = document.getElementById('customModalTitle');
-                const modalBody = document.getElementById('customModalBody');
-                const modalCancel = document.getElementById('customModalCancel');
-                const modalConfirm = document.getElementById('customModalConfirm');
-                
-                // Configurar o modal
-                modalIcon.textContent = '❌';
-                modalTitle.textContent = 'Apagar Histórico';
-                modalBody.innerHTML = `Deseja apagar TODAS as ${historico.length} vendas do histórico?<br><strong>Esta ação não pode ser desfeita.</strong>`;
-                modalCancel.textContent = 'Manter Histórico';
-                modalConfirm.textContent = 'Sim, Apagar Tudo';
-                modalConfirm.className = 'modal-btn modal-btn-danger';
-                
-                // Exibir o modal
-                modal.style.display = 'flex';
-                
-                // Retornar uma Promise para aguardar a resposta do usuário
-                return new Promise((resolve) => {
-                    const cleanUp = () => {
-                        modal.style.display = 'none';
-                        modalCancel.onclick = null;
-                        modalConfirm.onclick = null;
-                    };
-                    
-                    modalCancel.onclick = () => {
-                        cleanUp();
-                        resolve(false);
-                    };
-                    
-                    modalConfirm.onclick = () => {
-                        cleanUp();
-                        resolve(true);
-                    };
-                }).then(async (confirmed) => {
+                // Usando o modal personalizado
+                return showModal({
+                    title: 'Apagar Histórico',
+                    message: `Deseja apagar TODAS as ${historico.length} vendas do histórico?<br><strong>Esta ação não pode ser desfeita.</strong>`,
+                    type: 'warning',
+                    confirmText: 'Sim, Apagar Tudo',
+                    cancelText: 'Manter Histórico'
+                }).then(confirmed => {
                     if (confirmed) {
-                        await dbOperation('vendas', 'clear');
+                        dbOperation('vendas', 'clear');
                         historicoCache = [];
                         showToast('Histórico de vendas apagado com sucesso!', 'success');
                         return true;
@@ -3715,7 +4199,7 @@ async function resetDatabase() {
                 // Configurar o modal
                 modalIcon.textContent = options.type === 'warning' ? '⚠️' : '❓';
                 modalTitle.textContent = options.title;
-                modalBody.textContent = options.message;
+                modalBody.innerHTML = options.message;
                 modalCancel.textContent = options.cancelText || 'Cancelar';
                 modalConfirm.textContent = options.confirmText || 'Confirmar';
                 
@@ -3825,7 +4309,10 @@ async function resetDatabase() {
                     getHistorico()
                 ]);
                 
-                // Configura eventos
+                // Carrega dados do Notepad
+                loadNotepadFromLocalStorage();
+                
+                // Configura eventos do sistema principal
                 searchInput.addEventListener('input', renderProdutos);
                 
                 searchInput.addEventListener('keypress', function(e) {
@@ -3993,6 +4480,21 @@ async function resetDatabase() {
                     }
                 });
 
+                // Configura eventos do Notepad
+                notepadAddButton.addEventListener('click', addNotepadItem);
+                notepadSaveButton.addEventListener('click', saveNotepadToFile);
+                notepadClearButton.addEventListener('click', clearNotepad);
+                notepadExportButton.addEventListener('click', exportNotepadJSON);
+                notepadImportButton.addEventListener('click', importNotepadData);
+                
+                notepadImportFile.addEventListener('change', function() {
+                    if (this.files.length > 0) {
+                        notepadFileName.textContent = this.files[0].name;
+                    } else {
+                        notepadFileName.textContent = 'Nenhum arquivo selecionado';
+                    }
+                });
+
                 tabs.forEach(tab => {
                     tab.addEventListener('click', () => {
                         const tabId = tab.dataset.tab;
@@ -4014,6 +4516,10 @@ async function resetDatabase() {
                         
                         if (tabId === 'historico') {
                             renderHistorico();
+                        }
+                        
+                        if (tabId === 'notepad') {
+                            notepadClientName.focus();
                         }
                     });
                 });
@@ -4056,4 +4562,3 @@ async function resetDatabase() {
     </script>
 </body>
 </html>
-    
