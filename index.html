@@ -2144,6 +2144,33 @@
             toastQueue = toastQueue.filter(t => t.id !== id);
         }
         
+async function checkDatabaseStatus() {
+    try {
+        const db = await openDatabase();
+        const produtos = await dbOperation('produtos', 'getAll');
+        const vendas = await dbOperation('vendas', 'getAll');
+        
+        console.log('Produtos no DB:', produtos.length);
+        console.log('Vendas no DB:', vendas.length);
+        
+        showToast(`DB: ${produtos.length} produtos, ${vendas.length} vendas`, 'info');
+    } catch (error) {
+        console.error('Erro ao verificar DB:', error);
+        showToast('Erro ao acessar banco local', 'error');
+    }
+}
+
+// Chame esta função durante a inicialização
+
+// Função para resetar completamente o DB (use com cuidado!)
+async function resetDatabase() {
+    if (confirm('Tem certeza que deseja resetar TODOS os dados?')) {
+        indexedDB.deleteDatabase(DB_NAME);
+        localStorage.clear();
+        location.reload();
+    }
+}
+
         // Função para abrir o banco de dados
         async function openDatabase() {
             return new Promise((resolve, reject) => {
@@ -4029,3 +4056,4 @@
     </script>
 </body>
 </html>
+    
