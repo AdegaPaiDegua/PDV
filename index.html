@@ -751,6 +751,7 @@
         
         .historico-venda-data {
             font-weight: 500;
+            font-size: 0.875rem;
         }
         
         .historico-venda-total {
@@ -1518,6 +1519,37 @@
             color: #64748b;
             font-style: italic;
         }
+
+        /* Estilos para os checkboxes de seleção */
+        .notepad-checkbox {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: #4f46e5;
+        }
+
+        .notepad-select-all {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: #f8fafc;
+            border-radius: 4px;
+        }
+
+        .notepad-select-all label {
+            margin-left: 8px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .notepad-conclude-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
     </style>
 </head>
 <body>
@@ -1836,8 +1868,25 @@
                 </button>
                 
                 <h3 class="section-title">Consumo</h3>
+                
+                <!-- Seção de seleção e conclusão de vendas -->
+                <div class="notepad-select-all" id="notepadSelectAll" style="display: none;">
+                    <input type="checkbox" id="selectAllNotes" class="notepad-checkbox">
+                    <label for="selectAllNotes">Selecionar todas as vendas</label>
+                </div>
+                
                 <div class="notepad-notes" id="notepadNotesList">
                     <div class="notepad-empty">Nenhum item adicionado ainda. Adicione itens acima.</div>
+                </div>
+                
+                <div class="notepad-conclude-actions" id="notepadConcludeActions" style="display: none;">
+                    <button class="btn btn-accent" id="concludeSalesBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        Concluir Vendas Selecionadas
+                    </button>
                 </div>
                 
                 <div class="notepad-summary">
@@ -2085,6 +2134,10 @@
         const notepadImportFile = document.getElementById('notepadImportFile');
         const notepadFileName = document.getElementById('notepadFileName');
         const notepadImportButton = document.getElementById('notepadImportButton');
+        const selectAllNotes = document.getElementById('selectAllNotes');
+        const notepadSelectAll = document.getElementById('notepadSelectAll');
+        const notepadConcludeActions = document.getElementById('notepadConcludeActions');
+        const concludeSalesBtn = document.getElementById('concludeSalesBtn');
 
         // Variáveis do Notepad Adega
         let notepadNotes = [];
@@ -2384,7 +2437,7 @@
                 if (groupToasts.length > 0) {
                     updateGroupToast(toastData.groupId);
                 } else {
-                    // Remove o container do grupo se estiver vazio
+                    // Remove o container do grupo si estiver vazio
                     const groupContainer = document.getElementById(`toast-group-${toastData.groupId}`);
                     if (groupContainer) {
                         groupContainer.remove();
@@ -2424,6 +2477,8 @@
         function updateNotepadNotesList() {
             if (notepadNotes.length === 0) {
                 notepadNotesList.innerHTML = '<div class="notepad-empty">Nenhum item adicionado ainda. Adicione itens acima.</div>';
+                notepadSelectAll.style.display = 'none';
+                notepadConcludeActions.style.display = 'none';
                 return;
             }
             
@@ -2432,6 +2487,7 @@
                 const noteElement = document.createElement('div');
                 noteElement.className = 'notepad-note';
                 noteElement.innerHTML = `
+                    <input type="checkbox" class="notepad-checkbox" data-index="${index}" id="note-${index}">
                     <div class="notepad-note-info">
                         <div class="notepad-note-client">${note.clientName}</div>
                         <div class="notepad-note-product">${note.quantity}x ${note.beverage}</div>
@@ -2447,6 +2503,10 @@
                 notepadNotesList.appendChild(noteElement);
             });
             
+            // Mostrar controles de seleção
+            notepadSelectAll.style.display = 'flex';
+            notepadConcludeActions.style.display = 'flex';
+            
             // Adicionar event listeners aos botões de exclusão
             document.querySelectorAll('.notepad-note-actions .delete-btn').forEach(button => {
                 button.addEventListener('click', function() {
@@ -2455,6 +2515,23 @@
                     updateNotepadNotesList();
                     updateNotepadSummary();
                     saveNotepadToLocalStorage();
+                });
+            });
+            
+            // Adicionar event listener para selecionar/desselecionar todas
+            selectAllNotes.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.notepad-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+            
+            // Adicionar event listeners para checkboxes individuais
+            document.querySelectorAll('.notepad-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const allChecked = document.querySelectorAll('.notepad-checkbox:not(#selectAllNotes)').length === 
+                                      document.querySelectorAll('.notepad-checkbox:not(#selectAllNotes):checked').length;
+                    selectAllNotes.checked = allChecked;
                 });
             });
         }
@@ -2681,6 +2758,57 @@
             reader.readAsText(file);
         }
         
+        // Concluir vendas selecionadas
+        async function concludeSelectedSales() {
+            const selectedIndexes = [];
+            document.querySelectorAll('.notepad-checkbox:checked:not(#selectAllNotes)').forEach(checkbox => {
+                selectedIndexes.push(parseInt(checkbox.getAttribute('data-index')));
+            });
+            
+            if (selectedIndexes.length === 0) {
+                showToast('Selecione pelo menos uma venda para concluir.', 'warning');
+                return;
+            }
+            
+            // Ordenar índices em ordem decrescente para remoção segura
+            selectedIndexes.sort((a, b) => b - a);
+            
+            // Obter vendas selecionadas
+            const salesToConclude = selectedIndexes.map(index => notepadNotes[index]);
+            
+            // Adicionar vendas ao histórico
+            for (const sale of salesToConclude) {
+                const newSale = {
+                    id: gerarId(),
+                    data: new Date().toISOString(),
+                    itens: [{
+                        id: gerarId(),
+                        nome: sale.beverage,
+                        preco: sale.price,
+                        quantidade: sale.quantity
+                    }],
+                    total: sale.total,
+                    formaPagamento: 'notepad',
+                    cliente: sale.clientName
+                };
+                
+                await dbOperation('vendas', 'add', newSale);
+                historicoCache.unshift(newSale);
+            }
+            
+            // Remover vendas do notepad
+            for (const index of selectedIndexes) {
+                notepadNotes.splice(index, 1);
+            }
+            
+            // Atualizar interface
+            updateNotepadNotesList();
+            updateNotepadSummary();
+            saveNotepadToLocalStorage();
+            
+            showToast(`${selectedIndexes.length} venda(s) concluída(s) com sucesso e movida(s) para o histórico!`, 'success');
+        }
+
         // ===== FUNÇÕES DO SISTEMA PRINCIPAL =====
         
         // Função para abrir o banco de dados
@@ -3179,7 +3307,7 @@
                 renderHistorico();
             }
             
-            // Atualizar lista de produtos se estiver na aba de cadastro
+            // Atualizar lista de produtos si estiver na aba de cadastro
             if (document.getElementById('cadastro-tab').classList.contains('active')) {
                 renderProdutosCadastrados();
             }
@@ -3312,7 +3440,7 @@
         }
 
         // Remove um produto
-        async function removerProduto(id) {
+        async function remouterProduto(id) {
             showModal({
                 title: 'Remover Produto',
                 message: 'Tem certeza que deseja remover este produto?',
@@ -3476,6 +3604,7 @@
                             <div><strong>Recebido:</strong> ${formatarMoeda(venda.valorRecebido)}</div>
                             <div><strong>Troco:</strong> ${formatarMoeda(venda.troco)}</div>
                         ` : ''}
+                        ${venda.cliente ? `<div><strong>Cliente:</strong> ${venda.cliente}</div>` : ''}
                     `;
                     
                     vendaElement.appendChild(vendaHeader);
@@ -3744,7 +3873,7 @@
                 dados.push([
                     'Data', 'ID Venda', 'Total', 'Forma de Pagamento', 
                     'Valor Recebido', 'Troco', 'Quantidade de Itens', 
-                    'Itens (Nome x Quantidade)', 'Valor dos Itens'
+                    'Itens (Nome x Quantidade)', 'Valor dos Itens', 'Cliente'
                 ]);
 
                 // Linhas de dados
@@ -3763,7 +3892,8 @@
                         venda.formaPagamento === 'dinheiro' ? (venda.troco || 0) : 'N/A',
                         venda.itens.reduce((sum, item) => sum + item.quantidade, 0),
                         itensTexto,
-                        valoresItens
+                        valoresItens,
+                        venda.cliente || 'N/A'
                     ]);
                 });
 
@@ -3782,7 +3912,8 @@
                     {wch: 12}, // Troco
                     {wch: 18}, // Quantidade de Itens
                     {wch: 40}, // Itens
-                    {wch: 30}  // Valor dos Itens
+                    {wch: 30},  // Valor dos Itens
+                    {wch: 20}  // Cliente
                 ];
                 ws['!cols'] = wscols;
 
@@ -3971,7 +4102,7 @@
                         </div>
                     </div>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div style="display: grid; grid-template- columns: 1fr 1fr; gap: 1.5rem;">
                         <div style="background: white; border-radius: 8px; padding: 1.5rem;">
                             <h3 style="margin-top: 0; color: #4f46e5;">Formas de Pagamento</h3>
                             <div style="margin-top: 1rem;">
@@ -4098,7 +4229,7 @@
                                 ws[cellRef].s = {
                                     font: { bold: true, color: { rgb: "FFFFFF" } },
                                     fill: { fgColor: { rgb: "4f46e5" } },
-                                    alignment: { horizontal: "center" }
+                                    alignment: { horizontal: 'center' }
                                 };
                             }
                         }
@@ -4182,6 +4313,7 @@
                 case 'debito': return 'Cartão de Débito';
                 case 'credito': return 'Cartão de Crédito';
                 case 'pix': return 'PIX';
+                case 'notepad': return 'Notepad';
                 default: return forma;
             }
         }
@@ -4486,6 +4618,7 @@
                 notepadClearButton.addEventListener('click', clearNotepad);
                 notepadExportButton.addEventListener('click', exportNotepadJSON);
                 notepadImportButton.addEventListener('click', importNotepadData);
+                concludeSalesBtn.addEventListener('click', concludeSelectedSales);
                 
                 notepadImportFile.addEventListener('change', function() {
                     if (this.files.length > 0) {
